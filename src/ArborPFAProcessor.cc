@@ -103,8 +103,6 @@ void ArborPFAProcessor::processEvent(LCEvent *pLCEvent)
 
         PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::Reset(*m_pPandora));
         this->Reset();
-
-        getchar();
     }
     catch (pandora::StatusCodeException &statusCodeException)
     {
