@@ -23,6 +23,8 @@
 #include "CaloHitCreator.h"
 #include "ArborPFAProcessor.h"
 
+#include "ArborApi/ArborApi.h"
+
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -149,6 +151,7 @@ pandora::StatusCode CaloHitCreator::CreateECalCaloHits(const EVENT::LCEvent *con
 
                     PandoraApi::CaloHit::Parameters caloHitParameters;
                     caloHitParameters.m_hitType = pandora::ECAL;
+                    caloHitParameters.m_cellGeometry = pandora::RECTANGULAR;
                     caloHitParameters.m_isDigital = false;
                     caloHitParameters.m_layer = cellIdDecoder(pCaloHit)[layerCoding.c_str()];
                     caloHitParameters.m_isInOuterSamplingLayer = false;
@@ -179,12 +182,12 @@ pandora::StatusCode CaloHitCreator::CreateECalCaloHits(const EVENT::LCEvent *con
                     // ATTN If using strip splitting, must correct cell sizes for use in PFA to minimum of strip width and strip length
                     if (m_settings.m_stripSplittingOn)
                     {
-                        const float splitCellSize(std::min(caloHitParameters.m_cellSizeU.Get(), caloHitParameters.m_cellSizeV.Get()));
-                        caloHitParameters.m_cellSizeU = splitCellSize;
-                        caloHitParameters.m_cellSizeV = splitCellSize;
+                        const float splitCellSize(std::min(caloHitParameters.m_cellSize0.Get(), caloHitParameters.m_cellSize1.Get()));
+                        caloHitParameters.m_cellSize0 = splitCellSize;
+                        caloHitParameters.m_cellSize1 = splitCellSize;
                     }
 
-                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters));
+                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters, arbor_content::CaloHitFactory()));
                     m_calorimeterHitVector.push_back(pCaloHit);
 
                 }
@@ -240,6 +243,7 @@ pandora::StatusCode CaloHitCreator::CreateHCalCaloHits(const EVENT::LCEvent *con
 
                     PandoraApi::CaloHit::Parameters caloHitParameters;
                     caloHitParameters.m_hitType = pandora::HCAL;
+                    caloHitParameters.m_cellGeometry = pandora::RECTANGULAR;
                     caloHitParameters.m_isDigital = false;
                     caloHitParameters.m_layer = cellIdDecoder(pCaloHit)[layerCoding.c_str()];
                     caloHitParameters.m_isInOuterSamplingLayer = (this->GetNLayersFromEdge(pCaloHit) <= m_settings.m_nOuterSamplingLayers);
@@ -265,7 +269,7 @@ pandora::StatusCode CaloHitCreator::CreateHCalCaloHits(const EVENT::LCEvent *con
                     caloHitParameters.m_hadronicEnergy = std::min(m_settings.m_hCalToHadGeV * pCaloHit->getEnergy(), m_settings.m_maxHCalHitHadronicEnergy);
                     caloHitParameters.m_electromagneticEnergy = m_settings.m_hCalToEMGeV * pCaloHit->getEnergy();
 
-                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters));
+                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters, arbor_content::CaloHitFactory()));
                     m_calorimeterHitVector.push_back(pCaloHit);
                 }
                 catch (pandora::StatusCodeException &statusCodeException)
@@ -321,6 +325,7 @@ pandora::StatusCode CaloHitCreator::CreateMuonCaloHits(const EVENT::LCEvent *con
 
                     PandoraApi::CaloHit::Parameters caloHitParameters;
                     caloHitParameters.m_hitType = pandora::MUON;
+                    caloHitParameters.m_cellGeometry = pandora::RECTANGULAR;
                     caloHitParameters.m_layer = cellIdDecoder(pCaloHit)[layerCoding.c_str()];
                     caloHitParameters.m_isInOuterSamplingLayer = true;
                     this->GetCommonCaloHitProperties(pCaloHit, caloHitParameters);
@@ -364,7 +369,7 @@ pandora::StatusCode CaloHitCreator::CreateMuonCaloHits(const EVENT::LCEvent *con
                         caloHitParameters.m_mipEquivalentEnergy = pCaloHit->getEnergy() * m_settings.m_muonToMip;
                     }
 
-                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters));
+                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters, arbor_content::CaloHitFactory()));
                     m_calorimeterHitVector.push_back(pCaloHit);
                 }
                 catch (pandora::StatusCodeException &statusCodeException)
@@ -418,6 +423,7 @@ pandora::StatusCode CaloHitCreator::CreateLCalCaloHits(const EVENT::LCEvent *con
 
                     PandoraApi::CaloHit::Parameters caloHitParameters;
                     caloHitParameters.m_hitType = pandora::ECAL;
+                    caloHitParameters.m_cellGeometry = pandora::RECTANGULAR;
                     caloHitParameters.m_isDigital = false;
                     caloHitParameters.m_layer = cellIdDecoder(pCaloHit)[layerCoding.c_str()];
                     caloHitParameters.m_isInOuterSamplingLayer = false;
@@ -434,7 +440,7 @@ pandora::StatusCode CaloHitCreator::CreateLCalCaloHits(const EVENT::LCEvent *con
                     caloHitParameters.m_electromagneticEnergy = m_settings.m_eCalToEMGeV * pCaloHit->getEnergy();
                     caloHitParameters.m_hadronicEnergy = m_settings.m_eCalToHadGeVEndCap * pCaloHit->getEnergy();
 
-                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters));
+                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters, arbor_content::CaloHitFactory()));
                     m_calorimeterHitVector.push_back(pCaloHit);
                 }
                 catch (pandora::StatusCodeException &statusCodeException)
@@ -488,6 +494,7 @@ pandora::StatusCode CaloHitCreator::CreateLHCalCaloHits(const EVENT::LCEvent *co
 
                     PandoraApi::CaloHit::Parameters caloHitParameters;
                     caloHitParameters.m_hitType = pandora::HCAL;
+                    caloHitParameters.m_cellGeometry = pandora::RECTANGULAR;
                     caloHitParameters.m_isDigital = false;
                     caloHitParameters.m_layer = cellIdDecoder(pCaloHit)[layerCoding.c_str()];
                     caloHitParameters.m_isInOuterSamplingLayer = (this->GetNLayersFromEdge(pCaloHit) <= m_settings.m_nOuterSamplingLayers);
@@ -504,7 +511,7 @@ pandora::StatusCode CaloHitCreator::CreateLHCalCaloHits(const EVENT::LCEvent *co
                     caloHitParameters.m_hadronicEnergy = std::min(m_settings.m_hCalToHadGeV * pCaloHit->getEnergy(), m_settings.m_maxHCalHitHadronicEnergy);
                     caloHitParameters.m_electromagneticEnergy = m_settings.m_hCalToEMGeV * pCaloHit->getEnergy();
 
-                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters));
+                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters, arbor_content::CaloHitFactory()));
                     m_calorimeterHitVector.push_back(pCaloHit);
                 }
                 catch (pandora::StatusCodeException &statusCodeException)
@@ -548,8 +555,8 @@ void CaloHitCreator::GetEndCapCaloHitProperties(const EVENT::CalorimeterHit *con
     caloHitParameters.m_hitRegion = pandora::ENDCAP;
 
     const int physicalLayer(std::min(static_cast<int>(caloHitParameters.m_layer.Get()), layerLayout.getNLayers() - 1));
-    caloHitParameters.m_cellSizeU = layerLayout.getCellSize0(physicalLayer);
-    caloHitParameters.m_cellSizeV = layerLayout.getCellSize1(physicalLayer);
+    caloHitParameters.m_cellSize0 = layerLayout.getCellSize0(physicalLayer);
+    caloHitParameters.m_cellSize1 = layerLayout.getCellSize1(physicalLayer);
     caloHitParameters.m_cellThickness = layerLayout.getThickness(physicalLayer);
 
     const float radiationLength((pandora::ECAL == caloHitParameters.m_hitType.Get()) ? m_settings.m_absorberRadLengthECal :
@@ -588,8 +595,8 @@ void CaloHitCreator::GetBarrelCaloHitProperties(const EVENT::CalorimeterHit *con
     caloHitParameters.m_hitRegion = pandora::BARREL;
 
     const int physicalLayer(std::min(static_cast<int>(caloHitParameters.m_layer.Get()), layerLayout.getNLayers() - 1));
-    caloHitParameters.m_cellSizeU = layerLayout.getCellSize0(physicalLayer);
-    caloHitParameters.m_cellSizeV = layerLayout.getCellSize1(physicalLayer);
+    caloHitParameters.m_cellSize0 = layerLayout.getCellSize0(physicalLayer);
+    caloHitParameters.m_cellSize1 = layerLayout.getCellSize1(physicalLayer);
     caloHitParameters.m_cellThickness = layerLayout.getThickness(physicalLayer);
 
     const float radiationLength((pandora::ECAL == caloHitParameters.m_hitType.Get()) ? m_settings.m_absorberRadLengthECal :
