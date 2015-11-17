@@ -180,6 +180,8 @@ pandora::StatusCode ArborPFAProcessor::RegisterUserComponents() const
     PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, ArborContent::RegisterBFieldPlugin(*m_pPandora,
         m_settings.m_innerBField, m_settings.m_muonBarrelBField, m_settings.m_muonEndCapBField));
 
+    PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, ArborContent::RegisterEnergyCorrections(*m_pPandora));
+
     PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterAlgorithmFactory(*m_pPandora,
         "ExternalClustering", new ExternalClusteringAlgorithm::Factory));
 
