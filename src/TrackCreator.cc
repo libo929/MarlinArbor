@@ -29,6 +29,8 @@
 #include <cmath>
 #include <limits>
 
+#include "ArborApi/ObjectFactories.h"
+
 TrackCreator::TrackCreator(const Settings &settings, const pandora::Pandora *const pPandora) :
     m_settings(settings),
     m_pPandora(pPandora),
@@ -118,12 +120,15 @@ TrackCreator::TrackCreator(const Settings &settings, const pandora::Pandora *con
         m_minEtdZPosition = std::numeric_limits<float>::quiet_NaN();
         m_minSetRadius = std::numeric_limits<float>::quiet_NaN();
     }
+
+    m_pTrackFactory = new arbor_content::TrackFactory();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 TrackCreator::~TrackCreator()
 {
+	delete m_pTrackFactory;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -487,7 +492,7 @@ pandora::StatusCode TrackCreator::CreateTracks(EVENT::LCEvent *pLCEvent)
                     this->TrackReachesECAL(pTrack, trackParameters);
                     this->DefineTrackPfoUsage(pTrack, trackParameters);
 
-                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::Track::Create(*m_pPandora, trackParameters));
+                    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::Track::Create(*m_pPandora, trackParameters, *m_pTrackFactory));
                     m_trackVector.push_back(pTrack);
                 }
                 catch (pandora::StatusCodeException &statusCodeException)

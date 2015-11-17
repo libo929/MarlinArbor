@@ -24,6 +24,8 @@ typedef std::vector<Track *> TrackVector;
 typedef std::set<const Track *> TrackList;
 typedef std::map<Track *, int> TrackToPidMap;
 
+namespace arbor_content { class TrackFactory; }
+
 inline LCCollectionVec *newTrkCol(const std::string &name, LCEvent *evt , bool isSubset)
 {
     LCCollectionVec* col = new LCCollectionVec( LCIO::TRACK ) ;
@@ -290,6 +292,8 @@ private:
     TrackList               m_parentTrackList;              ///< The list of parent tracks
     TrackList               m_daughterTrackList;            ///< The list of daughter tracks
     TrackToPidMap           m_trackToPidMap;                ///< The map from track addresses to particle ids, where set by kinks/V0s
+
+    arbor_content::TrackFactory         *m_pTrackFactory;   ///< The track factory used to create arbor specific tracks
 };
 
 //------------------------------------------------------------------------------------------------------------------------------------------
