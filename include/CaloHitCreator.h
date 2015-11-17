@@ -17,6 +17,8 @@
 
 typedef std::vector<CalorimeterHit *> CalorimeterHitVector;
 
+namespace arbor_content { class CaloHitFactory; }
+
 /**
  *  @brief  CaloHitCreator class
  */
@@ -232,6 +234,8 @@ private:
     float                               m_hCalEndCapLayerThickness;         ///< HCal endcap layer thickness
 
     CalorimeterHitVector                m_calorimeterHitVector;             ///< The calorimeter hit vector
+
+    arbor_content::CaloHitFactory      *m_pCaloHitFactory;                   ///< The calo hit factory used for arbor calo hit creation
 };
 
 //------------------------------------------------------------------------------------------------------------------------------------------
