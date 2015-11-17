@@ -67,6 +67,10 @@ FOREACH( pkg Marlin MarlinUtil PandoraSDK ArborContent )
 ENDFOREACH()
 
 IF( PANDORA_MONITORING )
+    FIND_PACKAGE( ROOT 5.26.00 REQUIRED COMPONENTS Eve Geom RGL EG ) # minimum required ROOT version
+    INCLUDE_DIRECTORIES( ${ROOT_INCLUDE_DIRS} )
+    LINK_LIBRARIES( ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} )
+      
     FIND_PACKAGE( PandoraMonitoring 01.00.00 REQUIRED )
     IF( PandoraMonitoring_FOUND )
         INCLUDE_DIRECTORIES( ${PandoraMonitoring_INCLUDE_DIRS} )
