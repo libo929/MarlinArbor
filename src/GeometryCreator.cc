@@ -234,8 +234,11 @@ pandora::StatusCode GeometryCreator::SetILDSpecificGeometry(SubDetectorTypeMap &
     subDetectorNameMap["HCalRing"].m_outerPhiCoordinate = m_settings.m_hCalRingOuterPhiCoordinate;
 
     // Gaps in detector active material
+    // Gap entre les staves (trou dans le AHCAL : 1 entre chaque stave + 1 pour chaque milieu de stave)
     PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, this->CreateHCalBarrelBoxGaps());
+    // Gap dans le end cap entre stave (sorte de sandwich ...)
     PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, this->CreateHCalEndCapBoxGaps());
+    // gap entre chaque module (2 modules pour AHCAL et 5 modules pour SDHCAL)
     PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, this->CreateHCalBarrelConcentricGaps());
 
     return pandora::STATUS_CODE_SUCCESS;
