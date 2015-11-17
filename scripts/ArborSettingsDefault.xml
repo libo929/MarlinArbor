@@ -1,0 +1,193 @@
+<!-- Arbor settings xml file -->
+
+<pandora>
+    <!-- GLOBAL SETTINGS -->
+    <IsMonitoringEnabled>true</IsMonitoringEnabled>
+    <ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
+    <ShouldCollapseMCParticlesToPfoTarget>false</ShouldCollapseMCParticlesToPfoTarget>
+
+    <!-- PLUGIN SETTINGS -->
+<!--     <HadronicEnergyCorrectionPlugins>CleanClusters ScaleHotHadrons</HadronicEnergyCorrectionPlugins>
+    <EmShowerPlugin>LCEmShowerId</EmShowerPlugin>
+    <PhotonPlugin>LCPhotonId</PhotonPlugin>
+    <ElectronPlugin>LCElectronId</ElectronPlugin>
+    <MuonPlugin>LCMuonId</MuonPlugin> -->
+
+    <!-- ALGORITHM SETTINGS -->
+    
+    <!-- Select tracks and hits to use for clustering -->
+    <algorithm type = "EventPreparation">
+        <OutputTrackListName>Tracks</OutputTrackListName>
+        <MergeECalHCalCaloHitLists>false</MergeECalHCalCaloHitLists>
+        <OutputECalCaloHitListName>ECalCaloHits</OutputECalCaloHitListName>
+        <OutputHCalCaloHitListName>HCalCaloHits</OutputHCalCaloHitListName>
+        <OutputMuonCaloHitListName>MuonYokeHits</OutputMuonCaloHitListName>
+        <ReplacementTrackListName>Tracks</ReplacementTrackListName>
+        <ReplacementCaloHitListName>ECalCaloHits</ReplacementCaloHitListName>
+    </algorithm>
+    
+    <!-- 
+    Formation of ecal trees 
+    -->
+    
+    <!-- Switching to ecal calo hits -->
+    <algorithm type = "ListChanging">
+       <CaloHitListName> ECalCaloHits </CaloHitListName>
+    </algorithm>
+    
+    <!-- Clustering parent algorithm runs a daughter clustering algorithm -->
+    <algorithm type = "ClusteringParent">
+        <algorithm type = "ConnectorClustering" description = "ConnectorCreation">
+            <connectorAlgorithms>
+                <algorithm type = "ConnectorSeeding">
+                    <!-- Connect all with simple criteria -->
+                    <SeedingStrategy>0</SeedingStrategy>
+                    <MaxConnectionDistanceFine>30.f</MaxConnectionDistanceFine>
+
+                    <MaxPseudoLayerConnection>3</MaxPseudoLayerConnection>
+                    <!-- Only in same sub detector -->
+                    <ShouldConnectOnlySameHitType>true</ShouldConnectOnlySameHitType>
+                    <MaxConnectionAngleFine>1.3</MaxConnectionAngleFine>
+                    <MaxConnectionAngleCoarse>1.3</MaxConnectionAngleCoarse>
+                </algorithm>
+                <!-- Global cleaning for charged particles -->
+                <algorithm type = "GlobalConnectorCleaning">
+                    <tool type = "KappaOrderParameter" description = "OrderParameterTool"/>
+                    <tool type = "SimpleReferenceVector" description = "ReferenceVectorTool">
+                        <BackwardConnectorWeight>3</BackwardConnectorWeight>
+                        <ForwardConnectorWeight>1</ForwardConnectorWeight>
+                        <ReferenceDirectionDepth>1</ReferenceDirectionDepth>
+                        <ReferenceDirectionMaximumForwardLayer>3</ReferenceDirectionMaximumForwardLayer>
+                    </tool>
+                </algorithm>
+            </connectorAlgorithms>
+        </algorithm>
+        <algorithm type = "TreeClustering" description = "ClusterFormation"/>
+        <!-- Perform associations -->
+        <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation">
+            <associationAlgorithms>
+                <algorithm type = "TopologicalTrackClusterAssociation">
+                    <TrackClusterNLayersCut> 4 </TrackClusterNLayersCut>
+                    <MaxNormaleAngle> 0.8f </MaxNormaleAngle>
+                    <MaxTransverseAngle> 0.7f </MaxTransverseAngle>
+                    <MaxNormaleDistance> 20.f </MaxNormaleDistance>
+                    <MaxTransverseDistance> 30.f </MaxTransverseDistance>
+                </algorithm>
+                <!-- Merge trees with close-by seeds (neutral only) -->
+                <algorithm type = "ClosebySeedMerging" />
+            </associationAlgorithms>
+        </algorithm>
+        <ClusterListName> ECalTrees </ClusterListName>
+        <ReplaceCurrentClusterList> false </ReplaceCurrentClusterList>
+    </algorithm>
+    
+    <!-- 
+    Formation of hcal trees 
+    -->
+    
+    <!-- Switching to hcal calo hits -->
+    <algorithm type = "ListChanging">
+       <CaloHitListName> HCalCaloHits </CaloHitListName>
+    </algorithm>
+
+    <!-- Clustering parent algorithm runs a daughter clustering algorithm -->
+    <algorithm type = "ClusteringParent">
+        <algorithm type = "ConnectorClustering" description = "ConnectorCreation">
+            <connectorAlgorithms>
+                <algorithm type = "ConnectorSeeding">
+                    <!-- Connect all with simple criteria -->
+                    <SeedingStrategy>0</SeedingStrategy>
+                    <MaxConnectionDistanceFine>25.f</MaxConnectionDistanceFine>
+                    <MaxConnectionDistanceCoarse>80.f</MaxConnectionDistanceCoarse>
+                    <MaxPseudoLayerConnection>3</MaxPseudoLayerConnection>
+                    <!-- Only in same sub detector -->
+                    <ShouldConnectOnlySameHitType>true</ShouldConnectOnlySameHitType>
+                    <MaxConnectionAngleFine>1.3</MaxConnectionAngleFine>
+                    <MaxConnectionAngleCoarse>1.3</MaxConnectionAngleCoarse>
+                </algorithm>
+                <!-- Global cleaning for charged particles -->
+                <algorithm type = "GlobalConnectorCleaning">
+                    <tool type = "KappaOrderParameter" description = "OrderParameterTool"/>
+                    <tool type = "SimpleReferenceVector" description = "ReferenceVectorTool">
+                        <BackwardConnectorWeight>3</BackwardConnectorWeight>
+                        <ForwardConnectorWeight>1</ForwardConnectorWeight>
+                        <ReferenceDirectionDepth>1</ReferenceDirectionDepth>
+                        <ReferenceDirectionMaximumForwardLayer>3</ReferenceDirectionMaximumForwardLayer>
+                    </tool>
+                </algorithm>
+            </connectorAlgorithms>
+        </algorithm>
+        <algorithm type = "TreeClustering" description = "ClusterFormation"/>
+        <!-- Perform associations -->
+        <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation">
+            <associationAlgorithms>
+                <!-- Merge trees with close-by seeds (neutral only) -->
+                <algorithm type = "ClosebySeedMerging" />
+            </associationAlgorithms>
+        </algorithm>
+        <ClusterListName> HCalTrees </ClusterListName>
+        <ReplaceCurrentClusterList> true </ReplaceCurrentClusterList>
+    </algorithm>
+    
+    <!-- Connect ecal and hcal trees across the detectors-->
+    <algorithm type = "GapCrossingConnection">
+        <ECalClusterListName> ECalTrees </ECalClusterListName>
+        <HCalClusterListName> HCalTrees </HCalClusterListName>
+        <MergedClusterListName> ECalHCalTrees </MergedClusterListName>
+        <MaxOuterECalLayer> 2 </MaxOuterECalLayer>
+        <MaxInnerHCalLayer> 2 </MaxInnerHCalLayer>
+        <MinECalClusterSize> 3 </MinECalClusterSize>
+        <MinHCalClusterSize> 3 </MinHCalClusterSize>
+        <ShouldFitECalBranch> true </ShouldFitECalBranch>
+        <MinECalBranchFitLength> 4 </MinECalBranchFitLength>
+        <CrossGapFitAngleDifferenceCut> 0.6 </CrossGapFitAngleDifferenceCut>
+     </algorithm>
+    
+    <!-- Merge the different cluster lists -->
+    <algorithm type = "ClusterListMerging">
+        <InputListNames> ECalTrees HCalTrees ECalHCalTrees </InputListNames>
+        <OutputListName> PrimaryTrees </OutputListName>
+    </algorithm>
+
+    <!-- Prepare tracks for particle flow objects -->
+    <algorithm type = "TrackPreparation">
+        <CandidateListNames>Tracks</CandidateListNames>
+        <MergedCandidateListName>PfoCandidates</MergedCandidateListName>
+        <PfoTrackListName>PfoCreation</PfoTrackListName>
+        <ShouldMakeAssociations>false</ShouldMakeAssociations>
+    </algorithm>
+    
+    <!-- Prepare clusters for particle flow objects -->
+    <algorithm type = "ClusterPreparation">
+        <CandidateListNames>PrimaryTrees</CandidateListNames>
+        <MergedCandidateListName>PfoCreation</MergedCandidateListName>
+     </algorithm> 
+
+     <!-- Create particle flow objects -->
+     <algorithm type = "PfoCreation">
+       <OutputPfoListName> ArborPfos </OutputPfoListName>
+       <ShouldCreateTrackBasedPfos> true </ShouldCreateTrackBasedPfos>
+       <ShouldCreateNeutralPfos> true </ShouldCreateNeutralPfos>
+       <MinClusterElectromagneticEnergy> 0.1 </MinClusterElectromagneticEnergy>
+       <AllowSingleLayerClusters> false </AllowSingleLayerClusters>
+     </algorithm>
+
+     <!-- Open Eve visual monitoring-->
+     <algorithm type = "VisualMonitoring">
+        <ShowCurrentConnectors>false</ShowCurrentConnectors>
+        <ConnectorLevel>Clusters</ConnectorLevel>
+        <ShowCurrentMCParticles>false</ShowCurrentMCParticles>
+        <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
+        <ShowCurrentTracks>false</ShowCurrentTracks>
+        <ShowCurrentClusters>false</ShowCurrentClusters>
+        <ShowCurrentPfos>true</ShowCurrentPfos>
+        <ShowCurrentVertices>false</ShowCurrentVertices>      
+        <HitColors>iterate</HitColors>
+        <DisplayEvent>true</DisplayEvent>
+        <ShowDetector>true</ShowDetector>
+        <DetectorView>""</DetectorView>
+        <ShowOnlyAvailable>false</ShowOnlyAvailable>
+        <ShowAssociatedTracks>true</ShowAssociatedTracks>
+     </algorithm>
+     
+</pandora>
