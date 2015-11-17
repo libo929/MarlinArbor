@@ -1,0 +1,48 @@
+<!-- Arbor settings xml file -->
+
+<pandora>
+    <!-- GLOBAL SETTINGS -->
+    <IsMonitoringEnabled>true</IsMonitoringEnabled>
+    <ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
+    <ShouldCollapseMCParticlesToPfoTarget>false</ShouldCollapseMCParticlesToPfoTarget>
+
+    <!-- PLUGIN SETTINGS -->
+<!--     <HadronicEnergyCorrectionPlugins>CleanClusters ScaleHotHadrons</HadronicEnergyCorrectionPlugins>
+    <EmShowerPlugin>LCEmShowerId</EmShowerPlugin>
+    <PhotonPlugin>LCPhotonId</PhotonPlugin>
+    <ElectronPlugin>LCElectronId</ElectronPlugin>
+    <MuonPlugin>LCMuonId</MuonPlugin> -->
+
+    <!-- ALGORITHM SETTINGS -->
+    
+    <!-- Select tracks and hits to use for clustering -->
+    <algorithm type = "EventPreparation">
+        <MergeECalHCalCaloHitLists>true</MergeECalHCalCaloHitLists>
+        <OutputTrackListName>Tracks</OutputTrackListName>
+        <OutputCaloHitListName>CaloHits</OutputCaloHitListName>
+        <OutputMuonCaloHitListName>MuonYokeHits</OutputMuonCaloHitListName>
+        <ReplacementTrackListName>Tracks</ReplacementTrackListName>
+        <ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
+    </algorithm>
+
+
+     <algorithm type = "VisualMonitoring">
+        <ShowCurrentConnectors>false</ShowCurrentConnectors>
+        <ConnectorLevel>Pfos</ConnectorLevel>
+        
+        <ShowCurrentMCParticles>true</ShowCurrentMCParticles>
+        <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
+        <ShowCurrentTracks>false</ShowCurrentTracks>
+        <ShowCurrentClusters>false</ShowCurrentClusters>
+        <ShowCurrentPfos>false</ShowCurrentPfos>
+        <ShowCurrentVertices>false</ShowCurrentVertices>
+        <CaloHitListNames>CaloHits MuonYokeHits</CaloHitListNames>
+        <TrackListNames>Tracks</TrackListNames>
+        <HitColors>iterate</HitColors>
+        <DisplayEvent>true</DisplayEvent>
+        <ShowDetector>true</ShowDetector>
+        <DetectorView>""</DetectorView>
+        <ShowOnlyAvailable>false</ShowOnlyAvailable>
+        <ShowAssociatedTracks>true</ShowAssociatedTracks>
+     </algorithm>    
+</pandora>
