@@ -1,0 +1,67 @@
+<!-- Arbor settings xml file -->
+
+<pandora>
+    <!-- GLOBAL SETTINGS -->
+    <IsMonitoringEnabled>true</IsMonitoringEnabled>
+    <ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
+    <ShouldCollapseMCParticlesToPfoTarget>true</ShouldCollapseMCParticlesToPfoTarget>
+
+    <!-- PLUGIN SETTINGS -->
+    <HadronicEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </HadronicEnergyCorrectionPlugins>
+    <ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </ElectromagneticEnergyCorrectionPlugins>
+    
+<!--     <EmShowerPlugin>LCEmShowerId</EmShowerPlugin>
+    <PhotonPlugin>LCPhotonId</PhotonPlugin>
+    <ElectronPlugin>LCElectronId</ElectronPlugin>
+    <MuonPlugin>LCMuonId</MuonPlugin> -->
+    
+    <SdhcalQuadraticEnergyFunction>
+        <EnergyConstantParameters>
+            0.0275562;
+            2.48209e-05;
+            -2.0772e-08;
+            0.100251;
+            2.07212e-05;
+            -2.99901e-08;
+            0.181102;
+            5.88835e-05;
+            8.31624e-08; 
+        </EnergyConstantParameters>
+        <SdhcalThresholds>
+            0.0400452 
+            0.101322 
+            0.39448
+        </SdhcalThresholds>
+    </SdhcalQuadraticEnergyFunction>
+
+    <!-- ALGORITHM SETTINGS -->
+    
+     <!-- Run perfect particle flow on inputs using MCParticles -->
+     <algorithm type = "PerfectParticleFlow">
+       <OutputClusterListName> ArborClusters </OutputClusterListName>
+       <OutputPfoListName> ArborPFOs </OutputPfoListName>
+       <SimpleCaloHitCollection> true </SimpleCaloHitCollection>
+       <MinWeightFraction> 0.01 </MinWeightFraction>
+     </algorithm>
+
+     <!-- Open Eve visual monitoring-->
+     <algorithm type = "VisualMonitoring">
+        <ShowCurrentConnectors>false</ShowCurrentConnectors>
+        <ConnectorLevel>Pfos</ConnectorLevel>
+        
+        <ShowCurrentMCParticles>false</ShowCurrentMCParticles>
+        <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
+        <ShowCurrentTracks>false</ShowCurrentTracks>
+        <ShowCurrentClusters>false</ShowCurrentClusters>
+        <ShowCurrentPfos>true</ShowCurrentPfos>
+        <ShowCurrentVertices>false</ShowCurrentVertices>      
+        
+        <HitColors>iterate</HitColors>
+        <DisplayEvent>true</DisplayEvent>
+        <ShowDetector>true</ShowDetector>
+        <DetectorView>""</DetectorView>
+        <ShowOnlyAvailable>false</ShowOnlyAvailable>
+        <ShowAssociatedTracks>true</ShowAssociatedTracks>
+     </algorithm>
+     
+</pandora>
