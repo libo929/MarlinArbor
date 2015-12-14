@@ -34,7 +34,7 @@ echo $MARLIN_DLL | grep MarlinArbor > /dev/null
 if [ $? != 0 ]
 then
     echo "Adding marlin arbor to MARLIN_DLL !"
-    export MARLIN_DLL=/home/remi/ilcsoft/v01-17-03/MarlinReco/v01-07/lib/libMarlinReco.so:\
+    export MARLIN_DLL=/home/remi/ilcsoft/v01-17-03/MarlinReco/v01-10/lib/libMarlinReco.so:\
 /home/remi/ilcsoft/v01-17-03/PandoraAnalysis/v00-05/lib/libPandoraAnalysis.so:\
 /home/remi/ilcsoft/v01-17-03/LCFIVertex/v00-06-01/lib/libLCFIVertex.so:\
 /home/remi/ilcsoft/v01-17-03/CEDViewer/v01-07/lib/libCEDViewer.so:\
@@ -92,7 +92,7 @@ cat > $marlinFile << EOF
      <processor name="MyFullLDCTracking_MarlinTrk"/>  
 
      <!-- ========== the track cheater   ================= -->
-     <!-- processor name="MyTruthTracker"/ -->    
+     <processor name="MyTruthTracker"/>
 
      <!-- ========== the post tracking patrec   ================= -->
 
@@ -107,14 +107,17 @@ cat > $marlinFile << EOF
      <processor name="MySimpleLHCalDigi"/>   
      <processor name="MySimpleMuonDigi"/>    
      
+     <processor name="MyRecoMCTruthLinker"/>
      <processor name="MyMarlinArbor"/>
+     <!-- processor name="MyPerfectMarlinArbor"/ -->
+     
      <!--processor name="MyBCalReco"/-->
 
      <!-- ========== particle ID ============================ -->
      <!--processor name="MyPFOID" /-->
 
      <!-- ========== full and DST output ==================== -->
-     <!--processor name="MyRecoMCTruthLinker"/-->
+     <!--processor name="MyRecoMCTruthLinker"/--> 
      
      <!-- ========== vertex finder ========================== -->
      <!--processor name="VertexFinder"/-->
@@ -128,7 +131,7 @@ cat > $marlinFile << EOF
       $lcioFile
       </parameter>
       <parameter name="GearXMLFile" value="$gearFile"/>
-      <parameter name="MaxRecordNumber" value="200"/>
+      <parameter name="MaxRecordNumber" value="0"/>
       <parameter name="SkipNEvents" value="0"/>
       <parameter name="SupressCheck" value="false"/>
       <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE </parameter>
@@ -851,7 +854,7 @@ cat > $marlinFile << EOF
 
 <!--################MySimDigital################################ -->
  <processor name="MySimDigital" type="SimDigital">
- <!--the transfer Between Energy and Induced Charge for SDHCAL-->
+<!--the transfer Between Energy and Induced Charge for SDHCAL-->
 
  <!--ECAL parameters-->
  <!--Calibration coefficients for ECAL-->
@@ -901,9 +904,9 @@ cat > $marlinFile << EOF
 
  <!--Induced charge simulation parameters-->
   <!--Parameter for the Polya distribution used to simulate the induced charge distribution : mean of the distribution-->
-  <parameter name="PolyaAverageCharge" type="double">1.6 </parameter>
+  <parameter name="PolyaAverageCharge" type="double">4.55 </parameter>
   <!--Parameter for the Polya distribution used to simulate the induced charge distribution : related to the distribution width -->
-  <parameter name="PolyaWidthParameter" type="double">16.3 </parameter>
+  <parameter name="PolyaWidthParameter" type="double">1.0 </parameter>
 
  <!--Induced charge dispatching parameters-->
  <!--Induced charge dispatching : which steps to use parameters-->
@@ -912,11 +915,13 @@ cat > $marlinFile << EOF
   <!--if true, ensure that each hit will keep at least one step for digitisation independatly of filtering conditions (StepCellCenterMaxDistanceLayerDirection)-->
   <parameter name="KeepAtLeastOneStep" type="bool">true </parameter>
   <!--Minimum distance (mm) between 2 Geant4 steps, in the RPC plane, to keep the 2 steps. Default value=0.5-->
-  <parameter name="StepsMinDistanceRPCplaneDirection" type="float">0.0001 </parameter>
+  <parameter name="StepsMinDistanceRPCplaneDirection" type="float">1.2 </parameter>
 
  <!--Induced charge dispatching : dispatching mode-->
+  <!--Define the charge splitter method. Possible option : Uniform, Function, Erf-->
+  <parameter name="ChargeSplitterOption" type="string"> Erf </parameter>
   <!--If true, use function to split the charge between pads. If false split uniformely-->
-  <parameter name="UseFunctionForChargeSplitting" type="bool">true </parameter>
+  <!--parameter name="UseFunctionForChargeSplitting" type="bool">true </parameter-->
 
  <!--Induced charge dispatching : dispatching uniformely parameters-->
   <!--Distance (in mm) from the border of the cell that implies hit on neighbouring cell for 'Uniform' charge splitter : used if UseFunctionForChargeSplitting is false-->
@@ -924,19 +929,29 @@ cat > $marlinFile << EOF
 
  <!--Induced charge dispatching : dispatching with function parameters-->
   <!--ROOT TF2 formula for function describing the induced charge distribution, x and y are coordinates from the step position in I and J direction: used if UseFunctionForChargeSplitting is true-->
-  <parameter name="functionFormula" type="string"> exp(-(x*x+y*y)/([0]*[0]))+[1]*exp(-(x*x+y*y)/([2]*[2])) </parameter>
+  <parameter name="functionFormula" type="string"> exp(-(x*x+y*y)/([0]*[0])) +[1]*exp(-(x*x+y*y)/([2]*[2]))</parameter>
   <!--parameter values for the function defined with functionFormula-->
-  <parameter name="functionParameters" type="FloatVec">1.6 0.006 11.5 </parameter>
+  <parameter name="functionParameters" type="FloatVec">1. 0.00067 11.2 0.000005 80</parameter>
+  <!--Width values for the different Erf functions-->
+  <parameter name="erfWidth" type="FloatVec">1. 10.</parameter>
+  <!--Weigth for the different Erf functions-->
+  <parameter name="erfWeigth" type="FloatVec">1. 0.00077 </parameter>
   <!--distance in mm between two RPC pads : used if UseFunctionForChargeSplitting is true -->
-  <parameter name="RPC_PadSeparation" type="float">0.5 </parameter>
+  <parameter name="RPC_PadSeparation" type="float">0.408 </parameter>
   <!--maximal distance (in mm) at which a step can induce charge using the 2D function defined with functionFormula-->
-  <parameter name="functionRange" type="float">25 </parameter>
+  <parameter name="functionRange" type="float">30 </parameter>
 
  <!--digitisation parameters--> 
   <!--Threshold for HCAL Hits in pC-->
-  <parameter name="HCALThreshold" type="FloatVec">0.114 1.45 3.8 </parameter>
+  <parameter name="HCALThreshold" type="FloatVec">0.114 5.4 14. </parameter>
+  <!--parameter name="HCALThreshold" type="FloatVec">0.114 1.0 15.5 </parameter-->
   <!--Calibration coefficients for HCAL-->
-  <parameter name="CalibrHCAL" type="FloatVec">0.0406459 0.101952 0.258078 </parameter>
+  <!-- DBD parameters -->
+  <!-- <parameter name="CalibrHCAL" type="FloatVec">0.0406459 0.101952 0.258078 </parameter> -->
+  <!-- arnaud thesis results -->
+  <parameter name="CalibrHCAL" type="FloatVec">0.0400452 0.101322 0.39448</parameter>
+  <!-- guillaume optimisation parameters (hcal threshold = 0.114 1.0 15.5) ->
+  <!--parameter name="CalibrHCAL" type="FloatVec">1.07078184934584807e-18 8.19425005794504058e-02 3.44473833749605329e-01</parameter-->
   <!--Replace analog hit energy by value given in CalibrHCAL according to thresholds given in HCALThreshold-->
   <parameter name="doThresholds" type="bool">true </parameter>
 
@@ -949,6 +964,13 @@ cat > $marlinFile << EOF
   <parameter name="RelationOutputCollection" type="string" lcioOutType="LCRelation">RelationCaloHit </parameter>
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+
+  <!--Step efficiency correction method : should be Constant or PrototypeMap-->
+  <parameter name="EffMapOption" type="string"> Constant </parameter>
+  <!--Value of the constant term for efficiency correction if EffMapOption==Constant-->
+  <parameter name="EffMapConstantValue" type="float"> 0.96 </parameter>
+  <!--File name where prototype efficiency corresction is stored if EffMapOption==PrototypeMap-->
+  <parameter name="EffMapPrototypeFileName" type="string"> map.txt </parameter>
 
 </processor>
 
@@ -1073,7 +1095,7 @@ cat > $marlinFile << EOF
   <parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
   <parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
   <parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
-  <parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit</parameter>
+  <parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit RelationLHcalHit RelationCaloHit_LDC</parameter>
   <parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
   <parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
   <parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
@@ -1102,6 +1124,54 @@ cat > $marlinFile << EOF
   <parameter name="AbsorberIntLengthOther" type="float">0.0060</parameter>
   <!--Whether to calculate track states manually, rather than copy stored fitter values-->
   <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+  <parameter name="ReachesECalNFtdHits" type="int">2</parameter>
+  <!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
+  <!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
+</processor>
+
+
+
+<processor name="MyPerfectMarlinArbor" type="ArborPFAProcessor">
+  <parameter name="PandoraSettingsXmlFile" type="String">/home/remi/git/MarlinArbor/scripts/ArborSettingsPerfectParticleFlow.xml</parameter>
+  <!-- Collection names -->
+  <parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
+  <parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+  <parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+  <parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
+  <parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
+  <parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+  <parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+  <parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit RelationLHcalHit RelationCaloHit_LDC</parameter>
+  <parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
+  <parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+  <parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+  <parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+  <parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+  
+  <parameter name="ClusterCollectionName" type="String">PandoraPerfectClusters</parameter>
+  <parameter name="PFOCollectionName" type="String">PandoraPerfectPFOs</parameter>
+  <!-- Calibration constants -->
+  <parameter name="ECalToMipCalibration" type="float">160.0</parameter>
+  <parameter name="HCalToMipCalibration" type="float">34.8</parameter>
+  <parameter name="ECalMipThreshold" type="float">0.5</parameter>
+  <parameter name="HCalMipThreshold" type="float">0.3</parameter>
+  <parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
+  <parameter name="HCalToEMGeVCalibration" type="float">1.007</parameter>
+  <parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
+  <parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
+  <parameter name="HCalToHadGeVCalibration" type="float">1.027</parameter>
+  <parameter name="MuonToMipCalibration" type="float">10.0</parameter>
+  <parameter name="DigitalMuonHits" type="int">0</parameter>
+  <parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter>
+  <parameter name="AbsorberRadLengthECal" type="float">0.2854</parameter>
+  <parameter name="AbsorberIntLengthECal" type="float">0.0101</parameter>
+  <parameter name="AbsorberRadLengthHCal" type="float">0.0569</parameter>
+  <parameter name="AbsorberIntLengthHCal" type="float">0.0060</parameter>
+  <parameter name="AbsorberRadLengthOther" type="float">0.0569</parameter>
+  <parameter name="AbsorberIntLengthOther" type="float">0.0060</parameter>
+  <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+  <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+  <parameter name="ReachesECalNFtdHits" type="int">2</parameter>
   <!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
   <!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
 </processor>
