@@ -20,6 +20,9 @@
 
 #include <cstdlib>
 
+namespace marlin_arbor
+{
+
 ArborPFAProcessor aArborPFAProcessor;
 
 ArborPFAProcessor::PandoraToLCEventMap ArborPFAProcessor::m_pandoraToLCEventMap;
@@ -750,4 +753,6 @@ ArborPFAProcessor::Settings::Settings() :
     m_muonBarrelBField(-1.5f),
     m_muonEndCapBField(0.01f)
 {
+}
+
 }

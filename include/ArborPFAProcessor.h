@@ -19,6 +19,9 @@
 
 namespace pandora {class Pandora;}
 
+namespace marlin_arbor
+{
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -153,6 +156,8 @@ private:
 inline marlin::Processor *ArborPFAProcessor::newProcessor()
 {
     return new ArborPFAProcessor;
+}
+
 }
 
 #endif // #ifndef ARBOR_PFA_PROCESSOR_H

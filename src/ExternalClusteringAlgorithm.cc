@@ -17,6 +17,9 @@
 
 using namespace pandora;
 
+namespace marlin_arbor
+{
+
 ExternalClusteringAlgorithm::ExternalClusteringAlgorithm() :
     m_flagClustersAsPhotons(true)
 {
@@ -118,4 +121,6 @@ StatusCode ExternalClusteringAlgorithm::ReadSettings(const TiXmlHandle xmlHandle
         "FlagClustersAsPhotons", m_flagClustersAsPhotons));
 
     return STATUS_CODE_SUCCESS;
+}
+
 }

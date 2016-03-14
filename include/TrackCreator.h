@@ -20,11 +20,14 @@
 #include "Api/PandoraApi.h"
 #include "Objects/Helix.h"
 
+namespace arbor_content { class TrackFactory; }
+
+namespace marlin_arbor
+{
+
 typedef std::vector<Track *> TrackVector;
 typedef std::set<const Track *> TrackList;
 typedef std::map<Track *, int> TrackToPidMap;
-
-namespace arbor_content { class TrackFactory; }
 
 inline LCCollectionVec *newTrkCol(const std::string &name, LCEvent *evt , bool isSubset)
 {
@@ -333,6 +336,8 @@ inline bool TrackCreator::IsParent(const Track *const pTrack) const
 inline bool TrackCreator::IsDaughter(const Track *const pTrack) const
 {
     return (m_daughterTrackList.end() != m_daughterTrackList.find(pTrack));
+}
+
 }
 
 #endif // #ifndef TRACK_CREATOR_H

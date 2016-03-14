@@ -12,6 +12,9 @@
 
 namespace pandora { class CaloHit; }
 
+namespace marlin_arbor
+{
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -49,6 +52,8 @@ private:
 inline pandora::Algorithm *ExternalClusteringAlgorithm::Factory::CreateAlgorithm() const
 {
     return new ExternalClusteringAlgorithm();
+}
+
 }
 
 #endif // #ifndef EXTERNAL_CLUSTERING_ALGORITHM_H

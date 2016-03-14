@@ -31,6 +31,9 @@
 
 #include "ArborApi/ObjectFactories.h"
 
+namespace marlin_arbor
+{
+
 TrackCreator::TrackCreator(const Settings &settings, const pandora::Pandora *const pPandora) :
     m_settings(settings),
     m_pPandora(pPandora),
@@ -955,4 +958,6 @@ TrackCreator::Settings::Settings() :
     m_minTpcHitFractionOfExpected(0.2f),
     m_minFtdHitsForTpcHitFraction(2)
 {
+}
+
 }

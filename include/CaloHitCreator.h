@@ -15,9 +15,12 @@
 
 #include "Api/PandoraApi.h"
 
-typedef std::vector<CalorimeterHit *> CalorimeterHitVector;
-
 namespace arbor_content { class CaloHitFactory; }
+
+namespace marlin_arbor
+{
+
+typedef std::vector<CalorimeterHit *> CalorimeterHitVector;
 
 /**
  *  @brief  CaloHitCreator class
@@ -250,6 +253,8 @@ inline const CalorimeterHitVector &CaloHitCreator::GetCalorimeterHitVector() con
 inline void CaloHitCreator::Reset()
 {
     m_calorimeterHitVector.clear();
+}
+
 }
 
 #endif // #ifndef CALO_HIT_CREATOR_H

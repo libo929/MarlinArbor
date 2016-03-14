@@ -30,6 +30,9 @@
 
 #include <cmath>
 
+namespace marlin_arbor
+{
+
 PfoCreator::PfoCreator(const Settings &settings, const pandora::Pandora *const pPandora) :
     m_settings(settings),
     m_pPandora(pPandora)
@@ -158,4 +161,6 @@ pandora::StatusCode PfoCreator::CreateParticleFlowObjects(EVENT::LCEvent *pLCEve
 
 PfoCreator::Settings::Settings()
 {
+}
+
 }

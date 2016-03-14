@@ -29,6 +29,9 @@
 #include <cmath>
 #include <limits>
 
+namespace marlin_arbor
+{
+
 CaloHitCreator::CaloHitCreator(const Settings &settings, const pandora::Pandora *const pPandora) :
     m_settings(settings),
     m_pPandora(pPandora),
@@ -754,4 +757,6 @@ CaloHitCreator::Settings::Settings() :
     m_eCalSiToHadGeVEndCap(1.f),
     m_eCalScToHadGeVEndCap(1.f)
 {
+}
+
 }

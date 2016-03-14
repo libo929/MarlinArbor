@@ -25,6 +25,9 @@
 #include <cmath>
 #include <limits>
 
+namespace marlin_arbor
+{
+
 MCParticleCreator::MCParticleCreator(const Settings &settings, const pandora::Pandora *const pPandora) :
     m_settings(settings),
     m_pPandora(pPandora),
@@ -239,4 +242,6 @@ pandora::StatusCode MCParticleCreator::CreateCaloHitToMCParticleRelationships(co
 
 MCParticleCreator::Settings::Settings()
 {
+}
+
 }

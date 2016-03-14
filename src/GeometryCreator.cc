@@ -20,6 +20,9 @@
 #include "GeometryCreator.h"
 #include "ArborPFAProcessor.h"
 
+namespace marlin_arbor
+{
+
 GeometryCreator::GeometryCreator(const Settings &settings, const pandora::Pandora *const pPandora) :
     m_settings(settings),
     m_pPandora(pPandora)
@@ -412,4 +415,6 @@ GeometryCreator::Settings::Settings() :
     m_hCalRingOuterSymmetryOrder(16),
     m_hCalRingOuterPhiCoordinate(0.f)
 {
+}
+
 }

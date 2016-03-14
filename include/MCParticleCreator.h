@@ -16,6 +16,9 @@
 #include "CaloHitCreator.h"
 #include "TrackCreator.h"
 
+namespace marlin_arbor
+{
+
 /**
  *  @brief  MCParticleCreator class
  */
@@ -81,5 +84,7 @@ private:
     const pandora::Pandora *m_pPandora;                         ///< Address of the pandora object to create the mc particles
     const float             m_bField;                           ///< The bfield
 };
+
+}
 
 #endif // #ifndef MC_PARTICLE_CREATOR_H

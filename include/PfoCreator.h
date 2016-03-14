@@ -13,6 +13,9 @@
 
 #include "Api/PandoraApi.h"
 
+namespace marlin_arbor
+{
+
 /**
  *  @brief  PfoCreator class
  */
@@ -58,5 +61,7 @@ private:
     const Settings          m_settings;                         ///< The pfo creator settings
     const pandora::Pandora *m_pPandora;                         ///< Address of the pandora object from which to extract the pfos
 };
+
+}
 
 #endif // #ifndef PFO_CREATOR_H
