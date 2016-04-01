@@ -56,8 +56,8 @@ SET( CMAKE_CXX_FLAGS "-Wall -Werror -ansi -pedantic -Wno-long-long -Wno-sign-com
 
 FIND_PACKAGE( Marlin 1.0 REQUIRED )
 FIND_PACKAGE( MarlinUtil REQUIRED )
-FIND_PACKAGE( PandoraSDK 01.00.00 REQUIRED )
-FIND_PACKAGE( ArborContent 01.00.00 REQUIRED )
+FIND_PACKAGE( PandoraSDK 02.00.00 REQUIRED )
+FIND_PACKAGE( ArborContent 01.01.00 REQUIRED )
 FOREACH( pkg Marlin MarlinUtil PandoraSDK ArborContent )
     IF( ${pkg}_FOUND )
         INCLUDE_DIRECTORIES( ${${pkg}_INCLUDE_DIRS} )
