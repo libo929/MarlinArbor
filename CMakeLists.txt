@@ -11,7 +11,7 @@ PROJECT( MarlinArbor )
 
 # project version
 SET( MarlinArbor_VERSION_MAJOR 01 )
-SET( MarlinArbor_VERSION_MINOR 00 )
+SET( MarlinArbor_VERSION_MINOR 01 )
 SET( MarlinArbor_VERSION_PATCH 00 )
 
 
