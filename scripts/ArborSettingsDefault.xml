@@ -3,7 +3,7 @@
 <pandora>
     <!-- GLOBAL SETTINGS -->
     <IsMonitoringEnabled>true</IsMonitoringEnabled>
-    <ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
+    <ShouldDisplayAlgorithmInfo>false</ShouldDisplayAlgorithmInfo>
     <ShouldCollapseMCParticlesToPfoTarget>false</ShouldCollapseMCParticlesToPfoTarget>
 
     <!-- PLUGIN SETTINGS -->
@@ -19,35 +19,14 @@
     <PseudoLayerPlugin>
     	<UseCoordinateCorrections> true </UseCoordinateCorrections>
     </PseudoLayerPlugin>
-    <!-- 
-    SDHCAL single particle parameters from imad -  FTFP_BERT_HP
-	        0.0293659 
-            2.96392e-05 
-            -2.051233e-08 
-            0.0925993 
-            1.12284e-05 
-            -2.016464e-09 
-            0.166332 
-            3.08655e-05 
-            2.97939e-08
-     -->
+
     <SdhcalQuadraticEnergyFunction>
         <EnergyConstantParameters>
-            0.0275562
-            2.48209e-05
-            -2.0772e-08
-            0.100251
-            2.07212e-05
-            -2.99901e-08
-            0.181102
-	        5.88835e-05
-            8.31624e-08            
+            0.0275562 2.48209e-05 -2.0772e-08
+            0.100251  2.07212e-05 -2.99901e-08
+            0.181102  5.88835e-05  8.31624e-08            
         </EnergyConstantParameters>
-        <SdhcalThresholds>
-            0.0400452
-            0.101322 
-            0.39448
-        </SdhcalThresholds>
+        <SdhcalThresholds> 0.0400452 0.101322 0.39448 </SdhcalThresholds>
     </SdhcalQuadraticEnergyFunction>
     
 
@@ -55,26 +34,6 @@
     <!-- Use 'instance' xml tag to pre-configure algorithms without running them -->
     <algorithm type = "AlgorithmConfiguration">
         <algorithms>
-        
-            <!-- Configure a visual monitoring displaying the current cluster list to run between each step -->
-            <algorithm type = "VisualMonitoring" instance="MonitoringClusters">
-               <ShowCurrentConnectors>true</ShowCurrentConnectors>
-               <ConnectorLevel>Clusters</ConnectorLevel>
-               <ShowCurrentMCParticles>false</ShowCurrentMCParticles>
-               <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
-               <ShowCurrentTracks>false</ShowCurrentTracks>
-               <ShowCurrentClusters>true</ShowCurrentClusters>
-               <ShowCurrentPfos>false</ShowCurrentPfos>
-               <ShowCurrentVertices>false</ShowCurrentVertices>      
-               <HitColors>iterate</HitColors>
-               <DisplayEvent>false</DisplayEvent>
-               <ShowDetector>true</ShowDetector>
-               <DetectorView>""</DetectorView>
-               <ShowOnlyAvailable>false</ShowOnlyAvailable>
-               <ShowAssociatedTracks>true</ShowAssociatedTracks>
-            </algorithm>
-            
-            
             
 	        <!-- Main clustering algorithm with optimized parameters -->
 	        <algorithm type = "ArborClustering" instance = "ClusteringOptimized">
@@ -89,15 +48,13 @@
                    		<BackwardConnectorWeight> 2 </BackwardConnectorWeight>
                    		<ForwardConnectorWeight> 3 </ForwardConnectorWeight>
                    		<BackwardReferenceDirectionDepth> 1 </BackwardReferenceDirectionDepth>
-                   		<ForwardReferenceDirectionDepth> 3 </ForwardReferenceDirectionDepth>
+                   		<ForwardReferenceDirectionDepth> 2 </ForwardReferenceDirectionDepth>
                    		<OrderParameterAnglePower> 3 </OrderParameterAnglePower>
                    		<OrderParameterDistancePower> 2 </OrderParameterDistancePower>
                    		<Strategy> 0 </Strategy>
                    </tool>
                </AdditionalConnectionTools>
             </algorithm>
-	        
-	        
 	        
 	        <!-- Topological association parent algorithm with optimized parameters -->
 	        <algorithm type = "TopologicalAssociationParent" instance = "AssociationOptimized">
@@ -126,20 +83,16 @@
 						<MaxClusterNHit>10</MaxClusterNHit>
 						<MinClusterExtension>0.5</MinClusterExtension>
 					</algorithm>
-                    <algorithm type = "ContactClusterMerging">
-						<MaxClusterDistance>50.f</MaxClusterDistance>
-						<MinClusterContactDistance>10.f</MinClusterContactDistance>
-						<MinNHitContact>5</MinNHitContact>
-						<MaxEnergyChi2>1.f</MaxEnergyChi2>
-                    </algorithm>
 					<algorithm type = "SurroundingHitsMerging">
-						<MaxAssociationDistance>200.f</MaxAssociationDistance>
+						<MaxCaloHitDistanceFine>100.f</MaxCaloHitDistanceFine>
+		 				<MaxCaloHitDistanceCoarse>200.f</MaxCaloHitDistanceCoarse>
+		 				<MaxCentroidDistanceFine>150.f</MaxCentroidDistanceFine>
+						<MaxCentroidDistanceCoarse>300.f</MaxCentroidDistanceCoarse>
 						<EnergyWeight>0.f</EnergyWeight>
 						<DistanceWeight>1.f</DistanceWeight>
 					</algorithm>
 	            </associationAlgorithms>
 	        </algorithm>
-	        
 	        
 	        <!-- Reclustering algorithms -->
 	        <algorithm type = "ArborClustering" instance = "Reclustering1">
@@ -161,7 +114,6 @@
                </AdditionalConnectionTools>
             </algorithm>
             
-            
 	        <algorithm type = "ArborClustering" instance = "Reclustering2">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
@@ -180,7 +132,6 @@
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
             
 	        <algorithm type = "ArborClustering" instance = "Reclustering3">
                <AdditionalConnectionTools>
@@ -202,6 +153,46 @@
                </AdditionalConnectionTools>
             </algorithm>
             
+	        <algorithm type = "ArborClustering" instance = "Reclustering4">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 8.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 23.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	                   <MaxPseudoLayerConnection>3</MaxPseudoLayerConnection>
+	               	   <MaxNormaleDistanceFine> 10.f </MaxNormaleDistanceFine>
+                       <MaxTransverseDistanceFine> 22.f </MaxTransverseDistanceFine>
+                       <MaxConnectionAngleFine>0.6</MaxConnectionAngleFine>
+	               	   <MaxNormaleDistanceCoarse> 42.f </MaxNormaleDistanceCoarse>
+                       <MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+                       <MaxConnectionAngleCoarse>0.6</MaxConnectionAngleCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+            
+	        <algorithm type = "ArborClustering" instance = "Reclustering5">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 6.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	                   <MaxPseudoLayerConnection>3</MaxPseudoLayerConnection>
+	               	   <MaxNormaleDistanceFine> 10.f </MaxNormaleDistanceFine>
+                       <MaxTransverseDistanceFine> 22.f </MaxTransverseDistanceFine>
+                       <MaxConnectionAngleFine>0.5</MaxConnectionAngleFine>
+	               	   <MaxNormaleDistanceCoarse> 40.f </MaxNormaleDistanceCoarse>
+                       <MaxTransverseDistanceCoarse> 55.f </MaxTransverseDistanceCoarse>
+                       <MaxConnectionAngleCoarse>0.5</MaxConnectionAngleCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+            
             
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE1">
                <AdditionalConnectionTools>
@@ -215,7 +206,6 @@
                </AdditionalConnectionTools>
             </algorithm>
             
-            
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE2">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
@@ -227,7 +217,6 @@
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
             
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE3">
                <AdditionalConnectionTools>
@@ -241,7 +230,6 @@
                </AdditionalConnectionTools>
             </algorithm>
             
-            
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE4">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
@@ -253,7 +241,6 @@
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
             
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE5">
                <AdditionalConnectionTools>
@@ -279,13 +266,10 @@
     </algorithm>
     
 
-
-
-
-
-
-
-
+	<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+	<!-- ArborPFA algorithms starts here ! -->
+	<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+	
     <!-- Select tracks and hits to use for clustering -->
     <algorithm type = "EventPreparation">
         <OutputTrackListName>Tracks</OutputTrackListName>
@@ -295,9 +279,7 @@
         <ReplacementTrackListName>Tracks</ReplacementTrackListName>
         <ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
     </algorithm>
-
-
-
+    
     <!-- Run first clustering algorithm ad its topological associations with optimized parameters -->
     <algorithm type = "ClusteringParent">
         <algorithm type = "ArborClustering" description = "ClusterFormation" instance = "ClusteringOptimized" />
@@ -306,17 +288,10 @@
         <ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
     </algorithm>
     
-    
-    
-    
-    <!-- Initial clusters visual monitoring -->
-    <algorithm type = "VisualMonitoring" instance="MonitoringClusters"/>
-    
-    
-    
+  
     <!-- Run reclustering on charged clusters that do not match the track energy, using different strategies -->
     
-    <!-- Run reclustering on clusters with missing energy. Break all surrounding clusters and recluster-->
+	<!-- Run reclustering on clusters with missing energy. Break all surrounding clusters and recluster -->
     <algorithm type = "MissingEnergyReclustering">
          <clusteringAlgorithms>
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE1" />
@@ -326,7 +301,6 @@
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE5" />
          </clusteringAlgorithms>
          <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation" instance = "AssociationOptimized" />
-         <!-- <algorithm type = "VisualMonitoring" description = "Monitoring" instance="MonitoringClusters" /> -->
          <algorithm type = "TopologicalTrackClusterAssociation" description = "TrackClusterAssociation" instance = "TrackClusterOptimized"/>
          <MinChi2ToRunReclustering>1.0f</MinChi2ToRunReclustering>
          <MaxChi2ToStopReclustering>0.8f</MaxChi2ToStopReclustering>
@@ -341,18 +315,19 @@
             <algorithm type = "ArborClustering" instance = "Reclustering1" />
             <algorithm type = "ArborClustering" instance = "Reclustering2" />
             <algorithm type = "ArborClustering" instance = "Reclustering3" />
+            <algorithm type = "ArborClustering" instance = "Reclustering4" />
+            <algorithm type = "ArborClustering" instance = "Reclustering5" />
          </clusteringAlgorithms>
          <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation" instance = "AssociationOptimized" />
-         <!-- <algorithm type = "VisualMonitoring" description = "Monitoring" instance="MonitoringClusters" /> -->
          <algorithm type = "TopologicalTrackClusterAssociation" description = "TrackClusterAssociation" instance = "TrackClusterOptimized"/>
          <MinChi2ToRunReclustering>2.5f</MinChi2ToRunReclustering>
          <MaxChi2ToStopReclustering>0.8f</MaxChi2ToStopReclustering>
     </algorithm>
-    
-    
+
+        
     <!-- Prepare tracks for particle flow objects creation -->
     <algorithm type = "TrackPreparation">
-        <CandidateListNames>Tracks</CandidateListNames>
+        <CandidateListNames>Input</CandidateListNames>
         <MergedCandidateListName>PfoCandidates</MergedCandidateListName>
         <PfoTrackListName>PfoCreation</PfoTrackListName>
         <ShouldMakeAssociations>false</ShouldMakeAssociations>
@@ -365,34 +340,14 @@
     </algorithm>
     
      <!-- Create particle flow objects -->
-     <algorithm type = "PfoCreation">
-       <OutputPfoListName> ArborPfos </OutputPfoListName>
-       <ShouldCreateTrackBasedPfos> true </ShouldCreateTrackBasedPfos>
-       <ShouldCreateNeutralPfos> true </ShouldCreateNeutralPfos>
-       <MinClusterElectromagneticEnergy> 0.1 </MinClusterElectromagneticEnergy>
-       <MinClusterHadronicEnergy>0.1</MinClusterHadronicEnergy>
-       <AllowSingleLayerClusters> true </AllowSingleLayerClusters>
-       <MinHitsInCluster>1</MinHitsInCluster>
-     </algorithm>
-     
-     <!-- Open Eve visual monitoring on final pfos -->
-     <algorithm type = "VisualMonitoring">
-        <ShowCurrentConnectors>false</ShowCurrentConnectors>
-        <ConnectorLevel>Pfos</ConnectorLevel>
-        
-        <ShowCurrentMCParticles>false</ShowCurrentMCParticles>
-        <ShowCurrentCaloHits>true</ShowCurrentCaloHits>
-        <ShowCurrentTracks>true</ShowCurrentTracks>
-        <ShowCurrentClusters>false</ShowCurrentClusters>
-        <ShowCurrentPfos>true</ShowCurrentPfos>
-        <ShowCurrentVertices>false</ShowCurrentVertices>      
-        
-        <HitColors>iterate</HitColors>
-        <DisplayEvent>true</DisplayEvent>
-        <ShowDetector>true</ShowDetector>
-        <DetectorView>""</DetectorView>
-        <ShowOnlyAvailable>false</ShowOnlyAvailable>
-        <ShowAssociatedTracks>true</ShowAssociatedTracks>
-     </algorithm> 
+	<algorithm type = "PfoCreation">
+		<OutputPfoListName> ArborPfos </OutputPfoListName>
+		<ShouldCreateTrackBasedPfos> true </ShouldCreateTrackBasedPfos>
+		<ShouldCreateNeutralPfos> true </ShouldCreateNeutralPfos>
+		<MinClusterElectromagneticEnergy> 0.1 </MinClusterElectromagneticEnergy>
+		<MinClusterHadronicEnergy>0.1</MinClusterHadronicEnergy>
+		<AllowSingleLayerClusters> true </AllowSingleLayerClusters>
+		<MinHitsInCluster>1</MinHitsInCluster>
+	</algorithm>
      
 </pandora>
