@@ -245,6 +245,30 @@
             <algorithm type = "ArborClustering" instance = "ReclusteringMissE5">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
+						<MaxConnectionPseudoLayer> 6 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 70.f </MaxTransverseDistanceCoarse>
+                   </tool>
+                   <tool type = "ConnectorSeeding"/>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+            
+            <algorithm type = "ArborClustering" instance = "ReclusteringMissE6">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxConnectionPseudoLayer> 7 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 70.f </MaxTransverseDistanceCoarse>
+                   </tool>
+                   <tool type = "ConnectorSeeding"/>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+            
+            <algorithm type = "ArborClustering" instance = "ReclusteringMissE7">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
 						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
