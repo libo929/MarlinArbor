@@ -91,7 +91,7 @@ void ArborPFAProcessor::processEvent(LCEvent *pLCEvent)
 {
     try
     {
-        streamlog_out(DEBUG) << "ArborPFAProcessor - Run " << std::endl;
+        streamlog_out(DEBUG) << "ArborPFAProcessor - Event no " << pLCEvent->getEventNumber() << std::endl;
         (void) m_pandoraToLCEventMap.insert(PandoraToLCEventMap::value_type(m_pPandora, pLCEvent));
 
         PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, m_pMCParticleCreator->CreateMCParticles(pLCEvent));
