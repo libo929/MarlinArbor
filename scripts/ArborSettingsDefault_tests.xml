@@ -55,7 +55,7 @@
                <ShowCurrentTracks>true</ShowCurrentTracks>
                <ShowCurrentClusters>true</ShowCurrentClusters>
                <ShowCurrentPfos>false</ShowCurrentPfos>
-               <ShowCurrentVertices>false</ShowCurrentVertices>      
+               <ShowCurrentVertices>false</ShowCurrentVertices>
                <HitColors>iterate</HitColors>
                <DisplayEvent>false</DisplayEvent>
                <ShowDetector>true</ShowDetector>
@@ -67,240 +67,486 @@
 	        <!-- Main clustering algorithm with optimized parameters -->
 	        <algorithm type = "ArborClustering" instance = "ClusteringOptimized">
                <AdditionalConnectionTools>
-                   <tool type = "TrackDrivenSeeding">
-                   		<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 15.f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 30.f </MaxTransverseDistanceCoarse>
-                   </tool>
+                   <tool type = "TrackDrivenSeeding" />
 	               <tool type = "ConnectorSeeding" />
-                   <tool type = "ConnectorCleaning">
-                   		<BackwardConnectorWeight> 2 </BackwardConnectorWeight>
-                   		<ForwardConnectorWeight> 3 </ForwardConnectorWeight>
-                   		<BackwardReferenceDirectionDepth> 1 </BackwardReferenceDirectionDepth>
-                   		<ForwardReferenceDirectionDepth> 2 </ForwardReferenceDirectionDepth>
-                   		<OrderParameterAnglePower> 3 </OrderParameterAnglePower>
-                   		<OrderParameterDistancePower> 2 </OrderParameterDistancePower>
-                   		<Strategy> 0 </Strategy>
-                   </tool>
+                   <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
 	        
 	        <!-- Topological association parent algorithm with optimized parameters -->
 	        <algorithm type = "TopologicalAssociationParent" instance = "AssociationOptimized">
 	            <associationAlgorithms>
-					<algorithm type = "TopologicalTrackClusterAssociation" instance="TrackClusterOptimized">
-						<TrackClusterNLayersCut> 4 </TrackClusterNLayersCut>
-						<MaxNormaleAngle> 0.8f </MaxNormaleAngle>
-						<MaxTransverseAngle> 0.7f </MaxTransverseAngle>
-						<MaxNormaleDistance> 20.f </MaxNormaleDistance>
-						<MaxTransverseDistance> 30.f </MaxTransverseDistance>
-					</algorithm>
-					<algorithm type = "ClosebySeedMerging" />
-					<algorithm type = "ClusterFragmentMerging">
-						<MinNCaloHits>5</MinNCaloHits>
-						<MinNPseudoLayers>4</MinNPseudoLayers>
-						<MinNHitPerLayer>0.8f</MinNHitPerLayer>
-						<MaxFirstPseudoLayerFit>5</MaxFirstPseudoLayerFit>
-						<MaxClusterDistance>150.f</MaxClusterDistance>
-						<MaxFitPseudoLayer>4</MaxFitPseudoLayer>
-						<MaxClusterFitAngle>0.261</MaxClusterFitAngle>
-						<MaxClusterFitAngle2>0.261</MaxClusterFitAngle2>
-						<MaxEnergyChi2>1.f</MaxEnergyChi2>
-					</algorithm>
-					<algorithm type = "CloudClusterRemoval">
-						<MaxCloudClusterEnergy>1.f</MaxCloudClusterEnergy>
-						<MaxClusterNHit>10</MaxClusterNHit>
-						<MinClusterExtension>0.5</MinClusterExtension>
-					</algorithm>
-<!--                     <algorithm type = "ContactClusterMerging">
-						<MaxClusterDistance>50.f</MaxClusterDistance>
-						<MinClusterContactDistance>10.f</MinClusterContactDistance>
-						<MinNHitContact>5</MinNHitContact>
-						<MaxEnergyChi2>1.f</MaxEnergyChi2>
-                    </algorithm> -->
-					<algorithm type = "SurroundingHitsMerging">
-						<MaxCaloHitDistanceFine>100.f</MaxCaloHitDistanceFine>
-		 				<MaxCaloHitDistanceCoarse>200.f</MaxCaloHitDistanceCoarse>
-		 				<MaxCentroidDistanceFine>150.f</MaxCentroidDistanceFine>
-						<MaxCentroidDistanceCoarse>300.f</MaxCentroidDistanceCoarse>
-						<EnergyWeight>0.f</EnergyWeight>
-						<DistanceWeight>1.f</DistanceWeight>
-					</algorithm>
+  		            <algorithm type = "ClosebySeedMerging">
+		            	<MergeHCalSeedClusters>false</MergeHCalSeedClusters>
+		            </algorithm>
+  					<algorithm type = "TrackClusterAssociation" instance="TrackClusterOptimized" />
+				    <algorithm type = "ClosebySeedMerging"/>
+					<algorithm type = "ClusterFragmentMerging" />
+					<algorithm type = "CloudClusterRemoval" />
+					<algorithm type = "SurroundingHitsMerging" />
 	            </associationAlgorithms>
 	        </algorithm>
 	        
 	        <!-- Reclustering algorithms -->
-	        <algorithm type = "ArborClustering" instance = "Reclustering1">
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity1">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 15.f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 30.f </MaxTransverseDistanceCoarse>
-                   </tool>
-	               <tool type = "ConnectorSeeding">
-	               	   <MaxNormaleDistanceFine> 17.f </MaxNormaleDistanceFine>
-                       <MaxTransverseDistanceFine> 32.f </MaxTransverseDistanceFine>
-                       <MaxConnectionAngleFine>0.8</MaxConnectionAngleFine>
-	               	   <MaxNormaleDistanceCoarse> 60.f </MaxNormaleDistanceCoarse>
-                       <MaxTransverseDistanceCoarse> 90.f </MaxTransverseDistanceCoarse>
-                       <MaxConnectionAngleCoarse>0.75</MaxConnectionAngleCoarse>
-	               </tool>
-                   <tool type = "ConnectorCleaning" />
-               </AdditionalConnectionTools>
-            </algorithm>
-            
-	        <algorithm type = "ArborClustering" instance = "Reclustering2">
-               <AdditionalConnectionTools>
-                   <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 12.f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 27.f </MaxTransverseDistanceCoarse>
-                   </tool>
-	               <tool type = "ConnectorSeeding">
-	               	   <MaxNormaleDistanceFine> 14.f </MaxNormaleDistanceFine>
-                       <MaxTransverseDistanceFine> 29.f </MaxTransverseDistanceFine>
-                       <MaxConnectionAngleFine>0.7</MaxConnectionAngleFine>
-	               	   <MaxNormaleDistanceCoarse> 55.f </MaxNormaleDistanceCoarse>
-                       <MaxTransverseDistanceCoarse> 70.f </MaxTransverseDistanceCoarse>
-                       <MaxConnectionAngleCoarse>0.7</MaxConnectionAngleCoarse>
-	               </tool>
-                   <tool type = "ConnectorCleaning" />
-               </AdditionalConnectionTools>
-            </algorithm>
-            
-	        <algorithm type = "ArborClustering" instance = "Reclustering3">
-               <AdditionalConnectionTools>
-                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
 						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding" />
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity2">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding" />
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity3">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding" />
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity4">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.8 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding" />
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity5">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.7 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding" />
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity6">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.6 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding" />
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>  
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity7">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
                    </tool>
 	               <tool type = "ConnectorSeeding">
-	                   <MaxPseudoLayerConnection>3</MaxPseudoLayerConnection>
-	               	   <MaxNormaleDistanceFine> 12.f </MaxNormaleDistanceFine>
-                       <MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
-                       <MaxConnectionAngleFine>0.65</MaxConnectionAngleFine>
-	               	   <MaxNormaleDistanceCoarse> 50.f </MaxNormaleDistanceCoarse>
-                       <MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
-                       <MaxConnectionAngleCoarse>0.65</MaxConnectionAngleCoarse>
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 16.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 57.5f </MaxTransverseDistanceCoarse>
 	               </tool>
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
-	        <algorithm type = "ArborClustering" instance = "Reclustering4">
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity8">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
 						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 8.f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 23.f </MaxTransverseDistanceCoarse>
-                   </tool>
-	               <tool type = "ConnectorSeeding">
-	                   <MaxPseudoLayerConnection>3</MaxPseudoLayerConnection>
-	               	   <MaxNormaleDistanceFine> 10.f </MaxNormaleDistanceFine>
-                       <MaxTransverseDistanceFine> 22.f </MaxTransverseDistanceFine>
-                       <MaxConnectionAngleFine>0.6</MaxConnectionAngleFine>
-	               	   <MaxNormaleDistanceCoarse> 42.f </MaxNormaleDistanceCoarse>
-                       <MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
-                       <MaxConnectionAngleCoarse>0.6</MaxConnectionAngleCoarse>
-	               </tool>
-                   <tool type = "ConnectorCleaning" />
-               </AdditionalConnectionTools>
-            </algorithm>
-            
-	        <algorithm type = "ArborClustering" instance = "Reclustering5">
-               <AdditionalConnectionTools>
-                   <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 6.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
                    </tool>
 	               <tool type = "ConnectorSeeding">
-	                   <MaxPseudoLayerConnection>3</MaxPseudoLayerConnection>
-	               	   <MaxNormaleDistanceFine> 10.f </MaxNormaleDistanceFine>
-                       <MaxTransverseDistanceFine> 22.f </MaxTransverseDistanceFine>
-                       <MaxConnectionAngleFine>0.5</MaxConnectionAngleFine>
-	               	   <MaxNormaleDistanceCoarse> 40.f </MaxNormaleDistanceCoarse>
-                       <MaxTransverseDistanceCoarse> 55.f </MaxTransverseDistanceCoarse>
-                       <MaxConnectionAngleCoarse>0.5</MaxConnectionAngleCoarse>
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
 	               </tool>
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
-            
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE1">
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity9">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 22.5f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 35.f </MaxTransverseDistanceCoarse>
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
                    </tool>
-	               <tool type = "ConnectorSeeding"/>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 2 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+	               </tool>
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE2">
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity10">
                <AdditionalConnectionTools>
                    <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.8 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 16.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 57.5f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity11">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.7 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+	        <algorithm type = "ArborClustering" instance = "NeutralVicinity12">
+               <AdditionalConnectionTools>
+                   <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.6 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 2 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>  
+            
+            <algorithm type = "ArborClustering" instance = "MissingEnergy1">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 40.f </MaxTransverseDistanceCoarse>
                    </tool>
-	               <tool type = "ConnectorSeeding"/>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+	               </tool>
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE3">
+            <algorithm type = "ArborClustering" instance = "MissingEnergy2">
                <AdditionalConnectionTools>
-                   <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 27.5f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
                    </tool>
-                   <tool type = "ConnectorSeeding"/>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+	               </tool>
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE4">
+            <algorithm type = "ArborClustering" instance = "MissingEnergy3">
                <AdditionalConnectionTools>
-                   <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
                    </tool>
-                   <tool type = "ConnectorSeeding"/>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+	               </tool>
                    <tool type = "ConnectorCleaning" />
                </AdditionalConnectionTools>
             </algorithm>
-            
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE5">
+            <algorithm type = "ArborClustering" instance = "MissingEnergy4">
                <AdditionalConnectionTools>
-                   <tool type = "TrackDrivenSeeding">
-						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
-						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
-						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 40.f </MaxTransverseDistanceCoarse>
                    </tool>
-                   <tool type = "ConnectorSeeding"/>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 17.5f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 55.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy5">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 15.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy6">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 12.5f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning" />
+               </AdditionalConnectionTools>
+            </algorithm>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy7">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 40.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+	               </tool>
                    <tool type = "ConnectorCleaning">
-                   		<BackwardConnectorWeight> 1 </BackwardConnectorWeight>
-                   		<ForwardConnectorWeight> 5 </ForwardConnectorWeight>
-                   		<BackwardReferenceDirectionDepth> 1 </BackwardReferenceDirectionDepth>
-                   		<ForwardReferenceDirectionDepth> 3 </ForwardReferenceDirectionDepth>
-                   		<OrderParameterAnglePower> 3 </OrderParameterAnglePower>
-                   		<OrderParameterDistancePower> 2 </OrderParameterDistancePower>
-                   		<Strategy> 2 </Strategy>
+                   	   <BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+                   	   <ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+                   	   <BackwardReferenceDirectionDepth> 2 </BackwardReferenceDirectionDepth>
+                   	   <ForwardReferenceDirectionDepth> 1 </ForwardReferenceDirectionDepth>
+                   	   <Strategy> 1 </Strategy>
                    </tool>
                </AdditionalConnectionTools>
             </algorithm>
-            
+            <algorithm type = "ArborClustering" instance = "MissingEnergy8">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning">
+                   	   <BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+                   	   <ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+                   	   <BackwardReferenceDirectionDepth> 2 </BackwardReferenceDirectionDepth>
+                   	   <ForwardReferenceDirectionDepth> 1 </ForwardReferenceDirectionDepth>
+                   	   <Strategy> 1 </Strategy>
+                   </tool>
+               </AdditionalConnectionTools>
+            </algorithm>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy9">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning">
+                   	   <BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+                   	   <ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+                   	   <BackwardReferenceDirectionDepth> 2 </BackwardReferenceDirectionDepth>
+                   	   <ForwardReferenceDirectionDepth> 1 </ForwardReferenceDirectionDepth>
+                   	   <Strategy> 1 </Strategy>
+                   </tool>
+               </AdditionalConnectionTools>
+            </algorithm>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy10">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 40.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 17.5f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 55.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning">
+                   	   <BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+                   	   <ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+                   	   <BackwardReferenceDirectionDepth> 2 </BackwardReferenceDirectionDepth>
+                   	   <ForwardReferenceDirectionDepth> 1 </ForwardReferenceDirectionDepth>
+                   	   <Strategy> 1 </Strategy>
+                   </tool>
+               </AdditionalConnectionTools>
+            </algorithm>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy11">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 15.f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning">
+                   	   <BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+                   	   <ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+                   	   <BackwardReferenceDirectionDepth> 2 </BackwardReferenceDirectionDepth>
+                   	   <ForwardReferenceDirectionDepth> 1 </ForwardReferenceDirectionDepth>
+                   	   <Strategy> 1 </Strategy>
+                   </tool>
+               </AdditionalConnectionTools>
+            </algorithm>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy12">
+               <AdditionalConnectionTools>
+                    <tool type = "TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+                   </tool>
+	               <tool type = "ConnectorSeeding">
+	           		   <MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+	           		   <MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+	           		   <MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+                       <MaxTransverseDistanceFine> 12.5f </MaxTransverseDistanceFine>
+                       <MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+	               </tool>
+                   <tool type = "ConnectorCleaning">
+                   	   <BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+                   	   <ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+                   	   <BackwardReferenceDirectionDepth> 2 </BackwardReferenceDirectionDepth>
+                   	   <ForwardReferenceDirectionDepth> 1 </ForwardReferenceDirectionDepth>
+                   	   <Strategy> 1 </Strategy>
+                   </tool>
+               </AdditionalConnectionTools>
+            </algorithm>
         </algorithms>
     </algorithm>
-    
-
 
 
 	
@@ -314,46 +560,6 @@
         <ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
     </algorithm>
     
-    <!-- Run muon reconstruction -->
-<!--     <algorithm type = "MuonReconstruction">
-    	<algorithm type = "ArborClustering" description = "MuonClusterFormation">
-			<AdditionalConnectionTools>
-				<tool type = "TrackDrivenSeeding">
-					<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
-					<MaxTransverseDistanceFine> 15.f </MaxTransverseDistanceFine>
-					<MaxTransverseDistanceCoarse> 40.f </MaxTransverseDistanceCoarse>
-					<MaxDistanceToTrackFine> 10.f </MaxDistanceToTrackFine>
-					<MaxDistanceToTrackCoarse> 30.f </MaxDistanceToTrackCoarse>
-				</tool>
-				<tool type = "ConnectorCleaning">
-					<BackwardConnectorWeight> 2 </BackwardConnectorWeight>
-					<ForwardConnectorWeight> 3 </ForwardConnectorWeight>
-					<BackwardReferenceDirectionDepth> 1 </BackwardReferenceDirectionDepth>
-					<ForwardReferenceDirectionDepth> 3 </ForwardReferenceDirectionDepth>
-					<OrderParameterAnglePower> 3 </OrderParameterAnglePower>
-					<OrderParameterDistancePower> 2 </OrderParameterDistancePower>
-					<Strategy> 2 </Strategy>
-				</tool>
-			</AdditionalConnectionTools>
-    	</algorithm>
-    	<algorithm type = "TopologicalTrackClusterAssociation" description = "MuonTrackClusterAssociation" instance="TrackClusterOptimized" />
-        <InputCaloHitListName> CaloHits </InputCaloHitListName>
-       	<InputMuonCaloHitListName> MuonYokeHits </InputMuonCaloHitListName>
-       	<InputTrackListName> Tracks </InputTrackListName>
-       	<CaloHitClusteringListName> MuonClustering </CaloHitClusteringListName>
-       	<TrackClusteringListName> MuonClustering </TrackClusteringListName>
-       	<ReplacementCaloHitListName> MuonRemovedCaloHits </ReplacementCaloHitListName>
-       	<ReplacementTrackListName> MuonRemovedTracks </ReplacementTrackListName>
-       	<OutputTrackListName> MuonRemovedTracks </OutputTrackListName>
-       	<OutputCaloHitListName> MuonRemovedCaloHits </OutputCaloHitListName>
-       	<OutputMuonCaloHitListName> MuonRemovedYokeHits </OutputMuonCaloHitListName>
-       	<OutputMuonClusterListName> MuonClusters </OutputMuonClusterListName>
-       	<OutputMuonPfoListName> MuonPfos </OutputMuonPfoListName>
-        <ReplaceCurrentPfoList> false </ReplaceCurrentPfoList>
-        <ReplaceCurrentClusterList> false </ReplaceCurrentClusterList>
-        <MinMuonTrackMomentum> 0.1 </MinMuonTrackMomentum>
-    </algorithm> -->
-
 
     <!-- Run first clustering algorithm ad its topological associations with optimized parameters -->
     <algorithm type = "ClusteringParent">
@@ -363,55 +569,59 @@
         <ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
     </algorithm>
     
-    
-    <!-- Initial clusters visual monitoring -->
-    <!-- <algorithm type = "VisualMonitoring" instance="MonitoringClusters"/> -->
-    
   
     <!-- Run reclustering on charged clusters that do not match the track energy, using different strategies -->
-    
-	<!-- Run reclustering on clusters with missing energy. Break all surrounding clusters and recluster -->
-    <algorithm type = "MissingEnergyReclustering">
-         <clusteringAlgorithms>
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE1" />
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE2" />
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE3" />
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE4" />
-            <algorithm type = "ArborClustering" instance = "ReclusteringMissE5" />
-         </clusteringAlgorithms>
-         <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation" instance = "AssociationOptimized" />
-         <!-- <algorithm type = "VisualMonitoring" description = "Monitoring" instance="MonitoringClusters" /> -->
-         <algorithm type = "TopologicalTrackClusterAssociation" description = "TrackClusterAssociation" instance = "TrackClusterOptimized"/>
-         <MinChi2ToRunReclustering>1.0f</MinChi2ToRunReclustering>
-         <MaxChi2ToStopReclustering>0.8f</MaxChi2ToStopReclustering>
-         <MaxClusterCentroidDistance> 50.f </MaxClusterCentroidDistance>
-         <MaxClusterHitsDistance> 20.f </MaxClusterHitsDistance>
-    </algorithm>
-    
     
     <!-- Run reclustering on clusters with neutrals particles in its vicinity -->
     <algorithm type = "NeutralVicinityReclustering">
          <clusteringAlgorithms>
-            <algorithm type = "ArborClustering" instance = "Reclustering1" />
-            <algorithm type = "ArborClustering" instance = "Reclustering2" />
-            <algorithm type = "ArborClustering" instance = "Reclustering3" />
-            <algorithm type = "ArborClustering" instance = "Reclustering4" />
-            <algorithm type = "ArborClustering" instance = "Reclustering5" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity1" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity2" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity3" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity4" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity5" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity6" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity7" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity8" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity9" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity10" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity11" />
+            <algorithm type = "ArborClustering" instance = "NeutralVicinity12" />
          </clusteringAlgorithms>
          <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation" instance = "AssociationOptimized" />
-         <!-- <algorithm type = "VisualMonitoring" description = "Monitoring" instance="MonitoringClusters" /> -->
-         <algorithm type = "TopologicalTrackClusterAssociation" description = "TrackClusterAssociation" instance = "TrackClusterOptimized"/>
-         <MinChi2ToRunReclustering>2.5f</MinChi2ToRunReclustering>
-         <MaxChi2ToStopReclustering>0.8f</MaxChi2ToStopReclustering>
+         <algorithm type = "TrackClusterAssociation" description = "TrackClusterAssociation" instance = "TrackClusterOptimized"/>
     </algorithm>
-
-        
+    
+	<!-- Run reclustering on clusters with missing energy. Break all surrounding clusters and recluster -->
+    <algorithm type = "MissingEnergyReclustering">
+         <clusteringAlgorithms>
+            <algorithm type = "ArborClustering" instance = "MissingEnergy1" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy2" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy3" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy4" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy5" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy6" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy7" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy8" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy9" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy10" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy11" />
+            <algorithm type = "ArborClustering" instance = "MissingEnergy12" />
+         </clusteringAlgorithms>
+         <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation" instance = "AssociationOptimized" />
+         <algorithm type = "TrackClusterAssociation" description = "TrackClusterAssociation" instance = "TrackClusterOptimized"/>
+    </algorithm>
+    
     <!-- Prepare tracks for particle flow objects creation -->
     <algorithm type = "TrackPreparation">
         <CandidateListNames>Input</CandidateListNames>
         <MergedCandidateListName>PfoCandidates</MergedCandidateListName>
         <PfoTrackListName>PfoCreation</PfoTrackListName>
-        <ShouldMakeAssociations>false</ShouldMakeAssociations>
+        <trackClusterAssociationAlgorithms>
+	       	<algorithm type = "TrackClusterAssociation">
+				<UseEnergyCompatibility>true</UseEnergyCompatibility>
+			</algorithm>
+        </trackClusterAssociationAlgorithms>
     </algorithm>
     
     <!-- Prepare clusters for particle flow objects creation -->
@@ -423,36 +633,26 @@
      <!-- Create particle flow objects -->
      <algorithm type = "PfoCreation">
        <OutputPfoListName> ArborPfos </OutputPfoListName>
-       <ShouldCreateTrackBasedPfos> true </ShouldCreateTrackBasedPfos>
-       <ShouldCreateNeutralPfos> true </ShouldCreateNeutralPfos>
-       <MinClusterElectromagneticEnergy> 0.1 </MinClusterElectromagneticEnergy>
-       <MinClusterHadronicEnergy>0.1</MinClusterHadronicEnergy>
-       <AllowSingleLayerClusters> true </AllowSingleLayerClusters>
-       <MinHitsInCluster>1</MinHitsInCluster>
      </algorithm>
      
      <!-- Open Eve visual monitoring on final pfos -->
-<!--      <algorithm type = "VisualMonitoring">
+     <algorithm type = "VisualMonitoring">
         <ShowCurrentConnectors>false</ShowCurrentConnectors>
         <ConnectorLevel>Pfos</ConnectorLevel>
         
-        <ShowCurrentMCParticles>true</ShowCurrentMCParticles>
-        <ShowCurrentCaloHits>true</ShowCurrentCaloHits>
+        <ShowCurrentMCParticles>false</ShowCurrentMCParticles>
+        <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
         <ShowCurrentTracks>false</ShowCurrentTracks>
         <ShowCurrentClusters>false</ShowCurrentClusters>
         <ShowCurrentPfos>true</ShowCurrentPfos>
         <ShowCurrentVertices>false</ShowCurrentVertices>
-        <ClusterListNames> MuonClusters </ClusterListNames>
-        <CaloHitListNames> MuonYokeHits </CaloHitListNames>
-        
         <HitColors>iterate</HitColors>
         <DisplayEvent>true</DisplayEvent>
-        <ShowDetector>true</ShowDetector>
+        <ShowDetector>false</ShowDetector>
         <DetectorView>""</DetectorView>
         <ShowOnlyAvailable>false</ShowOnlyAvailable>
         <ShowAssociatedTracks>true</ShowAssociatedTracks>
-        <SuppressMCParticles> 22:5 2112:10 </SuppressMCParticles>
         <SuppressMCParticles> 22:0.5 2112:0.5 </SuppressMCParticles>
-     </algorithm>  -->
+     </algorithm>
      
 </pandora>
