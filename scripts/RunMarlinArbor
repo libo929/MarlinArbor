@@ -18,11 +18,12 @@ marlinXml=$1
 lcioFile=$2
 gearFile=$3
 pandoraFile=$4
-outputFileName="output.slcio"
+lcioOutputArg=""
+
 
 if [ $# -eq 5 ]
 then
-	outputFileName=$5
+	lcioOutputArg="--MyLCIOOutputProcessor.LCIOOutputFile=$5"
 fi
 
 
@@ -31,7 +32,7 @@ echo $MARLIN_DLL
 
 # run marlin !
 echo "Running Marlin Arbor (full reco)"
-Marlin --global.GearXMLFile=$gearFile --global.LCIOInputFiles=$lcioFile --MyMarlinArbor.PandoraSettingsXmlFile=$pandoraFile --MyLCIOOutputProcessor.LCIOOutputFile=$outputFileName $marlinXml
+Marlin --global.GearXMLFile=$gearFile --global.LCIOInputFiles=$lcioFile --MyMarlinArbor.PandoraSettingsXmlFile=$pandoraFile $lcioOutputArg $marlinXml
 
 status=$?
 
