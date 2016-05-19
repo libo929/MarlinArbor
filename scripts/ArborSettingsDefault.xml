@@ -81,6 +81,7 @@
 		            </algorithm>
   					<algorithm type = "TrackClusterAssociation" instance="TrackClusterOptimized" />
 				    <algorithm type = "ClosebySeedMerging"/>
+				    <algorithm type = "ChargedClusterMerging" />
 					<algorithm type = "ClusterFragmentMerging" />
 					<algorithm type = "CloudClusterRemoval" />
 					<algorithm type = "SurroundingHitsMerging" />
@@ -305,7 +306,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -324,7 +325,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -362,7 +363,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -381,7 +382,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -425,7 +426,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -450,7 +451,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -500,7 +501,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -525,7 +526,7 @@
                     <tool type = "TrackDrivenSeeding">
 						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
 						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
-						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
 						<MaxTransverseDistanceFine> 30.f </MaxTransverseDistanceFine>
 						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
                    </tool>
@@ -610,6 +611,7 @@
          </clusteringAlgorithms>
          <algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation" instance = "AssociationOptimized" />
          <algorithm type = "TrackClusterAssociation" description = "TrackClusterAssociation" instance = "TrackClusterOptimized"/>
+         <!-- <MaxClusterHitsDistance>40.f</MaxClusterHitsDistance> -->
     </algorithm>
     
     <!-- Prepare tracks for particle flow objects creation -->
