@@ -1,0 +1,78 @@
+<!-- ArborPFA settings xml file -->
+
+<pandora>
+	<!-- GLOBAL SETTINGS -->
+	<IsMonitoringEnabled>true</IsMonitoringEnabled>
+	<ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
+	<ShouldCollapseMCParticlesToPfoTarget>true
+	</ShouldCollapseMCParticlesToPfoTarget>
+
+	<!-- PLUGIN SETTINGS -->
+	<HadronicEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction
+	</HadronicEnergyCorrectionPlugins>
+	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction
+	</ElectromagneticEnergyCorrectionPlugins>
+
+	<!-- No particle ID plugin implemented for the moment -->
+	<!-- <EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> <PhotonPlugin>ArborPhotonId</PhotonPlugin> 
+		<ElectronPlugin>ArborElectronId</ElectronPlugin> <MuonPlugin>ArborMuonId</MuonPlugin> -->
+
+	<PseudoLayerPlugin>
+		<UseCoordinateCorrections> true </UseCoordinateCorrections>
+	</PseudoLayerPlugin>
+	<!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 0.0293659 
+		2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
+		2.97939e-08 -->
+	<SdhcalQuadraticEnergyFunction>
+		<EnergyConstantParameters>
+			0.0275562 2.48209e-05 -2.0772e-08
+			0.100251 2.07212e-05 -2.99901e-08
+			0.181102 5.88835e-05 8.31624e-08
+		</EnergyConstantParameters>
+		<SdhcalThresholds> 0.0400452 0.101322 0.39448 </SdhcalThresholds>
+	</SdhcalQuadraticEnergyFunction>
+
+	<algorithm type="CaloHitPreparation">
+		<IsolationMaxNNeighbors>1</IsolationMaxNNeighbors>
+		<IsolationMaxSeparationDistanceFine>25</IsolationMaxSeparationDistanceFine>
+		<IsolationMaxSeparationDistanceCoarse>40</IsolationMaxSeparationDistanceCoarse>
+	</algorithm>
+	
+
+	<!-- Select tracks and hits to use for clustering -->
+	<algorithm type="EventPreparation">
+		<OutputTrackListName>Tracks</OutputTrackListName>
+		<MergeECalHCalCaloHitLists>true</MergeECalHCalCaloHitLists>
+		<OutputCaloHitListName>CaloHits</OutputCaloHitListName>
+		<OutputMuonCaloHitListName>MuonYokeHits</OutputMuonCaloHitListName>
+		<ReplacementTrackListName>Tracks</ReplacementTrackListName>
+		<ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
+	</algorithm>
+
+	<!-- Run first clustering algorithm ad its topological associations with 
+		optimized parameters -->
+	<algorithm type="ClusteringParent">
+		<algorithm type="IsolatedHitClustering" description="ClusterFormation" />
+		<ClusterListName>IsolatedHitClusters</ClusterListName>
+		<ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
+	</algorithm>
+
+	<algorithm type="VisualMonitoring" description="VisualMonitoring">
+		<ShowCurrentConnectors>false</ShowCurrentConnectors>
+		<ConnectorLevel>Pfos</ConnectorLevel>
+		<ShowCurrentMCParticles>false</ShowCurrentMCParticles>
+		<ShowCurrentCaloHits>true</ShowCurrentCaloHits>
+		<ShowCurrentTracks>true</ShowCurrentTracks>
+		<ShowCurrentClusters>true</ShowCurrentClusters>
+		<ShowCurrentPfos>false</ShowCurrentPfos>
+		<ShowCurrentVertices>false</ShowCurrentVertices>
+		<!-- <TrackListNames>Input </TrackListNames> -->
+		<HitColors>iterate</HitColors>
+		<DisplayEvent>true</DisplayEvent>
+		<ShowDetector>true</ShowDetector>
+		<DetectorView>""</DetectorView>
+		<ShowOnlyAvailable>false</ShowOnlyAvailable>
+		<ShowAssociatedTracks>true</ShowAssociatedTracks>
+	</algorithm>
+
+</pandora>
