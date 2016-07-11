@@ -8,8 +8,11 @@
 
 <marlin>
 	<execute>
+		<processor name="MyPandoraPhoton"/>
  		<processor name="MyMarlinArbor"/>
-		<processor name="MyLCIOOutputProcessor"/>
+		<processor name="MyMCPfoMaker"/>
+		<processor name="MyPfoAnalysis"/>
+		<!-- <processor name="MyLCIOOutputProcessor"/> -->
 	</execute>
 
 
@@ -20,10 +23,55 @@
 		<parameter name="MaxRecordNumber" value="0"/>
 		<parameter name="SkipNEvents" value="0"/>
 		<parameter name="SupressCheck" value="false"/>
-		<parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE </parameter>
+		<parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG </parameter>
 		<parameter name="RandomSeed" value="1234567890" />
 	</global>
-
+	
+	
+	<processor name="MyPandoraPhoton" type="PandoraPFANewProcessor">
+		<parameter name="PandoraSettingsXmlFile" type="String">PandoraPhotons.xml</parameter>
+		<!-- Collection names -->
+		<parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
+		<parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+		<parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+		<parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
+		<parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
+		<parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+		<parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+		<parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit RelationLHcalHit RelationCaloHit_LDC</parameter>
+		<parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
+		<parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+		<parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+		<parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+		<parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+		
+		<parameter name="ClusterCollectionName" type="String">PandoraPhotonClusters</parameter>
+		<parameter name="PFOCollectionName" type="String">PandoraPhotonPFOs</parameter>
+		<!-- Calibration constants -->
+		<parameter name="ECalToMipCalibration" type="float">160.0</parameter>
+		<parameter name="HCalToMipCalibration" type="float">34.8</parameter>
+		<parameter name="ECalMipThreshold" type="float">0.5</parameter>
+		<parameter name="HCalMipThreshold" type="float">0.3</parameter>
+		<parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
+		<parameter name="HCalToEMGeVCalibration" type="float">1.007</parameter>
+		<parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
+		<parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
+		<parameter name="HCalToHadGeVCalibration" type="float">1.027</parameter>
+		<parameter name="MuonToMipCalibration" type="float">10.0</parameter>
+		<parameter name="DigitalMuonHits" type="int">0</parameter>
+		<parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter>
+		<parameter name="AbsorberRadLengthECal" type="float">0.2854</parameter>
+		<parameter name="AbsorberIntLengthECal" type="float">0.0101</parameter>
+		<parameter name="AbsorberRadLengthHCal" type="float">0.0569</parameter>
+		<parameter name="AbsorberIntLengthHCal" type="float">0.0060</parameter>
+		<parameter name="AbsorberRadLengthOther" type="float">0.0569</parameter>
+		<parameter name="AbsorberIntLengthOther" type="float">0.0060</parameter>
+		<!--Whether to calculate track states manually, rather than copy stored fitter values-->
+		<parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+		<parameter name="ReachesECalNFtdHits" type="int">2</parameter>
+		<!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
+		<!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
+	</processor>
 
 	<processor name="MyMarlinArbor" type="ArborPFAProcessor">
 		<parameter name="PandoraSettingsXmlFile" type="String"></parameter>
@@ -64,7 +112,45 @@
 		<parameter name="AbsorberIntLengthOther" type="float">0.0060</parameter>
 		<!--Whether to calculate track states manually, rather than copy stored fitter values-->
 		<parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+		
+		<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
 		<!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
+	</processor>
+	
+	
+	
+	<processor name="MyMCPfoMaker" type="MCPfoMaker">
+		<!--MCPfoMaker creates mc pfos for comparison with PandoraPFANew output-->
+		<!--Names of input mc particle collections-->
+		<parameter name="InputMCParticleCollections" type="StringVec" lcioInType="MCParticle">MCParticle</parameter>
+		<!--Flag to look for quarks with mother Z-->
+		<parameter name="LookForQuarksWithMotherZ" type="bool">false </parameter>
+		<!--Output mc particle collection name-->
+		<parameter name="OutputMCParticleCollection" type="string">MCPFOs </parameter>
+		<!--Output quark particle collection name-->
+		<parameter name="OutputQuarkParticleCollection" type="string">QuarkPFOs </parameter>
+		<!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+		<!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+	</processor>
+
+
+
+	<processor name="MyPfoAnalysis" type="PfoAnalysis">
+		<!--PfoAnalysis analyses output of PandoraPFANew-->
+		<!--Names of input mc particle collections-->
+		<parameter name="InputMCParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">MCPFOs </parameter>
+		<!--Names of input reconstructed particle collections-->
+		<parameter name="InputParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">ArborPFOs </parameter>
+		<!--Names of input quark particle collections-->
+		<parameter name="InputQuarkParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">QuarkPFOs </parameter>
+		<!--Names of input recluster monitoring collections-->
+		<parameter name="InputReclusterMonitoringCollections" type="StringVec" lcioInType="LCGenericObject"> </parameter>
+		<!--Set the debug print level-->
+		<parameter name="Printing" type="int">0 </parameter>
+		<!--Name of the output root file-->
+		<parameter name="RootFile" type="string"> ArborPFOAnalysis.root </parameter>
+		<!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+		<!--parameter name="Verbosity" type="string">DEBUG </parameter-->
 	</processor>
 
 
