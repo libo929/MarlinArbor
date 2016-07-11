@@ -33,6 +33,16 @@
 	</SdhcalQuadraticEnergyFunction>
 
 	<!-- ALGORITHM SETTINGS -->
+	
+	<!-- Select tracks and hits to use for clustering -->
+	<algorithm type="EventPreparation">
+		<OutputTrackListName>Tracks</OutputTrackListName>
+		<MergeECalHCalCaloHitLists>true</MergeECalHCalCaloHitLists>
+		<OutputCaloHitListName>CaloHits</OutputCaloHitListName>
+		<OutputMuonCaloHitListName>MuonYokeHits</OutputMuonCaloHitListName>
+		<ReplacementTrackListName>Tracks</ReplacementTrackListName>
+		<ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
+	</algorithm>
 
 	<!-- Run perfect particle flow on inputs using MCParticles -->
 	<algorithm type="PerfectParticleFlow">
@@ -41,8 +51,5 @@
 		<SimpleCaloHitCollection> true </SimpleCaloHitCollection>
 		<MinWeightFraction> 0.01 </MinWeightFraction>
 	</algorithm>
-
-	<!-- Open Eve visual monitoring -->
-	<!-- <algorithm type = "VisualMonitoring"/> -->
 
 </pandora>
