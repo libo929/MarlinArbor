@@ -678,8 +678,6 @@ void TrackCreator::TrackReachesECAL(const EVENT::Track *const pTrack, PandoraApi
     float hitZMax(-std::numeric_limits<float>::max());
     float hitOuterR(-std::numeric_limits<float>::max());
 
-    int nTpcHits(0);
-    int nFtdHits(0);
     int maxOccupiedFtdLayer(0);
 
     const EVENT::TrackerHitVec &trackerHitVec(pTrack->getTrackerHits());
@@ -703,7 +701,6 @@ void TrackCreator::TrackReachesECAL(const EVENT::Track *const pTrack, PandoraApi
 
         if ((r > m_tpcInnerR) && (r < m_tpcOuterR) && (std::fabs(z) <= m_tpcZmax))
         {
-            nTpcHits++;
             continue;
         }
 
@@ -716,11 +713,13 @@ void TrackCreator::TrackReachesECAL(const EVENT::Track *const pTrack, PandoraApi
                 if (static_cast<int>(j) > maxOccupiedFtdLayer)
                     maxOccupiedFtdLayer = static_cast<int>(j);
 
-                nFtdHits++;
                 break;
             }
         }
     }
+
+    const int nTpcHits(pTrack->getSubdetectorHitNumbers()[ 2 * lcio::ILDDetID::TPC - 1 ]);
+    const int nFtdHits(pTrack->getSubdetectorHitNumbers()[ 2 * lcio::ILDDetID::FTD - 1 ]);
 
     // Look to see if there are hits in etd or set, implying track has reached edge of ecal
     if ((hitOuterR > m_minSetRadius) || (hitZMax > m_minEtdZPosition))
