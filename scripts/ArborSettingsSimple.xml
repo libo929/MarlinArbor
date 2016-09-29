@@ -1,0 +1,80 @@
+<!-- ArborPFA settings xml file -->
+
+<pandora>
+	<!-- GLOBAL SETTINGS -->
+	<IsMonitoringEnabled>true</IsMonitoringEnabled>
+	<ShouldDisplayAlgorithmInfo>false</ShouldDisplayAlgorithmInfo>
+	<ShouldCollapseMCParticlesToPfoTarget>true
+	</ShouldCollapseMCParticlesToPfoTarget>
+
+	<!-- PLUGIN SETTINGS -->
+	<HadronicEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction
+	</HadronicEnergyCorrectionPlugins>
+	<!-- <ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction 
+		</ElectromagneticEnergyCorrectionPlugins> -->
+
+	<!-- No particle ID plugin implemented for the moment -->
+	<!-- <EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> <PhotonPlugin>ArborPhotonId</PhotonPlugin> 
+		<ElectronPlugin>ArborElectronId</ElectronPlugin> <MuonPlugin>ArborMuonId</MuonPlugin> -->
+
+	<PseudoLayerPlugin>
+		<UseCoordinateCorrections> true </UseCoordinateCorrections>
+	</PseudoLayerPlugin>
+
+	<!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 0.0293659 
+		2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
+		2.97939e-08 SDHCAL single particle parameters from imad - QGSP_BERT 0.0273594 
+		3.52211e-05 -1.7897e-08 0.0996403 2.0337e-05 -1.08497e-08 0.144696 1.55448e-05 
+		2.12579e-08 -->
+	<SdhcalQuadraticEnergyFunction>
+		<EnergyConstantParameters>
+			0.0273594 3.52211e-05 -1.7897e-08
+			0.0996403
+			2.0337e-05 -1.08497e-08
+			0.144696 1.55448e-05 2.12579e-08
+		</EnergyConstantParameters>
+		<SdhcalThresholds> 0.0400452 0.101322 0.39448 </SdhcalThresholds>
+	</SdhcalQuadraticEnergyFunction>
+
+
+	<!-- Select tracks and hits to use for clustering -->
+	<algorithm type="CaloHitPreparation" />
+	<algorithm type="EventPreparation">
+		<OutputTrackListName>Tracks</OutputTrackListName>
+		<MergeECalHCalCaloHitLists>true</MergeECalHCalCaloHitLists>
+		<OutputCaloHitListName>CaloHits</OutputCaloHitListName>
+		<OutputMuonCaloHitListName>MuonYokeHits</OutputMuonCaloHitListName>
+		<ReplacementTrackListName>Tracks</ReplacementTrackListName>
+		<ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
+	</algorithm>
+
+	<!-- Run simple clustering algorithm -->
+	<algorithm type="ClusteringParent">
+		<algorithm type="SimpleRegionClustering" description="ClusterFormation">
+		  <ThetaAngle>1.501</ThetaAngle>		  
+      <PhiAngle>0</PhiAngle>
+      <Distance>700</Distance>
+		</algorithm>
+		<ClusterListName>SimpleClusters</ClusterListName>
+		<ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
+	</algorithm>
+
+	<!-- Prepare tracks for particle flow objects creation -->
+	<algorithm type="TrackPreparation">
+		<CandidateListNames>Input</CandidateListNames>
+		<MergedCandidateListName>PfoCandidates</MergedCandidateListName>
+		<PfoTrackListName>PfoCreation</PfoTrackListName>
+	</algorithm>
+
+	<!-- Prepare clusters for particle flow objects creation -->
+	<algorithm type="ClusterPreparation">
+		<CandidateListNames>SimpleClusters</CandidateListNames>
+		<MergedCandidateListName>PfoCreation</MergedCandidateListName>
+	</algorithm>
+
+	<!-- Create particle flow objects -->
+	<algorithm type="PfoCreation">
+		<OutputPfoListName>SimplePfos</OutputPfoListName>
+	</algorithm>
+
+</pandora>
