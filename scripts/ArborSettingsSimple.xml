@@ -21,20 +21,33 @@
 		<UseCoordinateCorrections> true </UseCoordinateCorrections>
 	</PseudoLayerPlugin>
 
-	<!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 0.0293659 
-		2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
-		2.97939e-08 SDHCAL single particle parameters from imad - QGSP_BERT 0.0273594 
-		3.52211e-05 -1.7897e-08 0.0996403 2.0337e-05 -1.08497e-08 0.144696 1.55448e-05 
-		2.12579e-08 -->
-	<SdhcalQuadraticEnergyFunction>
-		<EnergyConstantParameters>
-			0.0273594 3.52211e-05 -1.7897e-08
-			0.0996403
-			2.0337e-05 -1.08497e-08
-			0.144696 1.55448e-05 2.12579e-08
-		</EnergyConstantParameters>
-		<SdhcalThresholds> 0.0400452 0.101322 0.39448 </SdhcalThresholds>
-	</SdhcalQuadraticEnergyFunction>
+  <!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 
+  0.0293659 
+    2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
+    2.97939e-08 
+    
+    SDHCAL single particle parameters from imad - QGSP_BERT 
+    0.0273594 
+    3.52211e-05 -1.7897e-08 0.0996403 2.0337e-05 -1.08497e-08 0.144696 1.55448e-05 
+    2.12579e-08
+    
+    ECAL + SDHCAL calibration with simple reco QGSP_BERT with Mokka ILD_v05_o2
+    lin = 
+    0.0387678 0.0943724 0.371602
+    quadr = 
+    0.0406952 3.30524e-05 -2.89607e-08
+    0.0925995 1.12701e-05  5.1673e-09
+    0.166333  3.08751e-05  2.98793e-08
+    
+     -->
+  <SdhcalQuadraticEnergyFunction>
+    <EnergyConstantParameters>
+    0.0406952 3.30524e-05 -2.89607e-08
+    0.0925995 1.12701e-05  5.1673e-09
+    0.166333  3.08751e-05  2.98793e-08
+    </EnergyConstantParameters>
+    <SdhcalThresholds> 0.0387678 0.0943724 0.371602 </SdhcalThresholds>
+  </SdhcalQuadraticEnergyFunction>
 
 
 	<!-- Select tracks and hits to use for clustering -->
@@ -76,5 +89,15 @@
 	<algorithm type="PfoCreation">
 		<OutputPfoListName>SimplePfos</OutputPfoListName>
 	</algorithm>
+	
+  <algorithm type="SingleParticleMonitoring">
+    <SDHcalThresholds> 0.0387678 0.0943724 0.371602 </SDHcalThresholds>
+    <UseSDHcalMode>true</UseSDHcalMode>
+    <TreeName>CalibrationTree</TreeName>
+    <FileName>ArborPFACalibration.root</FileName>
+    <GapDistanceFine>10</GapDistanceFine>
+    <GapDistanceCoarse>20</GapDistanceCoarse>
+    <ShouldUseIsolatedGapHits>false</ShouldUseIsolatedGapHits>
+  </algorithm>
 
 </pandora>
