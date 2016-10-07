@@ -29,6 +29,7 @@ class CaloHitCreator
 {
 public:
     typedef std::vector<std::string> StringVector;
+    typedef std::vector<float> FloatVector;
 
     /**
      *  @brief  Settings class
@@ -89,6 +90,9 @@ public:
         float           m_eCalScToHadGeVBarrel;                 ///< The calibration from deposited Sc-layer energy on the endcaps to hadronic energy
         float           m_eCalSiToHadGeVEndCap;                 ///< The calibration from deposited Si-layer energy on the enecaps to hadronic energy
         float           m_eCalScToHadGeVEndCap;                 ///< The calibration from deposited Sc-layer energy on the endcaps to hadronic energy
+
+        FloatVector     m_inputSDHcalThresholds;                ///< The sdhcal threshold values to decode from lcio file
+        FloatVector     m_pandoraSDHcalThresholds;              ///< The sdhcal threshold values to set in pandora calo hits
     };
 
     /**

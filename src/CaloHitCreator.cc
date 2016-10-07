@@ -255,6 +255,20 @@ pandora::StatusCode CaloHitCreator::CreateHCalCaloHits(const EVENT::LCEvent *con
                     caloHitParameters.m_isInOuterSamplingLayer = (this->GetNLayersFromEdge(pCaloHit) <= m_settings.m_nOuterSamplingLayers);
                     this->GetCommonCaloHitProperties(pCaloHit, caloHitParameters);
 
+                    float energy(pCaloHit->getEnergy());
+
+                    if(!m_settings.m_inputSDHcalThresholds.empty() && !m_settings.m_pandoraSDHcalThresholds.empty())
+                    {
+                      if(energy == m_settings.m_inputSDHcalThresholds.at(0))
+                        energy = m_settings.m_pandoraSDHcalThresholds.at(0);
+                      else if(energy == m_settings.m_inputSDHcalThresholds.at(1))
+                        energy = m_settings.m_pandoraSDHcalThresholds.at(1);
+                      else if(energy == m_settings.m_inputSDHcalThresholds.at(2))
+                        energy = m_settings.m_pandoraSDHcalThresholds.at(2);
+                    }
+
+                    caloHitParameters.m_inputEnergy = energy;
+
                     float absorberCorrection(1.);
 
                     if (std::fabs(pCaloHit->getPosition()[2]) < m_hCalBarrelOuterZ)
@@ -267,13 +281,13 @@ pandora::StatusCode CaloHitCreator::CreateHCalCaloHits(const EVENT::LCEvent *con
                         this->GetEndCapCaloHitProperties(pCaloHit, endcapLayerLayout, caloHitParameters, absorberCorrection);
                     }
 
-                    caloHitParameters.m_mipEquivalentEnergy = pCaloHit->getEnergy() * m_settings.m_hCalToMip * absorberCorrection;
+                    caloHitParameters.m_mipEquivalentEnergy = energy * m_settings.m_hCalToMip * absorberCorrection;
 
                     if (caloHitParameters.m_mipEquivalentEnergy.Get() < m_settings.m_hCalMipThreshold)
                         continue;
 
-                    caloHitParameters.m_hadronicEnergy = std::min(m_settings.m_hCalToHadGeV * pCaloHit->getEnergy(), m_settings.m_maxHCalHitHadronicEnergy);
-                    caloHitParameters.m_electromagneticEnergy = m_settings.m_hCalToEMGeV * pCaloHit->getEnergy();
+                    caloHitParameters.m_hadronicEnergy = std::min(m_settings.m_hCalToHadGeV * energy, m_settings.m_maxHCalHitHadronicEnergy);
+                    caloHitParameters.m_electromagneticEnergy = m_settings.m_hCalToEMGeV * energy;
 
                     PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::CaloHit::Create(*m_pPandora, caloHitParameters, *m_pCaloHitFactory));
                     m_calorimeterHitVector.push_back(pCaloHit);

@@ -705,6 +705,38 @@ void ArborPFAProcessor::ProcessSteeringFile()
                             "The output energy points for hadronic energy correction",
                             m_settings.m_outputEnergyCorrectionPoints,
                             FloatVector());
+
+    // Additional gap parameters
+    registerProcessorParameter("ECalBarrelModuleGapsZ",
+                            "The ECal barrel concentric gap z positions",
+                            m_geometryCreatorSettings.m_ecalBarrelModuleGapsZ,
+                            FloatVector());
+
+    registerProcessorParameter("ECalBarrelModuleGapSize",
+                            "The ECal barrel concentric gap size",
+                            m_geometryCreatorSettings.m_ecalBarrelModuleGapSize,
+                            float(2.f));
+
+    registerProcessorParameter("HCalBarrelModuleGapsZ",
+                            "The HCal barrel concentric gap z positions",
+                            m_geometryCreatorSettings.m_hcalBarrelModuleGapsZ,
+                            FloatVector());
+
+    registerProcessorParameter("HCalBarrelModuleGapSize",
+                            "The HCal barrel concentric gap size",
+                            m_geometryCreatorSettings.m_hcalBarrelModuleGapSize,
+                            float(2.f));
+
+    // SDHCAL thresholds
+    registerProcessorParameter("InputSDHcalThresholds",
+                            "The input sdhcal thresholds to read from the lcio file",
+                            m_caloHitCreatorSettings.m_inputSDHcalThresholds,
+                            FloatVector());
+
+    registerProcessorParameter("PandoraSDHcalThresholds",
+                            "The sdhcal thresholds to set as input in pandora calo hits",
+                            m_caloHitCreatorSettings.m_pandoraSDHcalThresholds,
+                            FloatVector());
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------

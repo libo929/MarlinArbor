@@ -13,6 +13,8 @@
 
 namespace gear { class CalorimeterParameters; }
 
+typedef std::vector<float> FloatVector;
+
 namespace marlin_arbor
 {
 
@@ -56,6 +58,12 @@ public:
         float           m_hCalRingInnerPhiCoordinate;           ///< HCal ring inner phi coordinate (missing from ILD gear files)
         int             m_hCalRingOuterSymmetryOrder;           ///< HCal ring outer symmetry order (missing from ILD gear files)
         float           m_hCalRingOuterPhiCoordinate;           ///< HCal ring outer phi coordinate (missing from ILD gear files)
+
+        FloatVector     m_ecalBarrelModuleGapsZ;                ///< ECal barrel concentric gap z positions
+        FloatVector     m_hcalBarrelModuleGapsZ;                ///< HCal barrel concentric gap z positions
+
+        float           m_ecalBarrelModuleGapSize;              ///< ECal barrel concentric gap size
+        float           m_hcalBarrelModuleGapSize;              ///< HCal barrel concentric gap size
     };
 
     /**
@@ -148,6 +156,9 @@ private:
      *  @param  vertexOffset position offset for vertex that doesn't point back to origin of xy plane
      */
     pandora::StatusCode CreateRegularBoxGaps(unsigned int symmetryOrder, float phi0, float innerRadius, float outerRadius, float minZ,
+        float maxZ, float gapWidth, pandora::CartesianVector vertexOffset = pandora::CartesianVector(0, 0, 0)) const;
+
+    pandora::StatusCode CreateRegularBoxGaps2(unsigned int symmetryOrder, float phi0, float innerRadius, float outerRadius, float minZ,
         float maxZ, float gapWidth, pandora::CartesianVector vertexOffset = pandora::CartesianVector(0, 0, 0)) const;
 
     const Settings          m_settings;                     ///< The geometry creator settings

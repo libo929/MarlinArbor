@@ -267,7 +267,49 @@ pandora::StatusCode GeometryCreator::SetILD_SDHCALSpecificGeometry(SubDetectorTy
     subDetectorTypeMap[pandora::HCAL_ENDCAP].m_outerSymmetryOrder = m_settings.m_hCalEndCapOuterSymmetryOrder;
     subDetectorTypeMap[pandora::HCAL_ENDCAP].m_outerPhiCoordinate = m_settings.m_hCalEndCapOuterPhiCoordinate;
 
-    // TODO implement gaps between modules
+    // load gaps between modules
+    const gear::CalorimeterParameters &hCalBarrelParameters = marlin::Global::GEAR->getHcalBarrelParameters();
+    const gear::CalorimeterParameters &eCalBarrelParameters = marlin::Global::GEAR->getEcalBarrelParameters();
+
+    // Create ecal barrel module gaps if any
+    for(unsigned int m=0 ; m<m_settings.m_ecalBarrelModuleGapsZ.size() ; m++)
+    {
+      const float gapZ(m_settings.m_ecalBarrelModuleGapsZ.at(m));
+
+      PandoraApi::Geometry::ConcentricGap::Parameters gapParameters;
+
+      gapParameters.m_minZCoordinate = -0.5f * m_settings.m_ecalBarrelModuleGapSize + gapZ;
+      gapParameters.m_maxZCoordinate =  0.5f * m_settings.m_ecalBarrelModuleGapSize + gapZ;
+      gapParameters.m_innerRCoordinate = eCalBarrelParameters.getExtent()[0];
+      gapParameters.m_innerPhiCoordinate = eCalBarrelParameters.getPhi0();
+      gapParameters.m_innerSymmetryOrder = eCalBarrelParameters.getSymmetryOrder();
+      gapParameters.m_outerRCoordinate = eCalBarrelParameters.getExtent()[1];
+      gapParameters.m_outerPhiCoordinate = eCalBarrelParameters.getPhi0();
+      gapParameters.m_outerSymmetryOrder = eCalBarrelParameters.getSymmetryOrder();
+
+      PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::Geometry::ConcentricGap::Create(*m_pPandora, gapParameters));
+    }
+
+    // Create sdhcal barrel module gaps if any
+    for(unsigned int m=0 ; m<m_settings.m_hcalBarrelModuleGapsZ.size() ; m++)
+    {
+      const float gapZ(m_settings.m_hcalBarrelModuleGapsZ.at(m));
+
+      PandoraApi::Geometry::ConcentricGap::Parameters gapParameters;
+
+      gapParameters.m_minZCoordinate = -0.5f * m_settings.m_hcalBarrelModuleGapSize + gapZ;
+      gapParameters.m_maxZCoordinate =  0.5f * m_settings.m_hcalBarrelModuleGapSize + gapZ;
+      gapParameters.m_innerRCoordinate = hCalBarrelParameters.getExtent()[0];
+      gapParameters.m_innerPhiCoordinate = hCalBarrelParameters.getPhi0();
+      gapParameters.m_innerSymmetryOrder = hCalBarrelParameters.getSymmetryOrder();
+      gapParameters.m_outerRCoordinate = hCalBarrelParameters.getExtent()[1];
+      gapParameters.m_outerPhiCoordinate = hCalBarrelParameters.getPhi0();
+      gapParameters.m_outerSymmetryOrder = 1000;
+
+      PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::Geometry::ConcentricGap::Create(*m_pPandora, gapParameters));
+    }
+
+    // TODO implement gaps between staves for SDHCAL
 
     return pandora::STATUS_CODE_SUCCESS;
 }
@@ -362,6 +404,38 @@ pandora::StatusCode GeometryCreator::CreateHCalBarrelConcentricGaps() const
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 pandora::StatusCode GeometryCreator::CreateRegularBoxGaps(unsigned int symmetryOrder, float phi0, float innerRadius, float outerRadius,
+    float minZ, float maxZ, float gapWidth, pandora::CartesianVector vertexOffset) const
+{
+    const pandora::CartesianVector basicGapVertex(pandora::CartesianVector(-0.5f * gapWidth, innerRadius, minZ) + vertexOffset);
+    const pandora::CartesianVector basicSide1(gapWidth, 0, 0);
+    const pandora::CartesianVector basicSide2(0, outerRadius - innerRadius, 0);
+    const pandora::CartesianVector basicSide3(0, 0, maxZ - minZ);
+
+    for (unsigned int i = 0; i < symmetryOrder; ++i)
+    {
+        const float phi = phi0 + (2. * M_PI * static_cast<float>(i) / static_cast<float>(symmetryOrder));
+        const float sinPhi(std::sin(phi));
+        const float cosPhi(std::cos(phi));
+
+        PandoraApi::Geometry::BoxGap::Parameters gapParameters;
+
+        gapParameters.m_vertex = pandora::CartesianVector(cosPhi * basicGapVertex.GetX() + sinPhi * basicGapVertex.GetY(),
+            -sinPhi * basicGapVertex.GetX() + cosPhi * basicGapVertex.GetY(), basicGapVertex.GetZ());
+        gapParameters.m_side1 = pandora::CartesianVector(cosPhi * basicSide1.GetX() + sinPhi * basicSide1.GetY(),
+            -sinPhi * basicSide1.GetX() + cosPhi * basicSide1.GetY(), basicSide1.GetZ());
+        gapParameters.m_side2 = pandora::CartesianVector(cosPhi * basicSide2.GetX() + sinPhi * basicSide2.GetY(),
+            -sinPhi * basicSide2.GetX() + cosPhi * basicSide2.GetY(), basicSide2.GetZ());
+        gapParameters.m_side3 = pandora::CartesianVector(cosPhi * basicSide3.GetX() + sinPhi * basicSide3.GetY(),
+            -sinPhi * basicSide3.GetX() + cosPhi * basicSide3.GetY(), basicSide3.GetZ());
+
+        PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::Geometry::BoxGap::Create(*m_pPandora, gapParameters));
+    }
+
+    return pandora::STATUS_CODE_SUCCESS;
+}
+
+
+pandora::StatusCode GeometryCreator::CreateRegularBoxGaps2(unsigned int symmetryOrder, float phi0, float innerRadius, float outerRadius,
     float minZ, float maxZ, float gapWidth, pandora::CartesianVector vertexOffset) const
 {
     const pandora::CartesianVector basicGapVertex(pandora::CartesianVector(-0.5f * gapWidth, innerRadius, minZ) + vertexOffset);
