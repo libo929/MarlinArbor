@@ -18,16 +18,32 @@
 		<UseCoordinateCorrections> true </UseCoordinateCorrections>
 	</PseudoLayerPlugin>
 	
-	<!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 0.0293659 
-		2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
-		2.97939e-08 -->
+  <!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 
+  0.0293659 
+    2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
+    2.97939e-08 
+    
+    SDHCAL single particle parameters from imad - QGSP_BERT 
+    0.0273594 
+    3.52211e-05 -1.7897e-08 0.0996403 2.0337e-05 -1.08497e-08 0.144696 1.55448e-05 
+    2.12579e-08
+    
+    ECAL + SDHCAL calibration with simple reco QGSP_BERT with Mokka ILD_v05_o2
+    lin = 
+    0.0387678 0.0943724 0.371602
+    quadr = 
+    0.0406952 3.30524e-05 -2.89607e-08
+    0.0925995 1.12701e-05  5.1673e-09
+    0.166333  3.08751e-05  2.98793e-08
+    
+     -->
 	<SdhcalQuadraticEnergyFunction>
 		<EnergyConstantParameters>
-			0.0275562 2.48209e-05 -2.0772e-08
-			0.100251 2.07212e-05 -2.99901e-08
-			0.181102 5.88835e-05 8.31624e-08
+		0.0406952 3.30524e-05 -2.89607e-08
+    0.0925995 1.12701e-05  5.1673e-09
+    0.166333  3.08751e-05  2.98793e-08
 		</EnergyConstantParameters>
-		<SdhcalThresholds> 0.0400452 0.101322 0.39448 </SdhcalThresholds>
+		<SdhcalThresholds> 0.0387678 0.0943724 0.371602 </SdhcalThresholds>
 	</SdhcalQuadraticEnergyFunction>
 
 
@@ -595,7 +611,7 @@
 	</algorithm>
 	
 	<!-- External photon clustering --> 
-	<algorithm type="ClusteringParent">
+ 	<algorithm type="ClusteringParent">
 		<algorithm type="ExternalClustering" description="ClusterFormation">
 			<ExternalClusterCollectionName>PandoraPhotonClusters</ExternalClusterCollectionName>
 			<FlagClustersAsPhotons>true</FlagClustersAsPhotons>
@@ -604,7 +620,7 @@
 			<associationAlgorithms>
 				<algorithm type="SurroundingHitsMerging">
 					<tool type="CaloHitMerging" description="CaloHitMerging">
-						<MaxCaloHitDistanceFine>15.f</MaxCaloHitDistanceFine>
+						<MaxCaloHitDistanceFine>25.f</MaxCaloHitDistanceFine>
 						<MaxCaloHitDistanceCoarse>0</MaxCaloHitDistanceCoarse>
 					</tool>
 				</algorithm>
@@ -679,10 +695,11 @@
 		</clusteringAlgorithms>
 		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationOptimized" />
 		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="TrackClusterOptimized" />
+		<MinChi2ToRunReclustering>2.5</MinChi2ToRunReclustering>
 	</algorithm>
 	
 	<!-- Run reclustering on clusters with missing energy. Break all surrounding clusters and trigger reclustering -->
-	<algorithm type="MissingEnergyReclustering">
+ 	<algorithm type="MissingEnergyReclustering">
 		<clusteringAlgorithms>
 			<algorithm type="ArborClustering" instance="Reclustering13" />
 			<algorithm type="ArborClustering" instance="Reclustering14" />
@@ -699,6 +716,7 @@
 		</clusteringAlgorithms>
 		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationOptimized" />
 		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="ReclusteringTrackAssociation" />
+	  <MinChi2ToRunReclustering>2.5</MinChi2ToRunReclustering>
 	</algorithm>
 
 	<!-- Recluster cluster with multiple track cluster associations -->
@@ -715,6 +733,7 @@
 				<AllowMultiAssociations>false</AllowMultiAssociations>
 			</algorithm>
 			<algorithm type="UnassociatedTrackRecovery" />
+			<algorithm type="LoopingTrackAssociation"/>
 		</trackClusterAssociationAlgorithms>
 	</algorithm>
 	
@@ -746,5 +765,5 @@
 		<ShowOnlyAvailable>false</ShowOnlyAvailable>
 		<ShowAssociatedTracks>true</ShowAssociatedTracks>
 	</algorithm>
-
+	
 </pandora>
