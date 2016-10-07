@@ -13,24 +13,33 @@
 	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction
 	</ElectromagneticEnergyCorrectionPlugins>
 
-	<SdhcalQuadraticEnergyFunction>
-		<EnergyConstantParameters>
-			0.0275562;
-			2.48209e-05;
-			-2.0772e-08;
-			0.100251;
-			2.07212e-05;
-			-2.99901e-08;
-			0.181102;
-			5.88835e-05;
-			8.31624e-08;
-		</EnergyConstantParameters>
-		<SdhcalThresholds>
-			0.0400452
-			0.101322
-			0.39448
-		</SdhcalThresholds>
-	</SdhcalQuadraticEnergyFunction>
+  <!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 
+  0.0293659 
+    2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
+    2.97939e-08 
+    
+    SDHCAL single particle parameters from imad - QGSP_BERT 
+    0.0273594 
+    3.52211e-05 -1.7897e-08 0.0996403 2.0337e-05 -1.08497e-08 0.144696 1.55448e-05 
+    2.12579e-08
+    
+    ECAL + SDHCAL calibration with simple reco QGSP_BERT with Mokka ILD_v05_o2
+    lin = 
+    0.0387678 0.0943724 0.371602
+    quadr = 
+    0.0406952 3.30524e-05 -2.89607e-08
+    0.0925995 1.12701e-05  5.1673e-09
+    0.166333  3.08751e-05  2.98793e-08
+    
+     -->
+  <SdhcalQuadraticEnergyFunction>
+    <EnergyConstantParameters>
+    0.0406952 3.30524e-05 -2.89607e-08
+    0.0925995 1.12701e-05  5.1673e-09
+    0.166333  3.08751e-05  2.98793e-08
+    </EnergyConstantParameters>
+    <SdhcalThresholds> 0.0387678 0.0943724 0.371602 </SdhcalThresholds>
+  </SdhcalQuadraticEnergyFunction>
 
 	<!-- ALGORITHM SETTINGS -->
 	
@@ -51,5 +60,23 @@
 		<SimpleCaloHitCollection> true </SimpleCaloHitCollection>
 		<MinWeightFraction> 0.01 </MinWeightFraction>
 	</algorithm>
+	
+  <!-- Open Eve visual monitoring on final pfos -->
+  <algorithm type="VisualMonitoring" description="VisualMonitoring">
+    <ShowCurrentConnectors>false</ShowCurrentConnectors>
+    <ConnectorLevel>Pfos</ConnectorLevel>
+    <ShowCurrentMCParticles>true</ShowCurrentMCParticles>
+    <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
+    <ShowCurrentTracks>false</ShowCurrentTracks>
+    <ShowCurrentClusters>false</ShowCurrentClusters>
+    <ShowCurrentPfos>true</ShowCurrentPfos>
+    <ShowCurrentVertices>false</ShowCurrentVertices>
+    <HitColors>iterate</HitColors>
+    <DisplayEvent>true</DisplayEvent>
+    <ShowDetector>true</ShowDetector>
+    <DetectorView>""</DetectorView>
+    <ShowOnlyAvailable>false</ShowOnlyAvailable>
+    <ShowAssociatedTracks>true</ShowAssociatedTracks>
+  </algorithm>
 
 </pandora>
