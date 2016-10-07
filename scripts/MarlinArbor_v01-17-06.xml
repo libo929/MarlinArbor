@@ -1052,6 +1052,11 @@ ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter
 	<!--Whether to calculate track states manually, rather than copy stored fitter values-->
 	<parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
 	<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+	
+	<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+  <!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+  <parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+  <parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0387678 0.0943724 0.371602 </parameter>
 	<!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
 </processor>
 
@@ -1092,6 +1097,11 @@ ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter
   <!--Whether to calculate track states manually, rather than copy stored fitter values-->
   <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
 	<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+	
+  <!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+  <!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+  <parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+  <parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0387678 0.0943724 0.371602 </parameter>
   <!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
   <!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
 </processor>
@@ -1134,6 +1144,11 @@ ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter
   <!--Whether to calculate track states manually, rather than copy stored fitter values-->
   <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
 	<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+	
+  <!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+  <!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+  <parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+  <parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0387678 0.0943724 0.371602 </parameter>
   <!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
   <!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
 </processor>
@@ -1176,6 +1191,11 @@ ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter
   <!--Whether to calculate track states manually, rather than copy stored fitter values-->
   <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
 	<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+	
+  <!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+  <!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+  <parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+  <parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0387678 0.0943724 0.371602 </parameter>
   <!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
   <!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
 </processor>
