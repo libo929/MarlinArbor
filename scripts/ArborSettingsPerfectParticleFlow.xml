@@ -61,8 +61,17 @@
 		<MinWeightFraction> 0.01 </MinWeightFraction>
 	</algorithm>
 	
+	<!-- Cheat track to cluster matching -->
+	<algorithm type="CheatingTrackToClusterMatching"/>
+	
+  <algorithm type="PerformanceMonitoring">
+    <ExpectedPfoTotalEnergy>360</ExpectedPfoTotalEnergy>
+    <PfoTotalEnergyDeviation>30</PfoTotalEnergyDeviation>
+     <algorithm type="VisualMonitoring" description="VisualMonitoring"/>
+  </algorithm>
+  
   <!-- Open Eve visual monitoring on final pfos -->
-  <algorithm type="VisualMonitoring" description="VisualMonitoring">
+  <algorithm type="VisualMonitoring" description="VisualMonitoring" >
     <ShowCurrentConnectors>false</ShowCurrentConnectors>
     <ConnectorLevel>Pfos</ConnectorLevel>
     <ShowCurrentMCParticles>true</ShowCurrentMCParticles>

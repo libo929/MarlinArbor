@@ -3,16 +3,805 @@
 <pandora>
 	<!-- GLOBAL SETTINGS -->
 	<IsMonitoringEnabled>true</IsMonitoringEnabled>
-	<ShouldDisplayAlgorithmInfo>false</ShouldDisplayAlgorithmInfo>
+	<ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
+	<ShouldCollapseMCParticlesToPfoTarget>true</ShouldCollapseMCParticlesToPfoTarget>
+
+	<!-- PLUGIN SETTINGS -->
+	<HadronicEnergyCorrectionPlugins> BarrelGapEnergyFunction ThetaEnergyFunction </HadronicEnergyCorrectionPlugins>
+<!-- 	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </ElectromagneticEnergyCorrectionPlugins> -->
+
+  <BarrelGapEnergyFunction>
+	  <EcalZGapPositions>-1410.6 -470.2 470.2 1410.6</EcalZGapPositions>
+	  <HcalZGapPositions>-1423 -485 485 1423</HcalZGapPositions>
+	  <EcalDistanceToGap>10</EcalDistanceToGap>
+	  <HcalDistanceToGap>30</HcalDistanceToGap>
+	  <EcalGapAlpha>0</EcalGapAlpha>
+	  <EcalGapBeta>0</EcalGapBeta>
+	  <HcalGapAlpha>1.5254</HcalGapAlpha>
+	  <HcalGapBeta>0</HcalGapBeta>
+  </BarrelGapEnergyFunction>
+  
+  <ThetaEnergyFunction>
+  	<LowEnergyCut>3.</LowEnergyCut>
+  	<BarrelP00>-2.36284</BarrelP00>
+  	<BarrelP01>1.14627</BarrelP01>
+  	<BarrelP02>-0.00152029</BarrelP02>
+  	<BarrelP10>0.325533</BarrelP10>
+  	<BarrelP11>-0.126941</BarrelP11>
+  	<BarrelP12>0.000462463</BarrelP12>
+  	<EndcapP00>-2.16956</EndcapP00>
+  	<EndcapP01>0.801878</EndcapP01>
+  	<EndcapP02>1.27263e-05</EndcapP02>
+  	<EndcapP10>0.157559</EndcapP10>
+  	<EndcapP11>0.34754</EndcapP11>
+  	<EndcapP12>-0.00122559</EndcapP12>
+  </ThetaEnergyFunction>
+ 
+	<EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> 
+	<PhotonPlugin>ArborPhotonId</PhotonPlugin> 
+	<ElectronPlugin>ArborElectronId</ElectronPlugin>
+	<MuonPlugin>ArborMuonId</MuonPlugin>
+	
+	<ArborEmShowerId>
+	 <MaxForwardPseudoLayer>3</MaxForwardPseudoLayer>
+	 <MinPseudoLayerNHits>4</MinPseudoLayerNHits>
+	 <MinFitHitDistanceFine>50</MinFitHitDistanceFine>
+	 <MinFitHitDistanceCoarse>100</MinFitHitDistanceCoarse>
+	 <MinNInteractingLayers>2</MinNInteractingLayers>
+	 <LowEnergyClusterCut>4.f</LowEnergyClusterCut>
+	 <MaxPseudoLayerExtension>30</MaxPseudoLayerExtension>
+	 <MaxAngleWithOrigin>0.3</MaxAngleWithOrigin>
+	 <MaxHadronicEnergyFraction>0.2</MaxHadronicEnergyFraction>
+	 <MinOuterEcalPseudoLayerEnergyCut>25</MinOuterEcalPseudoLayerEnergyCut>
+	 <MaxOuterEcalEnergyFraction>0.1</MaxOuterEcalEnergyFraction>
+	</ArborEmShowerId>
+
+	<PseudoLayerPlugin>
+		<UseCoordinateCorrections> true </UseCoordinateCorrections>
+	</PseudoLayerPlugin>
+	
+  <!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 
+  0.0293659 
+    2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
+    2.97939e-08 
+    
+    SDHCAL single particle parameters from imad - QGSP_BERT 
+    0.0273594 
+    3.52211e-05 -1.7897e-08 0.0996403 2.0337e-05 -1.08497e-08 0.144696 1.55448e-05 
+    2.12579e-08
+    
+    ECAL + SDHCAL calibration with simple reco QGSP_BERT with Mokka ILD_v05_o2
+    lin = 
+    0.0387678 0.0943724 0.371602
+    quadr = 
+    0.0406952 3.30524e-05 -2.89607e-08
+    0.0925995 1.12701e-05  5.1673e-09
+    0.166333  3.08751e-05  2.98793e-08
+    
+     -->
+	<SdhcalQuadraticEnergyFunction>
+		<EnergyConstantParameters>
+			0.0406952 3.30524e-05 -2.89607e-08
+    		0.0925995 1.12701e-05  5.1673e-09
+    		0.166333  3.08751e-05  2.98793e-08
+		</EnergyConstantParameters>
+		<SdhcalThresholds> 
+			0.0387678 0.0943724 0.371602 
+		</SdhcalThresholds>
+	</SdhcalQuadraticEnergyFunction>
+	
+
+	<!-- ALGORITHM SETTINGS -->
+	<!-- Use 'instance' xml tag to pre-configure algorithms without running 
+		them -->
+	<algorithm type="AlgorithmConfiguration">
+		<algorithms>
+		      			
+			<algorithm type="ArborClustering" instance="MainClustering">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+					</tool>
+					<tool type="ConnectorSeeding">
+					  <ShouldDiscriminateConnectedHits>false</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			
+			<algorithm type="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation">
+				<UseEnergyCompatibility>false</UseEnergyCompatibility>
+				<AllowMultiAssociations>true</AllowMultiAssociations>
+			</algorithm>
+			
+			<algorithm type="TrackClusterAssociation" instance="EnergyDrivenTrackClusterAssociation">
+				<UseEnergyCompatibility>true</UseEnergyCompatibility>
+				<AllowMultiAssociations>false</AllowMultiAssociations>
+			</algorithm>
+			
+			<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithPhotons">
+				<associationAlgorithms>
+					<algorithm type="ClosebySeedMerging">
+						<MergeHCalSeedClusters>false</MergeHCalSeedClusters>
+					</algorithm>
+					<algorithm type="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
+					<algorithm type="ClosebySeedMerging" />
+					<algorithm type="MipFragmentMerging" />
+			        <algorithm type="FragmentRemoval">
+			          <tool type="CaloHitMerging" description="CaloHitMerging" />
+			        </algorithm>
+			        <algorithm type="PointingClusterAssociation" />
+			        <algorithm type="ClusterFragmentMerging" />
+			        <algorithm type="SurroundingHitsMerging">
+			          <ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
+			          <tool type="CaloHitMerging" description="CaloHitMerging" />
+			        </algorithm>
+				</associationAlgorithms>
+			</algorithm>
+			
+			<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithoutPhotons">
+				<associationAlgorithms>
+					<algorithm type="ClosebySeedMerging">
+						<MergeHCalSeedClusters>false</MergeHCalSeedClusters>
+					</algorithm>
+					<algorithm type="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
+					<algorithm type="ClosebySeedMerging" />
+					<algorithm type="MipFragmentMerging" />
+			        <algorithm type="FragmentRemoval">
+			          <tool type="CaloHitMerging" description="CaloHitMerging" />
+			        </algorithm>
+			        <algorithm type="PointingClusterAssociation" />
+			        <algorithm type="ClusterFragmentMerging" />
+			        <algorithm type="SurroundingHitsMerging">
+			          <ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
+			          <tool type="CaloHitMerging" description="CaloHitMerging" />
+			        </algorithm>
+				</associationAlgorithms>
+			</algorithm>
+			
+			<!-- Reclustering algorithms -->
+			<algorithm type="ArborClustering" instance="Reclustering1">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering2">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering3">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering4">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.8 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering5">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.7 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering6">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.6 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering7">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 16.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 57.5f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering8">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering9">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 2 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering10">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.8 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 25.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 16.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 57.5f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering11">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.7 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 11.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 20.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 13.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering12">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.6 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 2 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 10.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 15.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 2 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+
+			<algorithm type="ArborClustering" instance="Reclustering13">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering14">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 35.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering15">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 8 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 45.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 75.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering16">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 17.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 55.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering17">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 35.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 15.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering18">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 45.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 75.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 12.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering19">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning">
+						<BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+						<ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+						<BackwardReferenceDirectionDepth> 2
+						</BackwardReferenceDirectionDepth>
+						<ForwardReferenceDirectionDepth> 1
+						</ForwardReferenceDirectionDepth>
+						<Strategy> 1 </Strategy>
+					</tool>
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering20">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 35.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning">
+						<BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+						<ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+						<BackwardReferenceDirectionDepth> 2
+						</BackwardReferenceDirectionDepth>
+						<ForwardReferenceDirectionDepth> 1
+						</ForwardReferenceDirectionDepth>
+						<Strategy> 1 </Strategy>
+					</tool>
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering21">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 45.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 75.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.6f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.9f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 20.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 65.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning">
+						<BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+						<ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+						<BackwardReferenceDirectionDepth> 2
+						</BackwardReferenceDirectionDepth>
+						<ForwardReferenceDirectionDepth> 1
+						</ForwardReferenceDirectionDepth>
+						<Strategy> 1 </Strategy>
+					</tool>
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering22">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 25.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 4 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.5f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.8f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 17.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 55.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning">
+						<BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+						<ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+						<BackwardReferenceDirectionDepth> 2
+						</BackwardReferenceDirectionDepth>
+						<ForwardReferenceDirectionDepth> 1
+						</ForwardReferenceDirectionDepth>
+						<Strategy> 1 </Strategy>
+					</tool>
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering23">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 4 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 35.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 60.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.4f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.7f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 15.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 50.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning">
+						<BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+						<ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+						<BackwardReferenceDirectionDepth> 2
+						</BackwardReferenceDirectionDepth>
+						<ForwardReferenceDirectionDepth> 1
+						</ForwardReferenceDirectionDepth>
+						<Strategy> 1 </Strategy>
+					</tool>
+				</AdditionalConnectionTools>
+			</algorithm>
+			<algorithm type="ArborClustering" instance="Reclustering24">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxInitialPseudoLayer> 3 </MaxInitialPseudoLayer>
+						<MaxInitialTrackAngle> 0.9 </MaxInitialTrackAngle>
+						<MaxConnectionPseudoLayer> 5 </MaxConnectionPseudoLayer>
+						<MaxTransverseDistanceFine> 45.f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 75.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorSeeding">
+						<ShouldDiscriminateConnectedHits>true</ShouldDiscriminateConnectedHits>
+						<MaxPseudoLayerConnection> 3 </MaxPseudoLayerConnection>
+						<MaxConnectionAngleFine> 0.3f </MaxConnectionAngleFine>
+						<MaxConnectionAngleCoarse> 0.6f </MaxConnectionAngleCoarse>
+						<MaxTransverseDistanceFine> 12.5f </MaxTransverseDistanceFine>
+						<MaxTransverseDistanceCoarse> 45.f </MaxTransverseDistanceCoarse>
+					</tool>
+					<tool type="ConnectorCleaning">
+						<BackwardConnectorWeight> 3 </BackwardConnectorWeight>
+						<ForwardConnectorWeight> 1 </ForwardConnectorWeight>
+						<BackwardReferenceDirectionDepth> 2
+						</BackwardReferenceDirectionDepth>
+						<ForwardReferenceDirectionDepth> 1
+						</ForwardReferenceDirectionDepth>
+						<Strategy> 1 </Strategy>
+					</tool>
+				</AdditionalConnectionTools>
+			</algorithm>
+		</algorithms>
+	</algorithm>
+
+	<!-- Select tracks and hits to use for clustering -->
+	<algorithm type="CaloHitPreparation" />
+	
+	<algorithm type="EventPreparation">
+		<OutputTrackListName>Tracks</OutputTrackListName>
+		<MergeECalHCalCaloHitLists>true</MergeECalHCalCaloHitLists>
+		<OutputCaloHitListName>CaloHits</OutputCaloHitListName>
+		<OutputMuonCaloHitListName>MuonYokeHits</OutputMuonCaloHitListName>
+		<ReplacementTrackListName>Tracks</ReplacementTrackListName>
+		<ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
+	</algorithm>
+	
+	<!-- Perfect neutral hadron clustering -->
+    <algorithm type = "ClusteringParent">
+    	<algorithm type = "PerfectClustering" description = "ClusterFormation">
+    		<ParticleIdList>2112 -2112 130 -130 310 311</ParticleIdList>
+        </algorithm>
+        <ClusterListName>NeutralHadronClusters</ClusterListName>
+        <ReplaceCurrentClusterList>false</ReplaceCurrentClusterList>
+    </algorithm>
+	
+	<!-- Perfect photon clustering -->
+	<algorithm type="ClusteringParent">
+		<algorithm type="PerfectClustering" description="ClusterFormation">
+			<ParticleIdList>22</ParticleIdList>
+		</algorithm>
+		<ClusterListName>PhotonClusters</ClusterListName>
+		<ReplaceCurrentClusterList>false</ReplaceCurrentClusterList>
+	</algorithm>
+  
+	<!-- Remove hits from photons that are in track paths -->
+	<algorithm type="NearbyTrackPhotonRemoval">
+		<PhotonClusterListName>PhotonClusters</PhotonClusterListName>
+	</algorithm>
+	
+	<!-- Run first clustering algorithm and its topological associations with optimized parameters -->
+	<algorithm type="ClusteringParent">
+		<algorithm type="ArborClustering" description="ClusterFormation" instance="MainClustering" />
+		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithPhotons" />
+		<ClusterListName>PrimaryTrees</ClusterListName>
+		<ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
+	</algorithm>
+	
+	<!-- Run reclustering on clusters with an energy excess. Break all surrounding clusters and trigger reclustering -->
+	<algorithm type="EnergyExcessReclustering">
+		<clusteringAlgorithms>
+			<algorithm type="ArborClustering" instance="Reclustering1" />
+			<algorithm type="ArborClustering" instance="Reclustering2" />
+			<algorithm type="ArborClustering" instance="Reclustering3" />
+			<algorithm type="ArborClustering" instance="Reclustering4" />
+			<algorithm type="ArborClustering" instance="Reclustering5" />
+			<algorithm type="ArborClustering" instance="Reclustering6" />
+			<algorithm type="ArborClustering" instance="Reclustering7" />
+			<algorithm type="ArborClustering" instance="Reclustering8" />
+			<algorithm type="ArborClustering" instance="Reclustering9" />
+			<algorithm type="ArborClustering" instance="Reclustering10" />
+			<algorithm type="ArborClustering" instance="Reclustering11" />
+			<algorithm type="ArborClustering" instance="Reclustering12" />
+		</clusteringAlgorithms>
+		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithoutPhotons" />
+		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
+		<MinChi2ToRunReclustering>2.5</MinChi2ToRunReclustering>
+	</algorithm>
+	
+	<!-- Run reclustering on clusters with missing energy. Break all surrounding clusters and trigger reclustering -->
+ 	<algorithm type="MissingEnergyReclustering">
+		<clusteringAlgorithms>
+			<algorithm type="ArborClustering" instance="Reclustering13" />
+			<algorithm type="ArborClustering" instance="Reclustering14" />
+			<algorithm type="ArborClustering" instance="Reclustering15" />
+			<algorithm type="ArborClustering" instance="Reclustering16" />
+			<algorithm type="ArborClustering" instance="Reclustering17" />
+			<algorithm type="ArborClustering" instance="Reclustering18" />
+			<algorithm type="ArborClustering" instance="Reclustering19" />
+			<algorithm type="ArborClustering" instance="Reclustering20" />
+			<algorithm type="ArborClustering" instance="Reclustering21" />
+			<algorithm type="ArborClustering" instance="Reclustering22" />
+			<algorithm type="ArborClustering" instance="Reclustering23" />
+			<algorithm type="ArborClustering" instance="Reclustering24" />
+		</clusteringAlgorithms>
+		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithoutPhotons" />
+		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
+	  <MinChi2ToRunReclustering>2.5</MinChi2ToRunReclustering>
+	</algorithm>
+
+	<!-- Recluster cluster with multiple track cluster associations -->
+	<algorithm type = "SplitTrackReclustering"/>
+	
+	<!-- Prepare tracks for particle flow objects creation -->
+	<algorithm type="TrackPreparation">
+		<CandidateListNames>Input</CandidateListNames>
+		<MergedCandidateListName>PfoCandidates</MergedCandidateListName>
+		<PfoTrackListName>PfoCreation</PfoTrackListName>
+		<trackClusterAssociationAlgorithms>
+			<algorithm type="TrackClusterAssociation" instance="EnergyDrivenTrackClusterAssociation" />
+			<algorithm type="UnassociatedTrackRecovery" />
+			<algorithm type="LoopingTrackAssociation"/>
+		</trackClusterAssociationAlgorithms>
+	</algorithm>
+	
+	<!-- Prepare clusters for particle flow objects creation -->
+	<algorithm type="ClusterPreparation">
+		<CandidateListNames>PrimaryTrees PhotonClusters NeutralHadronClusters</CandidateListNames>
+		<MergedCandidateListName>PfoCreation</MergedCandidateListName>
+	</algorithm>
+
+	<!-- Create particle flow objects -->
+	<algorithm type="PfoCreation">
+		<OutputPfoListName>ArborPfos</OutputPfoListName>
+	</algorithm>
+	
+	<!-- Final particle identification algorithm -->
+	<algorithm type="FinalParticleId" />
+	
+</pandora>
+
+
+
+
+
+
+
+
+
+<!-- ArborPFA settings xml file -->
+
+<pandora>
+	<!-- GLOBAL SETTINGS -->
+	<IsMonitoringEnabled>true</IsMonitoringEnabled>
+	<ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
 	<ShouldCollapseMCParticlesToPfoTarget>true</ShouldCollapseMCParticlesToPfoTarget>
 
 	<!-- PLUGIN SETTINGS -->
 	<HadronicEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </HadronicEnergyCorrectionPlugins>
 	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </ElectromagneticEnergyCorrectionPlugins>
 
-	<!-- No particle ID plugin implemented for the moment -->
-	<!-- <EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> <PhotonPlugin>ArborPhotonId</PhotonPlugin> 
-		<ElectronPlugin>ArborElectronId</ElectronPlugin> <MuonPlugin>ArborMuonId</MuonPlugin> -->
+	<EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> 
+	<PhotonPlugin>ArborPhotonId</PhotonPlugin> 
+	<ElectronPlugin>ArborElectronId</ElectronPlugin> 
+	<MuonPlugin>ArborMuonId</MuonPlugin>
 
 	<PseudoLayerPlugin>
 		<UseCoordinateCorrections> true </UseCoordinateCorrections>
@@ -87,7 +876,13 @@
 					<algorithm type="FragmentRemoval">
 						<tool type="CaloHitMerging" description="CaloHitMerging" />
 					</algorithm>
-					<algorithm type="PointingClusterAssociation" />
+					<algorithm type="PointingClusterAssociation">
+	  			 <MaxBackwardPseudoLayer>30</MaxBackwardPseudoLayer>
+	         <MinClusterCosOpeningAngle>0.7</MinClusterCosOpeningAngle>
+	         <MinClusterFitCosOpeningAngle>0.7</MinClusterFitCosOpeningAngle>
+	         <MinClusterFitCosOpeningAngle2>0.8</MinClusterFitCosOpeningAngle2>
+	         <NBackwardLayersFit>100</NBackwardLayersFit>
+	        </algorithm>
 					<algorithm type="ClusterFragmentMerging" />
 					<algorithm type="SurroundingHitsMerging">
 						<ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
@@ -613,7 +1408,7 @@
 	<!-- Perfect neutron/K0L clustering -->
     <algorithm type = "ClusteringParent">
     	<algorithm type = "PerfectClustering" description = "ClusterFormation">
-    		<ParticleIdList>2112 -2112 130 -130</ParticleIdList>
+    		<ParticleIdList>2112 -2112 130 -130 310 311</ParticleIdList>
         </algorithm>
         <ClusterListName>NeutralHadronClusters</ClusterListName>
         <ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
@@ -652,19 +1447,25 @@
 				<algorithm type="TrackClusterAssociation"/>
 				<algorithm type="ClosebySeedMerging" />
 				<algorithm type="MipFragmentMerging" />
-				<algorithm type="FragmentRemoval">
+ 				<algorithm type="FragmentRemoval">
 					<tool type="CaloHitMerging" description="CaloHitMerging">
-						<MaxPidCaloHitDistanceFine>22:15.f</MaxPidCaloHitDistanceFine>
-						<MaxPidCaloHitDistanceFine>22:0.f</MaxPidCaloHitDistanceFine>
+            <MaxPidCaloHitDistanceFine>22:25</MaxPidCaloHitDistanceFine>
+            <MaxPidCaloHitDistanceCoarse>22:0</MaxPidCaloHitDistanceCoarse>
 					</tool>
 				</algorithm>
-				<algorithm type="PointingClusterAssociation" />
-				<algorithm type="ClusterFragmentMerging" />
-				<algorithm type="SurroundingHitsMerging">
+ 				<algorithm type="PointingClusterAssociation">
+ 				 <MaxBackwardPseudoLayer>30</MaxBackwardPseudoLayer>
+ 				 <MinClusterCosOpeningAngle>0.7</MinClusterCosOpeningAngle>
+ 				 <MinClusterFitCosOpeningAngle>0.7</MinClusterFitCosOpeningAngle>
+         <MinClusterFitCosOpeningAngle2>0.8</MinClusterFitCosOpeningAngle2>
+         <NBackwardLayersFit>100</NBackwardLayersFit>
+ 				</algorithm>
+ 				<algorithm type="ClusterFragmentMerging" />
+ 				<algorithm type="SurroundingHitsMerging">
 					<ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
 					<tool type="CaloHitMerging" description="CaloHitMerging">
-						<MaxPidCaloHitDistanceFine>22:15.f</MaxPidCaloHitDistanceFine>
-						<MaxPidCaloHitDistanceFine>22:0.f</MaxPidCaloHitDistanceFine>
+            <MaxPidCaloHitDistanceFine>22:25</MaxPidCaloHitDistanceFine>
+            <MaxPidCaloHitDistanceCoarse>22:0</MaxPidCaloHitDistanceCoarse>
 					</tool>
 				</algorithm>
 			</associationAlgorithms>
@@ -673,8 +1474,10 @@
 		<ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
 	</algorithm>
 	
+	<algorithm type="VisualMonitoring" instance="MonitoringClusters"/>
+	
 	<!-- Run reclustering on clusters with an energy excess. Break all surrounding clusters and trigger reclustering -->
-	<algorithm type="EnergyExcessReclustering">
+ 	<algorithm type="EnergyExcessReclustering">
 		<clusteringAlgorithms>
 			<algorithm type="ArborClustering" instance="Reclustering1" />
 			<algorithm type="ArborClustering" instance="Reclustering2" />
@@ -693,8 +1496,10 @@
 		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="TrackClusterOptimized" />
 	</algorithm>
 	
+<!-- 	<algorithm type="VisualMonitoring" instance="MonitoringClusters"/> -->
+	
 	<!-- Run reclustering on clusters with missing energy. Break all surrounding clusters and trigger reclustering -->
-	<algorithm type="MissingEnergyReclustering">
+ 	<algorithm type="MissingEnergyReclustering">
 		<clusteringAlgorithms>
 			<algorithm type="ArborClustering" instance="Reclustering13" />
 			<algorithm type="ArborClustering" instance="Reclustering14" />
@@ -711,7 +1516,11 @@
 		</clusteringAlgorithms>
 		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationOptimized" />
 		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="ReclusteringTrackAssociation" />
+		<!-- <algorithm type="VisualMonitoring" description="Monitoring" instance="MonitoringClusters" /> -->
+		<MaxNeighborClusterAngle>0.25</MaxNeighborClusterAngle>
 	</algorithm>
+	
+<!-- 	<algorithm type="VisualMonitoring" instance="MonitoringClusters" /> -->
 
 	<!-- Recluster cluster with multiple track cluster associations -->
 	<algorithm type = "SplitTrackReclustering"/>
@@ -730,6 +1539,24 @@
 		</trackClusterAssociationAlgorithms>
 	</algorithm>
 	
+ 	<algorithm type="VisualMonitoring" description="VisualMonitoring">
+    <ShowCurrentConnectors>true</ShowCurrentConnectors>
+    <ConnectorLevel>Clusters</ConnectorLevel>
+    <ShowCurrentMCParticles>false</ShowCurrentMCParticles>
+    <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
+    <ShowCurrentTracks>false</ShowCurrentTracks>
+    <ShowCurrentClusters>false</ShowCurrentClusters>
+    <ShowCurrentPfos>false</ShowCurrentPfos>
+    <ShowCurrentVertices>false</ShowCurrentVertices>
+    <ClusterListNames> PrimaryTrees PhotonClusters NeutralHadronClusters </ClusterListNames>
+    <HitColors>iterate</HitColors>
+    <DisplayEvent>false</DisplayEvent>
+    <ShowDetector>true</ShowDetector>
+    <DetectorView>""</DetectorView>
+    <ShowOnlyAvailable>false</ShowOnlyAvailable>
+    <ShowAssociatedTracks>true</ShowAssociatedTracks>
+  </algorithm>
+	
 	<!-- Prepare clusters for particle flow objects creation -->
 	<algorithm type="ClusterPreparation">
 		<CandidateListNames>PrimaryTrees PhotonClusters NeutralHadronClusters</CandidateListNames>
@@ -740,6 +1567,32 @@
 	<algorithm type="PfoCreation">
 		<OutputPfoListName>ArborPfos</OutputPfoListName>
 	</algorithm>
+	
+	<!-- Final particle identification algorithm -->
+	<algorithm type="FinalParticleId"/>
+	
+	<algorithm type="PerformanceMonitoring">
+    <ExpectedPfoTotalEnergy>360</ExpectedPfoTotalEnergy>
+    <PfoTotalEnergyDeviation>30</PfoTotalEnergyDeviation>
+     <algorithm type="VisualMonitoring" description="VisualMonitoring"/>
+  </algorithm>
+	
+  <algorithm type="VisualMonitoring" description="VisualMonitoring">
+    <ShowCurrentConnectors>false</ShowCurrentConnectors>
+    <ConnectorLevel>Pfos</ConnectorLevel>
+    <ShowCurrentMCParticles>true</ShowCurrentMCParticles>
+    <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
+    <ShowCurrentTracks>true</ShowCurrentTracks>
+    <ShowCurrentClusters>false</ShowCurrentClusters>
+    <ShowCurrentPfos>true</ShowCurrentPfos>
+    <ShowCurrentVertices>false</ShowCurrentVertices>
+    <HitColors>iterate</HitColors>
+    <DisplayEvent>false</DisplayEvent>
+    <ShowDetector>true</ShowDetector>
+    <DetectorView>""</DetectorView>
+    <ShowOnlyAvailable>false</ShowOnlyAvailable>
+    <ShowAssociatedTracks>true</ShowAssociatedTracks>
+  </algorithm>
 	
 </pandora>
 

@@ -27,24 +27,25 @@
      <processor name="MyKinkFinder"/>
 
      <!-- ========== calorimeter digitization and PFA ======= -->
-     <processor name="MyILDCaloDigi"/>
+     <!-- <processor name="MyILDCaloDigi"/> -->
+     <processor name="MyNewLDCCaloDigi"/>
      <processor name="MySimDigital"/>  
-     <processor name="MySimpleBCalDigi"/>    
-     <processor name="MySimpleLCalDigi"/>    
-     <processor name="MySimpleLHCalDigi"/>   
-     <processor name="MySimpleMuonDigi"/> 
+     <processor name="MySimpleBCalDigi"/>
+     <processor name="MySimpleLCalDigi"/>
+     <processor name="MySimpleLHCalDigi"/>
+     <processor name="MySimpleMuonDigi"/>
 
      <processor name="MyRecoMCTruthLinker"/>
-     <processor name="MyMarlinArbor"/>
+	 <processor name="MyMarlinArbor"/>
+     <processor name="MyMCPfoMaker"/>
      <processor name="MyPfoAnalysis"/>
    </execute>
 
    <global>
       <parameter name="LCIOInputFiles">
-      /home/remi/sdhcaldata/ILD_o2_v05/uds500_00.stdhep.slcio
       </parameter>
-      <parameter name="GearXMLFile" value="GearOutput_ILD_o2_v05.xml"/>
-      <parameter name="MaxRecordNumber" value="-1"/>
+      <parameter name="GearXMLFile" value=""/>
+      <parameter name="MaxRecordNumber" value="10"/>
       <parameter name="SkipNEvents" value="0"/>
       <parameter name="SupressCheck" value="false"/>
       <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE </parameter>
@@ -731,6 +732,47 @@
 </processor>
 
 
+<!--######  MyNewLDCCaloDigi ##########################################-->
+
+
+ <processor name="MyNewLDCCaloDigi" type="NewLDCCaloDigi">
+ <!--LDC digitizer...-->
+  <!--Calibration coefficients for ECAL-->
+  <parameter name="CalibrECAL" type="FloatVec">42.91 85.82  </parameter> <!-- was 40.91 81.81 -->
+  <!--Calibration coefficients for HCAL-->
+  <parameter name="CalibrHCAL" type="FloatVec">54.7  </parameter> <!-- was 34.8 -->
+  <!--ECAL Collection Names-->
+  <parameter name="ECALCollections" type="StringVec">EcalBarrelSiliconCollection EcalEndcapSiliconCollection  EcalEndcapRingCollection </parameter>
+  <!--Index of ECal Layers-->
+  <parameter name="ECALLayers" type="IntVec">20 100  </parameter>
+  <!--Threshold for ECAL Hits in GeV-->
+  <parameter name="ECALThreshold" type="float">5e-05 </parameter>
+  <!--HCAL Collection Names-->
+  <parameter name="HCALCollections" type="StringVec">HcalBarrelCollection  HcalEndCapsCollection HcalEndCapRingsCollection</parameter>
+  <!--Index of HCal Layers-->
+  <parameter name="HCALLayers" type="IntVec">100  </parameter>
+  <!--Threshold for HCAL Hits in GeV-->
+  <parameter name="HCALThreshold" type="float">0.00025 </parameter>
+  <!--Digital Ecal-->
+  <parameter name="IfDigitalEcal" type="int">0 </parameter>
+  <!--Digital Hcal-->
+  <parameter name="IfDigitalHcal" type="int">0 </parameter>
+  <!--name for the new collection -->
+  <parameter name="ECALOutputCollection0" type="stringVec">ECALBarrel </parameter>
+  <parameter name="ECALOutputCollection1" type="stringVec">ECALEndcap </parameter>
+  <parameter name="ECALOutputCollection2" type="stringVec">ECALOther </parameter>
+  <parameter name="HCALOutputCollection0" type="stringVec">HCALBarrel_LDC </parameter>
+  <parameter name="HCALOutputCollection1" type="stringVec">HCALEndcap_LDC </parameter>
+  <parameter name="HCALOutputCollection2" type="stringVec">HCALOther_LDC </parameter>
+  <!--CaloHit Relation Collection-->
+  <parameter name="RelationOutputCollection" type="string" lcioOutType="LCRelation">RelationCaloHit_LDC </parameter>
+  <!--Gap Correction-->
+  <parameter name="ECALGapCorrection" type="int"> 1 </parameter>
+  <!--Gap Correction Fudge Factor-->
+  <parameter name="ECALGapCorrectionFactor" type="int"> 1.0 </parameter>
+  <parameter name="ECALModuleGapCorrectionFactor" type="int"> 0.0 </parameter>
+</processor>
+
 
 <!--################MySimDigital################################ -->
  <processor name="MySimDigital" type="SimDigital">
@@ -740,7 +782,8 @@
  <!--Calibration coefficients for ECAL-->
   <parameter name="CalibrECAL" type="FloatVec">40.91 81.81  </parameter>
   <!--ECAL Collection Names-->
-  <!--parameter name="ECALCollections" type="StringVec" lcioInType="SimCalorimeterHit">EcalBarrelCollection EcalEndcapCollection EcalRingCollection EcalBarrelPreShowerCollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter-->
+  <!--parameter name="ECALCollections" type="StringVec" lcioInType="SimCalorimeterHit">EcalBarrelCollection EcalEndcapCollection EcalRingCollection EcalBarrelPreShowerC
+ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter-->
   <parameter name="ECALCollections" type="StringVec">EcalBarrelSiliconCollection EcalEndcapSiliconCollection EcalEndcapRingCollection </parameter>
   <!--Correct for ECAL gaps-->
   <parameter name="ECALGapCorrection" type="int">1 </parameter>
@@ -768,10 +811,8 @@
   <parameter name="ECAlEndcapCorrectionFactor" type="float">1.025 </parameter>
   <!--Digital Ecal-->
   <parameter name="IfDigitalEcal" type="int">0 </parameter>
-
-
-
- <!--HCAL parameters-->
+  
+   <!--HCAL parameters-->
  <!-- Collections -->
   <!--Sim Calorimeter Hit Collections-->
   <parameter name="HCALCollections" type="StringVec" lcioInType="SimCalorimeterHit"> HcalBarrelCollection  HcalEndCapsCollection HcalEndCapRingsCollection </parameter>
@@ -784,9 +825,9 @@
 
  <!--Induced charge simulation parameters-->
   <!--Parameter for the Polya distribution used to simulate the induced charge distribution : mean of the distribution-->
-  <parameter name="PolyaAverageCharge" type="double">1.6 </parameter>
+  <parameter name="PolyaAverageCharge" type="double">4.55 </parameter>
   <!--Parameter for the Polya distribution used to simulate the induced charge distribution : related to the distribution width -->
-  <parameter name="PolyaWidthParameter" type="double">16.3 </parameter>
+  <parameter name="PolyaWidthParameter" type="double">1.0 </parameter>
 
  <!--Induced charge dispatching parameters-->
  <!--Induced charge dispatching : which steps to use parameters-->
@@ -795,11 +836,13 @@
   <!--if true, ensure that each hit will keep at least one step for digitisation independatly of filtering conditions (StepCellCenterMaxDistanceLayerDirection)-->
   <parameter name="KeepAtLeastOneStep" type="bool">true </parameter>
   <!--Minimum distance (mm) between 2 Geant4 steps, in the RPC plane, to keep the 2 steps. Default value=0.5-->
-  <parameter name="StepsMinDistanceRPCplaneDirection" type="float">0.0001 </parameter>
-
- <!--Induced charge dispatching : dispatching mode-->
+  <parameter name="StepsMinDistanceRPCplaneDirection" type="float">1.2 </parameter>
+  
+   <!--Induced charge dispatching : dispatching mode-->
+  <!--Define the charge splitter method. Possible option : Uniform, Function, Erf-->
+  <parameter name="ChargeSplitterOption" type="string"> Erf </parameter>
   <!--If true, use function to split the charge between pads. If false split uniformely-->
-  <parameter name="UseFunctionForChargeSplitting" type="bool">true </parameter>
+  <!--parameter name="UseFunctionForChargeSplitting" type="bool">true </parameter-->
 
  <!--Induced charge dispatching : dispatching uniformely parameters-->
   <!--Distance (in mm) from the border of the cell that implies hit on neighbouring cell for 'Uniform' charge splitter : used if UseFunctionForChargeSplitting is false-->
@@ -807,23 +850,26 @@
 
  <!--Induced charge dispatching : dispatching with function parameters-->
   <!--ROOT TF2 formula for function describing the induced charge distribution, x and y are coordinates from the step position in I and J direction: used if UseFunctionForChargeSplitting is true-->
-  <parameter name="functionFormula" type="string"> exp(-(x*x+y*y)/([0]*[0]))+[1]*exp(-(x*x+y*y)/([2]*[2])) </parameter>
+  <parameter name="functionFormula" type="string"> exp(-(x*x+y*y)/([0]*[0])) +[1]*exp(-(x*x+y*y)/([2]*[2]))</parameter>
   <!--parameter values for the function defined with functionFormula-->
-  <parameter name="functionParameters" type="FloatVec">1.6 0.006 11.5 </parameter>
+  <parameter name="functionParameters" type="FloatVec">1. 0.00067 11.2 0.000005 80</parameter>
+  <!--Width values for the different Erf functions-->
+  <parameter name="erfWidth" type="FloatVec">1. 10.</parameter>
+  <!--Weigth for the different Erf functions-->
+  <parameter name="erfWeigth" type="FloatVec">1. 0.00077 </parameter>
   <!--distance in mm between two RPC pads : used if UseFunctionForChargeSplitting is true -->
-  <parameter name="RPC_PadSeparation" type="float">0.5 </parameter>
+  <parameter name="RPC_PadSeparation" type="float">0.408 </parameter>
   <!--maximal distance (in mm) at which a step can induce charge using the 2D function defined with functionFormula-->
-  <parameter name="functionRange" type="float">25 </parameter>
-
- <!--digitisation parameters--> 
+  <parameter name="functionRange" type="float">30 </parameter>
+  
+   <!--digitisation parameters--> 
   <!--Threshold for HCAL Hits in pC-->
-  <parameter name="HCALThreshold" type="FloatVec">0.114 1.45 3.8 </parameter>
+  <parameter name="HCALThreshold" type="FloatVec">0.114 5.4 14. </parameter>
   <!--Calibration coefficients for HCAL-->
-  <parameter name="CalibrHCAL" type="FloatVec">0.0406459 0.101952 0.258078 </parameter>
+  <!-- <parameter name="CalibrHCAL" type="FloatVec">0.0406459 0.101952 0.258078 </parameter> -->
+  <parameter name="CalibrHCAL" type="FloatVec">0.0400452 0.101322 0.39448</parameter>
   <!--Replace analog hit energy by value given in CalibrHCAL according to thresholds given in HCALThreshold-->
   <parameter name="doThresholds" type="bool">true </parameter>
-
-
 
  <!--ECAL/HCAL common parameters-->
   <!--Print or not SimDigital-->
@@ -833,11 +879,15 @@
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
 
+  <!--Step efficiency correction method : should be Constant or PrototypeMap-->
+  <parameter name="EffMapOption" type="string"> Constant </parameter>
+  <!--Value of the constant term for efficiency correction if EffMapOption==Constant-->
+  <parameter name="EffMapConstantValue" type="float"> 0.96 </parameter>
+  <!--File name where prototype efficiency corresction is stored if EffMapOption==PrototypeMap-->
+  <parameter name="EffMapPrototypeFileName" type="string"> map.txt </parameter>
+
+
 </processor>
-
-
-
-
 
 <!--######  SimpleBCALDigi ##########################################-->
 
@@ -906,9 +956,110 @@
   <parameter name="RelationOutputCollection" type="string">RelationMuonHit </parameter>
 </processor>
 
-<!--######  RecoMCTruthLinker #######################################-->
+<!--########## MarlinArbor ###################################### -->
 
-<processor name="MyRecoMCTruthLinker" type="RecoMCTruthLinker">
+<processor name="MyMarlinArbor" type="ArborPFAProcessor">
+	<parameter name="PandoraSettingsXmlFile" type="String"> ArborSettingsDefault.xml </parameter>
+	<!-- Collection names -->
+	<parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
+	<parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+	<parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+	<parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
+	<parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
+	<parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+	<parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+	<parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit RelationLHcalHit RelationCaloHit_LDC</parameter>
+	<parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
+	<parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+	<parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+	<parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+	<parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+	<parameter name="ClusterCollectionName" type="String">ArborClusters</parameter>
+	<parameter name="PFOCollectionName" type="String">ArborPFOs</parameter>
+	<!-- Calibration constants -->
+	<parameter name="ECalToMipCalibration" type="float">160.0</parameter>
+	<parameter name="HCalToMipCalibration" type="float">34.8</parameter>
+	<parameter name="ECalMipThreshold" type="float">0.5</parameter>
+	<parameter name="HCalMipThreshold" type="float">0.3</parameter>
+	<parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
+	<parameter name="HCalToEMGeVCalibration" type="float">1.007</parameter>
+	<parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
+	<parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
+	<parameter name="HCalToHadGeVCalibration" type="float">1.027</parameter>
+	<parameter name="MuonToMipCalibration" type="float">10.0</parameter>
+	<parameter name="DigitalMuonHits" type="int">0</parameter>
+	<parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter>
+	<parameter name="AbsorberRadLengthECal" type="float">0.2854</parameter>
+	<parameter name="AbsorberIntLengthECal" type="float">0.0101</parameter>
+	<parameter name="AbsorberRadLengthHCal" type="float">0.0569</parameter>
+	<parameter name="AbsorberIntLengthHCal" type="float">0.0060</parameter>
+	<parameter name="AbsorberRadLengthOther" type="float">0.0569</parameter>
+	<parameter name="AbsorberIntLengthOther" type="float">0.0060</parameter>
+	<!--Whether to calculate track states manually, rather than copy stored fitter values-->
+	<parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+	<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+	
+	<!-- Concentric gap between ecal and hcal modules. Respective gap positions in z and size -->
+	<parameter name="ECalBarrelModuleGapsZ" type="FloatVec"> -1410.6 -470.2 470.2 1410.6 </parameter>
+	<parameter name="ECalBarrelModuleGapSize" type="float"> 2. </parameter>
+	<parameter name="HCalBarrelModuleGapsZ" type="FloatVec"> -1418. -457.5 457.5 1418. </parameter>
+	<parameter name="HCalBarrelModuleGapSize" type="float"> 20 </parameter>
+	
+	<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+  <!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+  <parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+  <parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0387678 0.0943724 0.371602 </parameter>
+	<!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
+</processor>
+
+
+<!--################################################ -->
+<processor name="MyBCalReco" type="BCalReco">
+ <!--Filling Histograms with deposited energy from beamstrahlung pairs in BeamCal-->
+  <!--Name of the Beamcal clusters collection-->
+  <parameter name="BCALClusterName" type="string" lcioOutType="Cluster">BCALClusters </parameter>
+  <!--Name of the Beamcal cluster to mc-particle relation collection-->
+  <parameter name="BCALMCTruthLinkName" type="string" lcioOutType="LCRelation">BCALMCTruthLink </parameter>
+  <!-- Name of input file for background energy density-->
+  <parameter name="BackgroundFilename" type="string">
+      bg_aver.sv01-14-p00.mILD_o1_v05.E1000-B1b_ws.PBeamstr-pairs.I210000.root
+  </parameter>
+  <!--Collection of SimCalorimeterHits in BeamCal-->
+  <parameter name="BeamCalHitCol" type="string">BCAL </parameter>
+  <!--Name of the MCParticle collection-->
+  <parameter name="CollectionName" type="string" lcioInType="MCParticle">MCParticle </parameter>
+  <!-- Event Clusters Histgram X axis range [n] (10 by default)-->
+  <parameter name="EventClustersHistoRange" type="int">10 </parameter>
+  <!--Name of the Beamcal reconstructed particles collection-->
+  <parameter name="RecoPartCollectionName" type="string" lcioOutType="ReconstructedParticle">BCALParticles </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+<!--################################################ -->
+
+ <processor name="MyPFOID" type="PFOID">
+  <!--Performs particle identification-->
+  <!--Debugging?-->
+  <parameter name="Debug" type="int">0 </parameter>
+  <!--Boundaries for energy binning-->
+  <parameter name="EnergyBoundaries" type="FloatVec">0 10 1e+07  </parameter>
+  <!--Name of files containing pdfs for charged particles-->
+  <parameter name="FilePDFName" type="StringVec">
+    pdf_charged_lt10.txt pdf_charged_ge10.txt
+  </parameter>
+  <!--Name of the PFO collection-->
+  <parameter name="RecoParticleCollection" type="string">PandoraPFOs</parameter>
+  <!--Name of files containing pdfs for neutral particles-->
+  <parameter name="neutralFilePDFName" type="StringVec">
+      pdf_neutral_lt10.txt pdf_neutral_ge10.txt
+  </parameter>
+ </processor>
+
+<!--################################################ -->
+
+
+
+ <processor name="MyRecoMCTruthLinker" type="RecoMCTruthLinker">
  <!--links RecontructedParticles to the MCParticle based on number of hits used-->
   <!--Name of the MCParticle input collection-->
   <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle"> MCParticle </parameter>
@@ -938,74 +1089,38 @@
   <parameter name="TrackerHitsRelInputCollections" type="StringVec" lcioInType="LCRelation">VXDTrackerHitRelations SITSpacePointRelations FTDPixelTrackerHitRelations FTDSpacePointRelations TPCTrackerHitRelations SETSpacePointRelations  </parameter>
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <!--parameter name="Verbosity" type="string"> DEBUG </parameter-->
-</processor>
+  </processor>
 
-<!--########## MarlinArbor ######################################-->
-
-<processor name="MyMarlinArbor" type="ArborPFAProcessor">
-  <parameter name="PandoraSettingsXmlFile" type="String">ArborSettingsDefault.xml</parameter>
-  <!-- Collection names -->
-  <parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
-  <parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
-  <parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
-  <parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
-  <parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
-  <parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
-  <parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
-  <parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit</parameter>
-  <parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
-  <parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
-  <parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
-  <parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
-  <parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
-  <parameter name="ClusterCollectionName" type="String">ArborClusters</parameter>
-  <parameter name="PFOCollectionName" type="String">ArborPFOs</parameter>
-  <!-- Calibration constants -->
-  <parameter name="ECalToMipCalibration" type="float">160.0</parameter>
-  <parameter name="HCalToMipCalibration" type="float">34.8</parameter>
-  <parameter name="ECalMipThreshold" type="float">0.5</parameter>
-  <parameter name="HCalMipThreshold" type="float">0.3</parameter>
-  <parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
-  <parameter name="HCalToEMGeVCalibration" type="float">1.007</parameter>
-  <parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
-  <parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
-  <parameter name="HCalToHadGeVCalibration" type="float">1.027</parameter>
-  <parameter name="MuonToMipCalibration" type="float">10.0</parameter>
-  <parameter name="DigitalMuonHits" type="int">0</parameter>
-  <parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter>
-  <parameter name="AbsorberRadLengthECal" type="float">0.2854</parameter>
-  <parameter name="AbsorberIntLengthECal" type="float">0.0101</parameter>
-  <parameter name="AbsorberRadLengthHCal" type="float">0.0569</parameter>
-  <parameter name="AbsorberIntLengthHCal" type="float">0.0060</parameter>
-  <parameter name="AbsorberRadLengthOther" type="float">0.0569</parameter>
-  <parameter name="AbsorberIntLengthOther" type="float">0.0060</parameter>
-  <!--Whether to calculate track states manually, rather than copy stored fitter values-->
-  <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
-  
-	<!-- Concentric gap between ecal and hcal modules. Respective gap positions in z and size -->
-	<parameter name="ECalBarrelModuleGapsZ" type="FloatVec"> -1410.6 -470.2 470.2 1410.6 </parameter>
-	<parameter name="ECalBarrelModuleGapSize" type="float"> 2. </parameter>
-	<parameter name="HCalBarrelModuleGapsZ" type="FloatVec"> -1418. -457.5 457.5 1418. </parameter>
-	<parameter name="HCalBarrelModuleGapSize" type="float"> 20 </parameter>
-  
-  <!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
-  <!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
-  <parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
-  <parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0387678 0.0943724 0.371602 </parameter>
-  <!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
-  <!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
+<processor name="MyMCPfoMaker" type="MCPfoMaker">
+  <!--MCPfoMaker creates mc pfos for comparison with PandoraPFANew output-->
+  <!--Names of input mc particle collections-->
+  <parameter name="InputMCParticleCollections" type="StringVec" lcioInType="MCParticle">MCParticle </parameter>
+  <!--Flag to look for quarks with mother Z-->
+  <parameter name="LookForQuarksWithMotherZ" type="bool">false </parameter>
+  <!--Output mc particle collection name-->
+  <parameter name="OutputMCParticleCollection" type="string">MCPFOs </parameter>
+  <!--Output quark particle collection name-->
+  <parameter name="OutputQuarkParticleCollection" type="string">QuarkPFOs </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
 </processor>
 
 <processor name="MyPfoAnalysis" type="PfoAnalysis">
   <!--PfoAnalysis analyses output of PandoraPFANew-->
-  <!--Names of input pfo collection-->
-  <parameter name="PfoCollection" type="string" lcioInType="ReconstructedParticle">ArborPFOs </parameter>
-  <!--Names of mc particle collection-->
-  <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle">MCParticle </parameter>
+  <!--Names of input mc particle collections-->
+  <parameter name="InputMCParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">MCPFOs </parameter>
+  <!--Names of input reconstructed particle collections-->
+  <parameter name="InputParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">ArborPFOs </parameter>
+  <!--Names of input quark particle collections-->
+  <parameter name="InputQuarkParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">QuarkPFOs </parameter>
+  <!--Names of input recluster monitoring collections-->
+  <parameter name="InputReclusterMonitoringCollections" type="StringVec" lcioInType="LCGenericObject">PandoraPFANewReclusterMonitoring </parameter>
+  <!--Names of mc particle collections-->
+  <parameter name="MCParticleCollections" type="StringVec" lcioInType="MCParticle">MCParticle </parameter>
   <!--Set the debug print level-->
   <parameter name="Printing" type="int">0 </parameter>
   <!--Name of the output root file-->
-  <parameter name="RootFile" type="string"> MyPfoAnalysis.root </parameter>
+  <parameter name="RootFile" type="string"> PfoAnalysis.root </parameter>
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
 </processor>

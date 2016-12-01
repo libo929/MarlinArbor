@@ -3,16 +3,58 @@
 <pandora>
 	<!-- GLOBAL SETTINGS -->
 	<IsMonitoringEnabled>true</IsMonitoringEnabled>
-	<ShouldDisplayAlgorithmInfo>false</ShouldDisplayAlgorithmInfo>
+	<ShouldDisplayAlgorithmInfo>true</ShouldDisplayAlgorithmInfo>
 	<ShouldCollapseMCParticlesToPfoTarget>true</ShouldCollapseMCParticlesToPfoTarget>
 
 	<!-- PLUGIN SETTINGS -->
-	<HadronicEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </HadronicEnergyCorrectionPlugins>
-	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </ElectromagneticEnergyCorrectionPlugins>
+	<HadronicEnergyCorrectionPlugins> BarrelGapEnergyFunction ThetaEnergyFunction </HadronicEnergyCorrectionPlugins>
+<!-- 	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </ElectromagneticEnergyCorrectionPlugins> -->
 
-	<!-- No particle ID plugin implemented for the moment -->
-	<!-- <EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> <PhotonPlugin>ArborPhotonId</PhotonPlugin> 
-		<ElectronPlugin>ArborElectronId</ElectronPlugin> <MuonPlugin>ArborMuonId</MuonPlugin> -->
+  <BarrelGapEnergyFunction>
+	  <EcalZGapPositions>-1410.6 -470.2 470.2 1410.6</EcalZGapPositions>
+	  <HcalZGapPositions>-1423 -485 485 1423</HcalZGapPositions>
+	  <EcalDistanceToGap>10</EcalDistanceToGap>
+	  <HcalDistanceToGap>30</HcalDistanceToGap>
+	  <EcalGapAlpha>0</EcalGapAlpha>
+	  <EcalGapBeta>0</EcalGapBeta>
+	  <HcalGapAlpha>1.5254</HcalGapAlpha>
+	  <HcalGapBeta>0</HcalGapBeta>
+  </BarrelGapEnergyFunction>
+  
+  <ThetaEnergyFunction>
+  	<LowEnergyCut>3.</LowEnergyCut>
+  	<BarrelP00>-2.36284</BarrelP00>
+  	<BarrelP01>1.14627</BarrelP01>
+  	<BarrelP02>-0.00152029</BarrelP02>
+  	<BarrelP10>0.325533</BarrelP10>
+  	<BarrelP11>-0.126941</BarrelP11>
+  	<BarrelP12>0.000462463</BarrelP12>
+  	<EndcapP00>-2.16956</EndcapP00>
+  	<EndcapP01>0.801878</EndcapP01>
+  	<EndcapP02>1.27263e-05</EndcapP02>
+  	<EndcapP10>0.157559</EndcapP10>
+  	<EndcapP11>0.34754</EndcapP11>
+  	<EndcapP12>-0.00122559</EndcapP12>
+  </ThetaEnergyFunction>
+ 
+	<EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> 
+	<PhotonPlugin>ArborPhotonId</PhotonPlugin> 
+	<ElectronPlugin>ArborElectronId</ElectronPlugin>
+	<MuonPlugin>ArborMuonId</MuonPlugin>
+	
+	<ArborEmShowerId>
+	 <MaxForwardPseudoLayer>3</MaxForwardPseudoLayer>
+	 <MinPseudoLayerNHits>4</MinPseudoLayerNHits>
+	 <MinFitHitDistanceFine>50</MinFitHitDistanceFine>
+	 <MinFitHitDistanceCoarse>100</MinFitHitDistanceCoarse>
+	 <MinNInteractingLayers>2</MinNInteractingLayers>
+	 <LowEnergyClusterCut>4.f</LowEnergyClusterCut>
+	 <MaxPseudoLayerExtension>30</MaxPseudoLayerExtension>
+	 <MaxAngleWithOrigin>0.3</MaxAngleWithOrigin>
+	 <MaxHadronicEnergyFraction>0.2</MaxHadronicEnergyFraction>
+	 <MinOuterEcalPseudoLayerEnergyCut>25</MinOuterEcalPseudoLayerEnergyCut>
+	 <MaxOuterEcalEnergyFraction>0.1</MaxOuterEcalEnergyFraction>
+	</ArborEmShowerId>
 
 	<PseudoLayerPlugin>
 		<UseCoordinateCorrections> true </UseCoordinateCorrections>
@@ -39,13 +81,15 @@
      -->
 	<SdhcalQuadraticEnergyFunction>
 		<EnergyConstantParameters>
-		0.0406952 3.30524e-05 -2.89607e-08
-    0.0925995 1.12701e-05  5.1673e-09
-    0.166333  3.08751e-05  2.98793e-08
+			0.0406952 3.30524e-05 -2.89607e-08
+    		0.0925995 1.12701e-05  5.1673e-09
+    		0.166333  3.08751e-05  2.98793e-08
 		</EnergyConstantParameters>
-		<SdhcalThresholds> 0.0387678 0.0943724 0.371602 </SdhcalThresholds>
+		<SdhcalThresholds> 
+			0.0387678 0.0943724 0.371602 
+		</SdhcalThresholds>
 	</SdhcalQuadraticEnergyFunction>
-
+	
 
 	<!-- ALGORITHM SETTINGS -->
 	<!-- Use 'instance' xml tag to pre-configure algorithms without running 
@@ -55,7 +99,7 @@
 			<!-- Configure a visual monitoring displaying the current cluster list 
 				to run between each algorithm step -->
 			<algorithm type="VisualMonitoring" instance="MonitoringClusters">
-				<ShowCurrentConnectors>false</ShowCurrentConnectors>
+				<ShowCurrentConnectors>true</ShowCurrentConnectors>
 				<ConnectorLevel>Clusters</ConnectorLevel>
 				<ShowCurrentMCParticles>false</ShowCurrentMCParticles>
 				<ShowCurrentCaloHits>false</ShowCurrentCaloHits>
@@ -71,28 +115,91 @@
 				<ShowAssociatedTracks>true</ShowAssociatedTracks>
 			</algorithm>
 			
-			<algorithm type="TrackClusterAssociation" instance="ReclusteringTrackAssociation">
+			<algorithm type="VisualMonitoring" instance="MonitoringPhotons">
+		        <ShowCurrentConnectors>false</ShowCurrentConnectors>
+		        <ConnectorLevel>Clusters</ConnectorLevel>
+		        <ShowCurrentMCParticles>false</ShowCurrentMCParticles>
+		        <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
+		        <ShowCurrentTracks>false</ShowCurrentTracks>
+		        <ShowCurrentClusters>false</ShowCurrentClusters>
+		        <ShowCurrentPfos>false</ShowCurrentPfos>
+		        <ShowCurrentVertices>false</ShowCurrentVertices>
+		        <ClusterListNames>PhotonClusters</ClusterListNames>
+		        <HitColors>iterate</HitColors>
+		        <DisplayEvent>false</DisplayEvent>
+		        <ShowDetector>true</ShowDetector>
+		        <DetectorView>""</DetectorView>
+		        <ShowOnlyAvailable>false</ShowOnlyAvailable>
+		        <ShowAssociatedTracks>true</ShowAssociatedTracks>
+		      </algorithm>
+		      			
+			<algorithm type="ArborClustering" instance="MainClustering">
+				<AdditionalConnectionTools>
+					<tool type="TrackDrivenSeeding">
+						<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+					</tool>
+					<tool type="ConnectorSeeding">
+					  <ShouldDiscriminateConnectedHits>false</ShouldDiscriminateConnectedHits>
+					</tool>
+					<tool type="ConnectorCleaning" />
+				</AdditionalConnectionTools>
+			</algorithm>
+			
+			<algorithm type="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation">
 				<UseEnergyCompatibility>false</UseEnergyCompatibility>
 				<AllowMultiAssociations>true</AllowMultiAssociations>
 			</algorithm>
 			
-			<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationOptimized">
+			<algorithm type="TrackClusterAssociation" instance="EnergyDrivenTrackClusterAssociation">
+				<UseEnergyCompatibility>true</UseEnergyCompatibility>
+				<AllowMultiAssociations>false</AllowMultiAssociations>
+			</algorithm>
+			
+			<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithPhotons">
 				<associationAlgorithms>
 					<algorithm type="ClosebySeedMerging">
 						<MergeHCalSeedClusters>false</MergeHCalSeedClusters>
 					</algorithm>
-					<algorithm type="TrackClusterAssociation" instance="ReclusteringTrackAssociation" />
+					<algorithm type="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
 					<algorithm type="ClosebySeedMerging" />
 					<algorithm type="MipFragmentMerging" />
-					<algorithm type="FragmentRemoval">
-						<tool type="CaloHitMerging" description="CaloHitMerging" />
+			        <algorithm type="FragmentRemoval">
+			          <AdditionalClusterMergingListNames> PhotonClusters </AdditionalClusterMergingListNames>
+			          <tool type="CaloHitMerging" description="CaloHitMerging">
+			            <MaxPidCaloHitDistanceFine>22:25</MaxPidCaloHitDistanceFine>
+			            <MaxPidCaloHitDistanceCoarse>22:0</MaxPidCaloHitDistanceCoarse>
+			          </tool>
+			        </algorithm>
+			        <algorithm type="PointingClusterAssociation" />
+			        <algorithm type="ClusterFragmentMerging" />
+			        <algorithm type="SurroundingHitsMerging">
+			          <AdditionalClusterListNames> PhotonClusters </AdditionalClusterListNames>
+			          <ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
+			          <tool type="CaloHitMerging" description="CaloHitMerging">
+			            <MaxPidCaloHitDistanceFine>22:25</MaxPidCaloHitDistanceFine>
+			            <MaxPidCaloHitDistanceCoarse>22:0</MaxPidCaloHitDistanceCoarse>
+			          </tool>
+			        </algorithm>
+				</associationAlgorithms>
+			</algorithm>
+			
+			<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithoutPhotons">
+				<associationAlgorithms>
+					<algorithm type="ClosebySeedMerging">
+						<MergeHCalSeedClusters>false</MergeHCalSeedClusters>
 					</algorithm>
-					<algorithm type="PointingClusterAssociation" />
-					<algorithm type="ClusterFragmentMerging" />
-					<algorithm type="SurroundingHitsMerging">
-						<ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
-						<tool type="CaloHitMerging" description="CaloHitMerging" />
-					</algorithm>
+					<algorithm type="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
+					<algorithm type="ClosebySeedMerging" />
+					<algorithm type="MipFragmentMerging" />
+			        <algorithm type="FragmentRemoval">
+			          <tool type="CaloHitMerging" description="CaloHitMerging" />
+			        </algorithm>
+			        <algorithm type="PointingClusterAssociation" />
+			        <algorithm type="ClusterFragmentMerging" />
+			        <algorithm type="SurroundingHitsMerging">
+			          <ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
+			          <tool type="CaloHitMerging" description="CaloHitMerging" />
+			        </algorithm>
 				</associationAlgorithms>
 			</algorithm>
 			
@@ -601,6 +708,7 @@
 
 	<!-- Select tracks and hits to use for clustering -->
 	<algorithm type="CaloHitPreparation" />
+	
 	<algorithm type="EventPreparation">
 		<OutputTrackListName>Tracks</OutputTrackListName>
 		<MergeECalHCalCaloHitLists>true</MergeECalHCalCaloHitLists>
@@ -610,72 +718,57 @@
 		<ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
 	</algorithm>
 	
-	<!-- External photon clustering --> 
- 	<algorithm type="ClusteringParent">
-		<algorithm type="ExternalClustering" description="ClusterFormation">
-			<ExternalClusterCollectionName>PandoraPhotonClusters</ExternalClusterCollectionName>
-			<FlagClustersAsPhotons>true</FlagClustersAsPhotons>
-		</algorithm>
-		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation">
-			<associationAlgorithms>
-				<algorithm type="SurroundingHitsMerging">
-					<tool type="CaloHitMerging" description="CaloHitMerging">
-						<MaxCaloHitDistanceFine>25.f</MaxCaloHitDistanceFine>
-						<MaxCaloHitDistanceCoarse>0</MaxCaloHitDistanceCoarse>
-					</tool>
-				</algorithm>
-			</associationAlgorithms>
-		</algorithm>
-		<ClusterListName>PhotonClusters</ClusterListName>
-        <ReplaceCurrentClusterList>false</ReplaceCurrentClusterList>
-	</algorithm>
-
+	<!-- Arbor photon clustering as basic clustering with photon id -->
+   <algorithm type="PhotonReconstruction">
+    <algorithm type="ArborClustering" description="ClusterFormation">
+      <ECalConnectionTools>
+        <tool type="TrackDrivenSeeding">
+          <MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
+        </tool>
+        <tool type="ConnectorSeeding">
+          <ShouldDiscriminateConnectedHits>false</ShouldDiscriminateConnectedHits>
+        </tool>
+        <tool type="ConnectorCleaning" />
+      </ECalConnectionTools>
+    </algorithm>
+    <algorithm type="TopologicalAssociationParent" description="ClusterAssociation" >
+      <associationAlgorithms>
+        <algorithm type="ClosebySeedMerging">
+          <MergeHCalSeedClusters>false</MergeHCalSeedClusters>
+        </algorithm>
+        <algorithm type="TrackClusterAssociation"/>
+        <algorithm type="FragmentRemoval">
+          <tool type="CaloHitMerging" description="CaloHitMerging" />
+        </algorithm>
+        <algorithm type="SurroundingHitsMerging">
+          <ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
+          <tool type="CaloHitMerging" description="CaloHitMerging">
+            <MaxCaloHitDistanceFine>25.f</MaxCaloHitDistanceFine>
+            <MaxCaloHitDistanceCoarse>0.f</MaxCaloHitDistanceCoarse>
+          </tool>
+        </algorithm>
+      </associationAlgorithms>
+    </algorithm>
+    <ClusterListName>PhotonClusters</ClusterListName>
+    <ReplaceCurrentClusterList>false</ReplaceCurrentClusterList>
+  </algorithm>
+  
 	<!-- Remove hits from photons that are in track paths -->
 	<algorithm type="NearbyTrackPhotonRemoval">
 		<PhotonClusterListName>PhotonClusters</PhotonClusterListName>
 	</algorithm>
 	
-	<!-- Run first clustering algorithm ad its topological associations with optimized parameters -->
+	<algorithm type="VisualMonitoring" instance="MonitoringPhotons" />
+	
+	<!-- Run first clustering algorithm and its topological associations with optimized parameters -->
 	<algorithm type="ClusteringParent">
-		<algorithm type="ArborClustering" description="ClusterFormation">
-			<AdditionalConnectionTools>
-				<tool type="TrackDrivenSeeding">
-					<MaxConnectionPseudoLayer> 3 </MaxConnectionPseudoLayer>
-				</tool>
-				<tool type="ConnectorSeeding" />
-				<tool type="ConnectorCleaning" />
-			</AdditionalConnectionTools>
-		</algorithm>
-		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" >
-			<associationAlgorithms>
-				<algorithm type="ClosebySeedMerging">
-					<MergeHCalSeedClusters>false</MergeHCalSeedClusters>
-				</algorithm>
-				<algorithm type="TrackClusterAssociation"/>
-				<algorithm type="ClosebySeedMerging" />
-				<algorithm type="MipFragmentMerging" />
-				<algorithm type="FragmentRemoval">
-					<AdditionalClusterMergingListNames> PhotonClusters </AdditionalClusterMergingListNames>
-					<tool type="CaloHitMerging" description="CaloHitMerging">
-						<MaxPidCaloHitDistanceFine>22:15.f</MaxPidCaloHitDistanceFine>
-						<MaxPidCaloHitDistanceFine>22:0.f</MaxPidCaloHitDistanceFine>
-					</tool>
-				</algorithm>
-				<algorithm type="PointingClusterAssociation" />
-				<algorithm type="ClusterFragmentMerging" />
-				<algorithm type="SurroundingHitsMerging">
-					<AdditionalClusterListNames> PhotonClusters </AdditionalClusterListNames>
-					<ShouldMergeIsolatedHits>true</ShouldMergeIsolatedHits>
-					<tool type="CaloHitMerging" description="CaloHitMerging">
-						<MaxPidCaloHitDistanceFine>22:15.f</MaxPidCaloHitDistanceFine>
-						<MaxPidCaloHitDistanceFine>22:0.f</MaxPidCaloHitDistanceFine>
-					</tool>
-				</algorithm>
-			</associationAlgorithms>
-		</algorithm>
+		<algorithm type="ArborClustering" description="ClusterFormation" instance="MainClustering" />
+		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithPhotons" />
 		<ClusterListName>PrimaryTrees</ClusterListName>
 		<ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
 	</algorithm>
+	
+	<algorithm type="VisualMonitoring" instance="MonitoringClusters" />
 	
 	<!-- Run reclustering on clusters with an energy excess. Break all surrounding clusters and trigger reclustering -->
 	<algorithm type="EnergyExcessReclustering">
@@ -693,8 +786,8 @@
 			<algorithm type="ArborClustering" instance="Reclustering11" />
 			<algorithm type="ArborClustering" instance="Reclustering12" />
 		</clusteringAlgorithms>
-		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationOptimized" />
-		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="TrackClusterOptimized" />
+		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithoutPhotons" />
+		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
 		<MinChi2ToRunReclustering>2.5</MinChi2ToRunReclustering>
 	</algorithm>
 	
@@ -714,8 +807,8 @@
 			<algorithm type="ArborClustering" instance="Reclustering23" />
 			<algorithm type="ArborClustering" instance="Reclustering24" />
 		</clusteringAlgorithms>
-		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationOptimized" />
-		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="ReclusteringTrackAssociation" />
+		<algorithm type="TopologicalAssociationParent" description="ClusterAssociation" instance="AssociationWithoutPhotons" />
+		<algorithm type="TrackClusterAssociation" description="TrackClusterAssociation" instance="TopologicalTrackClusterAssociation" />
 	  <MinChi2ToRunReclustering>2.5</MinChi2ToRunReclustering>
 	</algorithm>
 
@@ -728,10 +821,7 @@
 		<MergedCandidateListName>PfoCandidates</MergedCandidateListName>
 		<PfoTrackListName>PfoCreation</PfoTrackListName>
 		<trackClusterAssociationAlgorithms>
-			<algorithm type="TrackClusterAssociation">
-				<UseEnergyCompatibility>true</UseEnergyCompatibility>
-				<AllowMultiAssociations>false</AllowMultiAssociations>
-			</algorithm>
+			<algorithm type="TrackClusterAssociation" instance="EnergyDrivenTrackClusterAssociation" />
 			<algorithm type="UnassociatedTrackRecovery" />
 			<algorithm type="LoopingTrackAssociation"/>
 		</trackClusterAssociationAlgorithms>
@@ -748,16 +838,28 @@
 		<OutputPfoListName>ArborPfos</OutputPfoListName>
 	</algorithm>
 	
+	<!-- Final particle identification algorithm -->
+	<algorithm type="FinalParticleId">
+	 <ForcePhotonTagging>true</ForcePhotonTagging>
+	</algorithm>
+	
+  <algorithm type="PerformanceMonitoring">
+    <ExpectedPfoTotalEnergy>360</ExpectedPfoTotalEnergy>
+    <PfoTotalEnergyDeviation>30</PfoTotalEnergyDeviation>
+     <algorithm type="VisualMonitoring" description="VisualMonitoring"/>
+  </algorithm>
+	
 	<!-- Open Eve visual monitoring on final pfos -->
 	<algorithm type="VisualMonitoring" description="VisualMonitoring">
 		<ShowCurrentConnectors>false</ShowCurrentConnectors>
 		<ConnectorLevel>Pfos</ConnectorLevel>
 		<ShowCurrentMCParticles>true</ShowCurrentMCParticles>
-		<ShowCurrentCaloHits>false</ShowCurrentCaloHits>
-		<ShowCurrentTracks>false</ShowCurrentTracks>
+		<ShowCurrentCaloHits>true</ShowCurrentCaloHits>
+		<ShowCurrentTracks>true</ShowCurrentTracks>
 		<ShowCurrentClusters>false</ShowCurrentClusters>
 		<ShowCurrentPfos>true</ShowCurrentPfos>
 		<ShowCurrentVertices>false</ShowCurrentVertices>
+		<CaloHitListNames>MuonYokeHits</CaloHitListNames>
 		<HitColors>iterate</HitColors>
 		<DisplayEvent>true</DisplayEvent>
 		<ShowDetector>true</ShowDetector>
