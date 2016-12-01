@@ -116,7 +116,7 @@
 		<!-- Concentric gap between ecal and hcal modules. Respective gap positions in z and size -->
 		<parameter name="ECalBarrelModuleGapsZ" type="FloatVec"> -1410.6 -470.2 470.2 1410.6 </parameter>
 		<parameter name="ECalBarrelModuleGapSize" type="float"> 2. </parameter>
-		<parameter name="HCalBarrelModuleGapsZ" type="FloatVec"> -1418. -457.5 457.5 1418. </parameter>
+		<parameter name="HCalBarrelModuleGapsZ" type="FloatVec"> -1423 -485 485 1423 </parameter>
 		<parameter name="HCalBarrelModuleGapSize" type="float"> 20 </parameter>
 		
 		<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
