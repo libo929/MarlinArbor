@@ -107,5 +107,8 @@ INSTALL_SHARED_LIBRARY( MarlinArbor DESTINATION lib )
 # install header files
 INSTALL_DIRECTORY( ./include DESTINATION . )
 
+# install scripts files
+INSTALL_DIRECTORY( ./scripts DESTINATION . )
+
 # display some variables and write them to cache
 DISPLAY_STD_VARIABLES()
