@@ -2,7 +2,6 @@
 
 <!-- Users need to replace : -->
 <!-- * GearFile -->
-<!-- * ArborPFA settings file -->
 <!-- * lcio input files -->
 <!-- * lcio output file -->
 
@@ -28,6 +27,9 @@
 		<processor name="MyPerfectPfoAnalysis"/>
 		<processor name="MyPerfectPhotonPfoAnalysis"/>
 		<processor name="MyPerfectPhotonNeutronK0LPfoAnalysis"/>
+		
+		<!-- Write reconstructed particle in lcio output file -->
+		<processor name="MyLCIOOutputProcessor"/>
 	</execute>
 
 	<global>
@@ -41,7 +43,11 @@
 		<parameter name="RandomSeed" value="1234567890" />
 	</global>
 	
-
+	<processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
+		<!--   standard output: full reconstruction keep all collections -->
+		<parameter name="LCIOOutputFile" type="string" > </parameter>
+		<parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
+	</processor>
 
 	<processor name="MyAIDAProcessor" type="AIDAProcessor">
 		<!--Processor that handles AIDA files. Creates on directory per processor.  Processors only need to create and fill the histograms, clouds and tuples. Needs to be the first ActiveProcessor-->
