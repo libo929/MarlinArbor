@@ -12,7 +12,7 @@ PROJECT( MarlinArbor )
 # project version
 SET( MarlinArbor_VERSION_MAJOR 01 )
 SET( MarlinArbor_VERSION_MINOR 04 )
-SET( MarlinArbor_VERSION_PATCH 00 )
+SET( MarlinArbor_VERSION_PATCH 01 )
 
 
 ### CMAKE ###################################################################
