@@ -1570,28 +1570,5 @@
 	<!-- Final particle identification algorithm -->
 	<algorithm type="FinalParticleId"/>
 	
-	<algorithm type="PerformanceMonitoring">
-    <ExpectedPfoTotalEnergy>360</ExpectedPfoTotalEnergy>
-    <PfoTotalEnergyDeviation>30</PfoTotalEnergyDeviation>
-     <algorithm type="VisualMonitoring" description="VisualMonitoring"/>
-  </algorithm>
-	
-  <algorithm type="VisualMonitoring" description="VisualMonitoring">
-    <ShowCurrentConnectors>false</ShowCurrentConnectors>
-    <ConnectorLevel>Pfos</ConnectorLevel>
-    <ShowCurrentMCParticles>true</ShowCurrentMCParticles>
-    <ShowCurrentCaloHits>false</ShowCurrentCaloHits>
-    <ShowCurrentTracks>true</ShowCurrentTracks>
-    <ShowCurrentClusters>false</ShowCurrentClusters>
-    <ShowCurrentPfos>true</ShowCurrentPfos>
-    <ShowCurrentVertices>false</ShowCurrentVertices>
-    <HitColors>iterate</HitColors>
-    <DisplayEvent>false</DisplayEvent>
-    <ShowDetector>true</ShowDetector>
-    <DetectorView>""</DetectorView>
-    <ShowOnlyAvailable>false</ShowOnlyAvailable>
-    <ShowAssociatedTracks>true</ShowAssociatedTracks>
-  </algorithm>
-	
 </pandora>
 
