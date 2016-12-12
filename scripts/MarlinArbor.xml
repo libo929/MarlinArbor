@@ -12,7 +12,7 @@
 	  <processor name="MyRecoMCTruthLinker"/>
 	  <processor name="MyMarlinArbor"/>
 	  <processor name="MyMCPfoMaker" />
-	  <processor name="MyPfoAnalysis" />	  
+	  <processor name="MyPfoAnalysis" />  
 	</execute>
 
 	<global>
@@ -20,7 +20,7 @@
 		</parameter>
 		<parameter name="GearXMLFile" value=""/>
 		<parameter name="MaxRecordNumber" value="0"/>
-		<parameter name="SkipNEvents" value="13"/>
+		<parameter name="SkipNEvents" value="0"/>
 		<parameter name="SupressCheck" value="false"/>
 		<parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG </parameter>
 		<parameter name="RandomSeed" value="1234567890" />
@@ -73,7 +73,7 @@
 	</processor>
 
 	<processor name="MyMarlinArbor" type="ArborPFAProcessor">
-		<parameter name="PandoraSettingsXmlFile" type="String"></parameter>
+		<parameter name="PandoraSettingsXmlFile" type="String">ArborSettingsDefault.xml</parameter>
 		<!-- Collection names -->
 		<parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
 		<parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
@@ -96,10 +96,10 @@
 		<parameter name="ECalMipThreshold" type="float">0.5</parameter>
 		<parameter name="HCalMipThreshold" type="float">0.3</parameter>
 		<parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
-		<parameter name="HCalToEMGeVCalibration" type="float">1.007</parameter>
+		<parameter name="HCalToEMGeVCalibration" type="float">1.</parameter>
 		<parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
 		<parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
-		<parameter name="HCalToHadGeVCalibration" type="float">1.027</parameter>
+		<parameter name="HCalToHadGeVCalibration" type="float">1.</parameter>
 		<parameter name="MuonToMipCalibration" type="float">10.0</parameter>
 		<parameter name="DigitalMuonHits" type="int">0</parameter>
 		<parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter>
@@ -113,17 +113,10 @@
 		<parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
 		<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
 		
-		<!-- Concentric gap between ecal and hcal modules. Respective gap positions in z and size -->
-		<parameter name="ECalBarrelModuleGapsZ" type="FloatVec"> -1410.6 -470.2 470.2 1410.6 </parameter>
-		<parameter name="ECalBarrelModuleGapSize" type="float"> 2. </parameter>
-		<parameter name="HCalBarrelModuleGapsZ" type="FloatVec"> -1423 -485 485 1423 </parameter>
-		<parameter name="HCalBarrelModuleGapSize" type="float"> 20 </parameter>
-		
 		<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
-    <!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+    	<!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
 		<parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
-		<parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0387678 0.0943724 0.371602 </parameter>
-		<!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
+		<parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0433771 0.088424 0.457353 </parameter>
 	</processor>
 	
 	

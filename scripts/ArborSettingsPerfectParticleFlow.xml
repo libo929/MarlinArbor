@@ -8,38 +8,34 @@
 	</ShouldCollapseMCParticlesToPfoTarget>
 
 	<!-- PLUGIN SETTINGS -->
-	<HadronicEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction
-	</HadronicEnergyCorrectionPlugins>
-	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction
-	</ElectromagneticEnergyCorrectionPlugins>
-
-  <!-- SDHCAL single particle parameters from imad - FTFP_BERT_HP 
-  0.0293659 
-    2.96392e-05 -2.051233e-08 0.0925993 1.12284e-05 -2.016464e-09 0.166332 3.08655e-05 
-    2.97939e-08 
-    
-    SDHCAL single particle parameters from imad - QGSP_BERT 
-    0.0273594 
-    3.52211e-05 -1.7897e-08 0.0996403 2.0337e-05 -1.08497e-08 0.144696 1.55448e-05 
-    2.12579e-08
-    
-    ECAL + SDHCAL calibration with simple reco QGSP_BERT with Mokka ILD_v05_o2
-    lin = 
-    0.0387678 0.0943724 0.371602
-    quadr = 
-    0.0406952 3.30524e-05 -2.89607e-08
-    0.0925995 1.12701e-05  5.1673e-09
-    0.166333  3.08751e-05  2.98793e-08
-    
-     -->
-  <SdhcalQuadraticEnergyFunction>
-    <EnergyConstantParameters>
-    0.0406952 3.30524e-05 -2.89607e-08
-    0.0925995 1.12701e-05  5.1673e-09
-    0.166333  3.08751e-05  2.98793e-08
-    </EnergyConstantParameters>
-    <SdhcalThresholds> 0.0387678 0.0943724 0.371602 </SdhcalThresholds>
-  </SdhcalQuadraticEnergyFunction>
+	<HadronicEnergyCorrectionPlugins> BarrelGapEnergyFunction ThetaEnergyFunction </HadronicEnergyCorrectionPlugins>
+	
+	<BarrelGapEnergyFunction>
+		 <EcalZGapPositions>-1410.6 -470.2 470.2 1410.6</EcalZGapPositions>
+		 <HcalZGapPositions>-1423 -485 485 1423</HcalZGapPositions>
+		 <EcalDistanceToGap>10</EcalDistanceToGap>
+		 <HcalDistanceToGap>30</HcalDistanceToGap>
+		 <EcalGapAlpha>0</EcalGapAlpha>
+		 <EcalGapBeta>0</EcalGapBeta>
+		 <HcalGapAlpha>1.5254</HcalGapAlpha>
+		 <HcalGapBeta>0</HcalGapBeta>
+	</BarrelGapEnergyFunction>
+  
+	<ThetaEnergyFunction>
+		<LowEnergyCut>3.</LowEnergyCut>
+		<BarrelP00>-2.0695</BarrelP00>
+		<BarrelP01>1.15493</BarrelP01>
+		<BarrelP02>-0.00154133</BarrelP02>
+		<BarrelP10>0.574691</BarrelP10>
+		<BarrelP11>-0.127181</BarrelP11>
+		<BarrelP12>0.000531069</BarrelP12>
+		<EndcapP00>-0.913565</EndcapP00>
+		<EndcapP01>0.817793</EndcapP01>
+		<EndcapP02>0.000459511</EndcapP02>
+		<EndcapP10>-0.837188</EndcapP10>
+		<EndcapP11>0.320991</EndcapP11>
+		<EndcapP12>-0.00174508</EndcapP12>
+	</ThetaEnergyFunction>
 
 	<!-- ALGORITHM SETTINGS -->
 	

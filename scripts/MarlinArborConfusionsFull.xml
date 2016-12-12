@@ -1,44 +1,56 @@
 <!-- Example steering file for MarlinPandora -->
  <marlin>
-   
    <execute>
-     <processor name="MyAIDAProcessor"/>
+		<processor name="MyAIDAProcessor"/>
+		
+		<!-- ========== track digitization and tracking  === -->
+		<processor name="VXDPlanarDigiProcessor"/>
+		<processor name="SITPlanarDigiProcessor"/>
+		<processor name="SITSpacePointBuilder" />
+		<processor name="FTDPixelPlanarDigiProcessor"/>
+		<processor name="FTDStripPlanarDigiProcessor"/>
+		<processor name="FTDSpacePointBuilder"/>
+		<processor name="SETPlanarDigiProcessor"/>
+		<processor name="SETSpacePointBuilder" />
+		<processor name="MyTPCDigiProcessor"/>
+		
+		<!-- ========== the new C++ tracking =============== -->
+		<processor name="MyClupatraProcessor" />
+		<processor name="MySiliconTracking_MarlinTrk"/>  
+		<processor name="MyForwardTracking"/><!--create fwd tracks in parallel -->
+		<processor name="MyTrackSubsetProcessor" /><!-- combine Silicon and Forward Tracking -->     
+		<processor name="MyFullLDCTracking_MarlinTrk"/>  
+		
+		<!-- ========== the post tracking patrec   ================= -->
+		<processor name="MyV0Finder"/>
+		<processor name="MyKinkFinder"/>
+		
+		<!-- ========== calorimeter digitization and PFA ======= -->
+		<!-- <processor name="MyILDCaloDigi"/> -->
+		<processor name="MyNewLDCCaloDigi"/>
+		<processor name="MySimDigital"/>  
+		<processor name="MySimpleBCalDigi"/>
+		<processor name="MySimpleLCalDigi"/>
+		<processor name="MySimpleLHCalDigi"/>
+		<processor name="MySimpleMuonDigi"/>
 
-     <!-- ========== track digitization and tracking  === -->
-     <processor name="VXDPlanarDigiProcessor"/>
-     <processor name="SITPlanarDigiProcessor"/>
-     <processor name="SITSpacePointBuilder" />
-     <processor name="FTDPixelPlanarDigiProcessor"/>
-     <processor name="FTDStripPlanarDigiProcessor"/>
-     <processor name="FTDSpacePointBuilder"/>
-     <processor name="SETPlanarDigiProcessor"/>
-     <processor name="SETSpacePointBuilder" />
-     <processor name="MyTPCDigiProcessor"/>
-
-     <!-- ========== the new C++ tracking =============== -->
-     <processor name="MyClupatraProcessor" />
-     <processor name="MySiliconTracking_MarlinTrk"/>  
-     <processor name="MyForwardTracking"/><!--create fwd tracks in parallel -->
-     <processor name="MyTrackSubsetProcessor" /><!-- combine Silicon and Forward Tracking -->     
-     <processor name="MyFullLDCTracking_MarlinTrk"/>  
-
-     <!-- ========== the post tracking patrec   ================= -->
-     <processor name="MyV0Finder"/>
-     <processor name="MyKinkFinder"/>
-
-     <!-- ========== calorimeter digitization and PFA ======= -->
-     <!-- <processor name="MyILDCaloDigi"/> -->
-     <processor name="MyNewLDCCaloDigi"/>
-     <processor name="MySimDigital"/>  
-     <processor name="MySimpleBCalDigi"/>
-     <processor name="MySimpleLCalDigi"/>
-     <processor name="MySimpleLHCalDigi"/>
-     <processor name="MySimpleMuonDigi"/>
-
-     <processor name="MyRecoMCTruthLinker"/>
-	 <processor name="MyMarlinArbor"/>
-     <processor name="MyMCPfoMaker"/>
-     <processor name="MyPfoAnalysis"/>
+		<!-- Link mc particle with hits and tracks -->
+		<processor name="MyRecoMCTruthLinker"/>
+		
+		<!-- Run full ArborPFA reconstruction chain -->
+		<processor name="MyMarlinArbor"/>
+		<processor name="MyPerfectPFAMarlinArbor"/>
+		<processor name="MyPerfectPhotonMarlinArbor"/>
+		   <processor name="MyPerfectPhotonNeutronK0LMarlinArbor"/>
+		
+		<!-- Create mc links and collections for uds performance analysis -->
+		<processor name="MyMCPfoMaker" />
+		
+		<!-- Run ArborPFA PFO analysis -->
+		<processor name="MyPfoAnalysis" />
+		<processor name="MyPerfectPfoAnalysis"/>
+		<processor name="MyPerfectPhotonPfoAnalysis"/>
+		<processor name="MyPerfectPhotonNeutronK0LPfoAnalysis"/>
    </execute>
 
    <global>
@@ -956,8 +968,6 @@ ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter
   <parameter name="RelationOutputCollection" type="string">RelationMuonHit </parameter>
 </processor>
 
-<!--########## MarlinArbor ###################################### -->
-
 	<processor name="MyMarlinArbor" type="ArborPFAProcessor">
 		<parameter name="PandoraSettingsXmlFile" type="String">ArborSettingsDefault.xml</parameter>
 		<!-- Collection names -->
@@ -1001,6 +1011,139 @@ ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter
 		
 		<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
     	<!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+		<parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+		<parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0433771 0.088424 0.457353 </parameter>
+	</processor>
+	
+	
+	<processor name="MyPerfectPFAMarlinArbor" type="ArborPFAProcessor">
+		<parameter name="PandoraSettingsXmlFile" type="String"> ArborSettingsPerfectParticleFlow.xml </parameter>
+		<!-- Collection names -->
+		<parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
+		<parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+		<parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+		<parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
+		<parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
+		<parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+		<parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+		<parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit RelationLHcalHit RelationCaloHit_LDC</parameter>
+		<parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
+		<parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+		<parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+		<parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+		<parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+		<parameter name="ClusterCollectionName" type="String">PerfectClusters</parameter>
+		<parameter name="PFOCollectionName" type="String">PerfectPFOs</parameter>
+		<!-- Calibration constants -->
+		<parameter name="ECalToMipCalibration" type="float">160.0</parameter>
+		<parameter name="HCalToMipCalibration" type="float">34.8</parameter>
+		<parameter name="ECalMipThreshold" type="float">0.5</parameter>
+		<parameter name="HCalMipThreshold" type="float">0.3</parameter>
+		<parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
+		<parameter name="HCalToEMGeVCalibration" type="float">1.</parameter>
+		<parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
+		<parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
+		<parameter name="HCalToHadGeVCalibration" type="float">1.</parameter>
+		<parameter name="MuonToMipCalibration" type="float">10.0</parameter>
+		<parameter name="DigitalMuonHits" type="int">0</parameter>
+		<parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter> 
+		<parameter name="AbsorberRadiationLength" type="float">0.2857</parameter>
+		<!--Whether to calculate track states manually, rather than copy stored fitter values-->
+		 <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+		<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+		
+		<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+		<!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+		<parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+		<parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0433771 0.088424 0.457353 </parameter>
+	</processor>
+
+
+	<!--########## PerfectPhotonMarlinArbor ###################################### -->
+
+	<processor name="MyPerfectPhotonMarlinArbor" type="ArborPFAProcessor">
+		<parameter name="PandoraSettingsXmlFile" type="String"> ArborSettingsPerfectPhoton.xml </parameter>
+		<!-- Collection names -->
+		<parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
+		<parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+		<parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+		<parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
+		<parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
+		<parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+		<parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+		<parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit RelationLHcalHit RelationCaloHit_LDC</parameter>
+		<parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
+		<parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+		<parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+		<parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+		<parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+		<parameter name="ClusterCollectionName" type="String">ArborPerfectPhotonClusters</parameter>
+		<parameter name="PFOCollectionName" type="String">ArborPerfectPhotonPFOs</parameter>
+		<!-- Calibration constants -->
+		<parameter name="ECalToMipCalibration" type="float">160.0</parameter>
+		<parameter name="HCalToMipCalibration" type="float">34.8</parameter>
+		<parameter name="ECalMipThreshold" type="float">0.5</parameter>
+		<parameter name="HCalMipThreshold" type="float">0.3</parameter>
+		<parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
+		<parameter name="HCalToEMGeVCalibration" type="float">1.</parameter>
+		<parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
+		<parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
+		<parameter name="HCalToHadGeVCalibration" type="float">1.</parameter>
+		<parameter name="MuonToMipCalibration" type="float">10.0</parameter>
+		<parameter name="DigitalMuonHits" type="int">0</parameter>
+		<parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter> 
+		<parameter name="AbsorberRadiationLength" type="float">0.2857</parameter>
+		<!--Whether to calculate track states manually, rather than copy stored fitter values-->
+		 <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+		<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+		
+		<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+		<!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
+		<parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
+		<parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0433771 0.088424 0.457353 </parameter>
+	</processor>
+
+
+	<!--########## PerfectPhotonNeutronK0LMarlinArbor ###################################### -->
+	
+	<processor name="MyPerfectPhotonNeutronK0LMarlinArbor" type="ArborPFAProcessor">
+		<parameter name="PandoraSettingsXmlFile" type="String"> ArborSettingsPerfectPhotonNeutronK0L.xml </parameter>
+		<!-- Collection names -->
+		<parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
+		<parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+		<parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+		<parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
+		<parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
+		<parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+		<parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+		<parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit RelationLHcalHit RelationCaloHit_LDC</parameter>
+		<parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCTruthLink</parameter>
+		<parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+		<parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+		<parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+		<parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+		<parameter name="ClusterCollectionName" type="String">ArborPerfectPhotonNeutronK0LClusters</parameter>
+		<parameter name="PFOCollectionName" type="String">ArborPerfectPhotonNeutronK0LPFOs</parameter>
+		<!-- Calibration constants -->
+		<parameter name="ECalToMipCalibration" type="float">160.0</parameter>
+		<parameter name="HCalToMipCalibration" type="float">34.8</parameter>
+		<parameter name="ECalMipThreshold" type="float">0.5</parameter>
+		<parameter name="HCalMipThreshold" type="float">0.3</parameter>
+		<parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
+		<parameter name="HCalToEMGeVCalibration" type="float">1.</parameter>
+		<parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
+		<parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
+		<parameter name="HCalToHadGeVCalibration" type="float">1.</parameter>
+		<parameter name="MuonToMipCalibration" type="float">10.0</parameter>
+		<parameter name="DigitalMuonHits" type="int">0</parameter>
+		<parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter> 
+		<parameter name="AbsorberRadiationLength" type="float">0.2857</parameter>
+		<!--Whether to calculate track states manually, rather than copy stored fitter values-->
+		 <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+		<parameter name="ReachesECalMinFtdLayer" type="int">2</parameter>
+		
+		<!-- Input thresholds are the one from DBD. They are not replaced in the digitizer to keep the -->
+		<!-- reconstruction intact. Optimized thresholds are replaced by the PandoraSDHcalThresholds ones -->
 		<parameter name="InputSDHcalThresholds" type="FloatVec"> 0.0400452 0.101322 0.39448 </parameter>
 		<parameter name="PandoraSDHcalThresholds" type="FloatVec"> 0.0433771 0.088424 0.457353 </parameter>
 	</processor>
@@ -1098,24 +1241,76 @@ ollection EcalEndcapPreShowerCollection EcalRingPreShowerCollection  </parameter
   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
 </processor>
 
-<processor name="MyPfoAnalysis" type="PfoAnalysis">
-  <!--PfoAnalysis analyses output of PandoraPFANew-->
-  <!--Names of input mc particle collections-->
-  <parameter name="InputMCParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">MCPFOs </parameter>
-  <!--Names of input reconstructed particle collections-->
-  <parameter name="InputParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">ArborPFOs </parameter>
-  <!--Names of input quark particle collections-->
-  <parameter name="InputQuarkParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">QuarkPFOs </parameter>
-  <!--Names of input recluster monitoring collections-->
-  <parameter name="InputReclusterMonitoringCollections" type="StringVec" lcioInType="LCGenericObject">PandoraPFANewReclusterMonitoring </parameter>
-  <!--Names of mc particle collections-->
-  <parameter name="MCParticleCollections" type="StringVec" lcioInType="MCParticle">MCParticle </parameter>
-  <!--Set the debug print level-->
-  <parameter name="Printing" type="int">0 </parameter>
-  <!--Name of the output root file-->
-  <parameter name="RootFile" type="string"> PfoAnalysis.root </parameter>
-  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
-</processor>
+	<processor name="MyPfoAnalysis" type="PfoAnalysis">
+		<!--PfoAnalysis analyses output of PandoraPFANew-->
+		<!--Names of input mc particle collections-->
+		<parameter name="InputMCParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">MCPFOs </parameter>
+		<!--Names of input reconstructed particle collections-->
+		<parameter name="InputParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">ArborPFOs </parameter>
+		<!--Names of input quark particle collections-->
+		<parameter name="InputQuarkParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">QuarkPFOs </parameter>
+		<!--Names of input recluster monitoring collections-->
+		<parameter name="InputReclusterMonitoringCollections" type="StringVec" lcioInType="LCGenericObject"> </parameter>
+		<!--Set the debug print level-->
+		<parameter name="Printing" type="int">0 </parameter>
+		<!--Name of the output root file-->
+		<parameter name="RootFile" type="string"> ArborPFOAnalysis.root </parameter>
+	</processor>
+	
+	
+	<processor name="MyPerfectPfoAnalysis" type="PfoAnalysis">
+		<!--PfoAnalysis analyses output of PandoraPFANew-->
+		<!--Names of input mc particle collections-->
+		<parameter name="InputMCParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">MCPFOs </parameter>
+		<!--Names of input reconstructed particle collections-->
+		<parameter name="InputParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">PerfectPFOs </parameter>
+		<!--Names of input quark particle collections-->
+		<parameter name="InputQuarkParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">QuarkPFOs </parameter>
+		<!--Names of input recluster monitoring collections-->
+		<parameter name="InputReclusterMonitoringCollections" type="StringVec" lcioInType="LCGenericObject">PandoraPFANewReclusterMonitoring </parameter>
+		<!--Names of mc particle collections-->
+		<parameter name="MCParticleCollections" type="StringVec" lcioInType="MCParticle">MCParticle </parameter>
+		<!--Set the debug print level-->
+		<parameter name="Printing" type="int">0 </parameter>
+		<!--Name of the output root file-->
+		<parameter name="RootFile" type="string"> PerfectPfoAnalysis.root </parameter>
+	</processor>
+
+
+	<processor name="MyPerfectPhotonPfoAnalysis" type="PfoAnalysis">
+		<!--PfoAnalysis analyses output of PandoraPFANew-->
+		<!--Names of input mc particle collections-->
+		<parameter name="InputMCParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">MCPFOs </parameter>
+		<!--Names of input reconstructed particle collections-->
+		<parameter name="InputParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">ArborPerfectPhotonPFOs </parameter>
+		<!--Names of input quark particle collections-->
+		<parameter name="InputQuarkParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">QuarkPFOs </parameter>
+		<!--Names of input recluster monitoring collections-->
+		<parameter name="InputReclusterMonitoringCollections" type="StringVec" lcioInType="LCGenericObject">PandoraPFANewReclusterMonitoring </parameter>
+		<!--Names of mc particle collections-->
+		<parameter name="MCParticleCollections" type="StringVec" lcioInType="MCParticle">MCParticle </parameter>
+		<!--Set the debug print level-->
+		<parameter name="Printing" type="int">0 </parameter>
+		<!--Name of the output root file-->
+		<parameter name="RootFile" type="string"> PerfectPhotonPfoAnalysis.root </parameter>
+	</processor>
+
+	<processor name="MyPerfectPhotonNeutronK0LPfoAnalysis" type="PfoAnalysis">
+		<!--PfoAnalysis analyses output of PandoraPFANew-->
+		<!--Names of input mc particle collections-->
+		<parameter name="InputMCParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">MCPFOs </parameter>
+		<!--Names of input reconstructed particle collections-->
+		<parameter name="InputParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">ArborPerfectPhotonNeutronK0LPFOs </parameter>
+		<!--Names of input quark particle collections-->
+		<parameter name="InputQuarkParticleCollections" type="StringVec" lcioInType="ReconstructedParticle">QuarkPFOs </parameter>
+		<!--Names of input recluster monitoring collections-->
+		<parameter name="InputReclusterMonitoringCollections" type="StringVec" lcioInType="LCGenericObject">PandoraPFANewReclusterMonitoring </parameter>
+		<!--Names of mc particle collections-->
+		<parameter name="MCParticleCollections" type="StringVec" lcioInType="MCParticle">MCParticle </parameter>
+		<!--Set the debug print level-->
+		<parameter name="Printing" type="int">0 </parameter>
+		<!--Name of the output root file-->
+		<parameter name="RootFile" type="string"> PerfectPhotonNeutronK0LPfoAnalysis.root </parameter>
+	</processor>
 
 </marlin>

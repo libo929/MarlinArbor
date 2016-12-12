@@ -80,7 +80,7 @@
 	
 	<!-- Prepare clusters for particle flow objects creation -->
 	<algorithm type="ClusterPreparation">
-		<CandidateListNames>PrimaryTrees PhotonClusters</CandidateListNames>
+		<CandidateListNames>PrimaryTrees</CandidateListNames>
 		<MergedCandidateListName>PfoCreation</MergedCandidateListName>
 	</algorithm>
 

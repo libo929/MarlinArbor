@@ -8,34 +8,33 @@
 
 	<!-- PLUGIN SETTINGS -->
 	<HadronicEnergyCorrectionPlugins> BarrelGapEnergyFunction ThetaEnergyFunction </HadronicEnergyCorrectionPlugins>
-<!-- 	<ElectromagneticEnergyCorrectionPlugins> SdhcalQuadraticEnergyFunction </ElectromagneticEnergyCorrectionPlugins> -->
 
-  <BarrelGapEnergyFunction>
-	  <EcalZGapPositions>-1410.6 -470.2 470.2 1410.6</EcalZGapPositions>
-	  <HcalZGapPositions>-1423 -485 485 1423</HcalZGapPositions>
-	  <EcalDistanceToGap>10</EcalDistanceToGap>
-	  <HcalDistanceToGap>30</HcalDistanceToGap>
-	  <EcalGapAlpha>0</EcalGapAlpha>
-	  <EcalGapBeta>0</EcalGapBeta>
-	  <HcalGapAlpha>1.5254</HcalGapAlpha>
-	  <HcalGapBeta>0</HcalGapBeta>
-  </BarrelGapEnergyFunction>
+	<BarrelGapEnergyFunction>
+		<EcalZGapPositions>-1410.6 -470.2 470.2 1410.6</EcalZGapPositions>
+		<HcalZGapPositions>-1423 -485 485 1423</HcalZGapPositions>
+		<EcalDistanceToGap>10</EcalDistanceToGap>
+		<HcalDistanceToGap>30</HcalDistanceToGap>
+		<EcalGapAlpha>0</EcalGapAlpha>
+		<EcalGapBeta>0</EcalGapBeta>
+		<HcalGapAlpha>1.5254</HcalGapAlpha>
+		<HcalGapBeta>0</HcalGapBeta>
+	</BarrelGapEnergyFunction>
   
-  <ThetaEnergyFunction>
-  	<LowEnergyCut>3.</LowEnergyCut>
-  	<BarrelP00>-2.36284</BarrelP00>
-  	<BarrelP01>1.14627</BarrelP01>
-  	<BarrelP02>-0.00152029</BarrelP02>
-  	<BarrelP10>0.325533</BarrelP10>
-  	<BarrelP11>-0.126941</BarrelP11>
-  	<BarrelP12>0.000462463</BarrelP12>
-  	<EndcapP00>-2.16956</EndcapP00>
-  	<EndcapP01>0.801878</EndcapP01>
-  	<EndcapP02>1.27263e-05</EndcapP02>
-  	<EndcapP10>0.157559</EndcapP10>
-  	<EndcapP11>0.34754</EndcapP11>
-  	<EndcapP12>-0.00122559</EndcapP12>
-  </ThetaEnergyFunction>
+	<ThetaEnergyFunction>
+		<LowEnergyCut>3.</LowEnergyCut>
+		<BarrelP00>-2.0695</BarrelP00>
+		<BarrelP01>1.15493</BarrelP01>
+		<BarrelP02>-0.00154133</BarrelP02>
+		<BarrelP10>0.574691</BarrelP10>
+		<BarrelP11>-0.127181</BarrelP11>
+		<BarrelP12>0.000531069</BarrelP12>
+		<EndcapP00>-0.913565</EndcapP00>
+		<EndcapP01>0.817793</EndcapP01>
+		<EndcapP02>0.000459511</EndcapP02>
+		<EndcapP10>-0.837188</EndcapP10>
+		<EndcapP11>0.320991</EndcapP11>
+		<EndcapP12>-0.00174508</EndcapP12>
+	</ThetaEnergyFunction>
  
 	<EmShowerPlugin>ArborEmShowerId</EmShowerPlugin> 
 	<PhotonPlugin>ArborPhotonId</PhotonPlugin> 
@@ -43,17 +42,17 @@
 	<MuonPlugin>ArborMuonId</MuonPlugin>
 	
 	<ArborEmShowerId>
-	 <MaxForwardPseudoLayer>3</MaxForwardPseudoLayer>
-	 <MinPseudoLayerNHits>4</MinPseudoLayerNHits>
-	 <MinFitHitDistanceFine>50</MinFitHitDistanceFine>
-	 <MinFitHitDistanceCoarse>100</MinFitHitDistanceCoarse>
-	 <MinNInteractingLayers>2</MinNInteractingLayers>
-	 <LowEnergyClusterCut>4.f</LowEnergyClusterCut>
-	 <MaxPseudoLayerExtension>30</MaxPseudoLayerExtension>
-	 <MaxAngleWithOrigin>0.3</MaxAngleWithOrigin>
-	 <MaxHadronicEnergyFraction>0.2</MaxHadronicEnergyFraction>
-	 <MinOuterEcalPseudoLayerEnergyCut>25</MinOuterEcalPseudoLayerEnergyCut>
-	 <MaxOuterEcalEnergyFraction>0.1</MaxOuterEcalEnergyFraction>
+		<MaxForwardPseudoLayer>3</MaxForwardPseudoLayer>
+		<MinPseudoLayerNHits>4</MinPseudoLayerNHits>
+		<MinFitHitDistanceFine>50</MinFitHitDistanceFine>
+		<MinFitHitDistanceCoarse>100</MinFitHitDistanceCoarse>
+		<MinNInteractingLayers>2</MinNInteractingLayers>
+		<LowEnergyClusterCut>4.f</LowEnergyClusterCut>
+		<MaxPseudoLayerExtension>30</MaxPseudoLayerExtension>
+		<MaxAngleWithOrigin>0.3</MaxAngleWithOrigin>
+		<MaxHadronicEnergyFraction>0.2</MaxHadronicEnergyFraction>
+		<MinOuterEcalPseudoLayerEnergyCut>25</MinOuterEcalPseudoLayerEnergyCut>
+		<MaxOuterEcalEnergyFraction>0.1</MaxOuterEcalEnergyFraction>
 	</ArborEmShowerId>
 
 	<PseudoLayerPlugin>
