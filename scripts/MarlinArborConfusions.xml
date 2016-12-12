@@ -18,7 +18,7 @@
 		<processor name="MyMarlinArbor"/>
 		<processor name="MyPerfectPFAMarlinArbor"/>
 		<processor name="MyPerfectPhotonMarlinArbor"/>
-		   <processor name="MyPerfectPhotonNeutronK0LMarlinArbor"/>
+		<processor name="MyPerfectPhotonNeutronK0LMarlinArbor"/>
 		
 		<!-- Create mc links and collections for uds performance analysis -->
 		<processor name="MyMCPfoMaker" />
