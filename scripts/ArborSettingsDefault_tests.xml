@@ -811,11 +811,11 @@
 	 <ForcePhotonTagging>true</ForcePhotonTagging>
 	</algorithm>
 	
-  <algorithm type="PerformanceMonitoring">
-    <ExpectedPfoTotalEnergy>360</ExpectedPfoTotalEnergy>
-    <PfoTotalEnergyDeviation>30</PfoTotalEnergyDeviation>
-     <algorithm type="VisualMonitoring" description="VisualMonitoring"/>
-  </algorithm>
+	<algorithm type="PerformanceMonitoring">
+		<ExpectedPfoTotalEnergy>360</ExpectedPfoTotalEnergy>
+		<PfoTotalEnergyDeviation>30</PfoTotalEnergyDeviation>
+		<algorithm type="VisualMonitoring" description="VisualMonitoring"/>
+	</algorithm>
 	
 	<!-- Open Eve visual monitoring on final pfos -->
 	<algorithm type="VisualMonitoring" description="VisualMonitoring">
