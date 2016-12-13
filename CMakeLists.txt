@@ -64,6 +64,7 @@ FOREACH( pkg Marlin MarlinUtil PandoraSDK ArborContent )
         INCLUDE_DIRECTORIES( ${${pkg}_INCLUDE_DIRS} )
         LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
         ADD_DEFINITIONS ( ${${pkg}_DEFINITIONS} )
+        MESSAGE( "DEFINTIONS OF ${pkg} : ${${pkg}_DEFINITIONS}" )
     ENDIF()
 ENDFOREACH()
 
