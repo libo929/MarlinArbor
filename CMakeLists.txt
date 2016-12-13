@@ -21,6 +21,7 @@ SET( MarlinArbor_VERSION_PATCH 01 )
 FIND_PACKAGE( ILCUTIL COMPONENTS ILCSOFT_CMAKE_MODULES REQUIRED )
 
 INCLUDE( ilcsoft_default_settings )
+INCLUDE( PandoraCMakeSettings )
 
 
 ### SOURCE ##################################################################
@@ -49,7 +50,7 @@ IF( NOT COMPILER_SUPPORTS_CXX_FLAGS )
     UNSET( CMAKE_CXX_FLAGS )
 ENDIF()
 
-SET( CMAKE_CXX_FLAGS "-Wall -Werror -ansi -pedantic -Wno-long-long -Wno-sign-compare -fno-strict-aliasing ${CMAKE_CXX_FLAGS}" )
+SET( CMAKE_CXX_FLAGS "-Wall -Werror -ansi -pedantic -Wno-long-long -Wno-sign-compare -fno-strict-aliasing -Wno-effc++ ${CMAKE_CXX_FLAGS}" )
 
 
 ### DEPENDENCIES ############################################################
