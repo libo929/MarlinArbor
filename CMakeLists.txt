@@ -18,9 +18,9 @@ SET( MarlinArbor_VERSION_PATCH 01 )
 ### CMAKE ###################################################################
 
 # load default settings from ILCSOFT_CMAKE_MODULES
-FIND_PACKAGE( ILCUTIL COMPONENTS ILCSOFT_CMAKE_MODULES REQUIRED )
+#FIND_PACKAGE( ILCUTIL COMPONENTS ILCSOFT_CMAKE_MODULES REQUIRED )
 
-INCLUDE( ilcsoft_default_settings )
+#INCLUDE( ilcsoft_default_settings )
 INCLUDE( PandoraCMakeSettings )
 
 
@@ -28,7 +28,7 @@ INCLUDE( PandoraCMakeSettings )
 
 #include directories
 INCLUDE_DIRECTORIES( ./include )
-INSTALL_DIRECTORY( ./include DESTINATION . FILES_MATCHING PATTERN "*.h" )
+INSTALL( DIRECTORY ./include DESTINATION include FILES_MATCHING PATTERN "*.h" )
 
 AUX_SOURCE_DIRECTORY( ./src/ MarlinArbor_SRCS )
 
@@ -100,19 +100,16 @@ ENDIF()
 ### LIBRARY #################################################################
 
 # add library
-ADD_SHARED_LIBRARY( MarlinArbor ${MarlinArbor_SRCS} )
+ADD_LIBRARY( MarlinArbor SHARED ${MarlinArbor_SRCS} )
 
 
 ### INSTALL #################################################################
 
 # install library
-INSTALL_SHARED_LIBRARY( MarlinArbor DESTINATION lib )
-
-# install header files
-INSTALL_DIRECTORY( ./include DESTINATION . )
+INSTALL( TARGETS ${PROJECT_NAME} DESTINATION lib COMPONENT Runtime )
 
 # install scripts files
-INSTALL_DIRECTORY( ./scripts DESTINATION . )
+INSTALL( DIRECTORY ./scripts DESTINATION scripts )
 
 # display some variables and write them to cache
-DISPLAY_STD_VARIABLES()
+PANDORA_DISPLAY_STD_VARIABLES()
