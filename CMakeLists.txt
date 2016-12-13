@@ -51,7 +51,7 @@ IF( NOT COMPILER_SUPPORTS_CXX_FLAGS )
 ENDIF()
 
 SET( CMAKE_CXX_FLAGS "-Wall -Werror -ansi -pedantic -Wno-long-long -Wno-sign-compare -fno-strict-aliasing ${CMAKE_CXX_FLAGS}" )
-LIST( REMOVE_ITEM CMAKE_CXX_FLAGS "-Weffc++")
+LIST( REMOVE_ITEM CMAKE_CXX_FLAGS -Weffc++ )
 
 MESSAGE( STATUS "CMAKE_CXX_FLAGS : ${CMAKE_CXX_FLAGS}" )
 
