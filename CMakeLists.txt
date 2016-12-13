@@ -17,10 +17,7 @@ SET( MarlinArbor_VERSION_PATCH 01 )
 
 ### CMAKE ###################################################################
 
-# load default settings from ILCSOFT_CMAKE_MODULES
-#FIND_PACKAGE( ILCUTIL COMPONENTS ILCSOFT_CMAKE_MODULES REQUIRED )
-
-#INCLUDE( ilcsoft_default_settings )
+# load default settings
 INCLUDE( PandoraCMakeSettings )
 
 
