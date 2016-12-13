@@ -50,8 +50,10 @@ IF( NOT COMPILER_SUPPORTS_CXX_FLAGS )
     UNSET( CMAKE_CXX_FLAGS )
 ENDIF()
 
-SET( CMAKE_CXX_FLAGS "-Wall -Werror -ansi -pedantic -Wno-long-long -Wno-sign-compare -fno-strict-aliasing -Wno-effc++ ${CMAKE_CXX_FLAGS}" )
+SET( CMAKE_CXX_FLAGS "-Wall -Werror -ansi -pedantic -Wno-long-long -Wno-sign-compare -fno-strict-aliasing ${CMAKE_CXX_FLAGS}" )
+LIST( REMOVE_ITEM CMAKE_CXX_FLAGS "-Weffc++")
 
+MESSAGE( STATUS "CMAKE_CXX_FLAGS : ${CMAKE_CXX_FLAGS}" )
 
 ### DEPENDENCIES ############################################################
 
@@ -59,12 +61,12 @@ FIND_PACKAGE( Marlin 1.0 REQUIRED )
 FIND_PACKAGE( MarlinUtil REQUIRED )
 FIND_PACKAGE( PandoraSDK 02.00.00 REQUIRED )
 FIND_PACKAGE( ArborContent 01.01.00 REQUIRED )
+
 FOREACH( pkg Marlin MarlinUtil PandoraSDK ArborContent )
     IF( ${pkg}_FOUND )
         INCLUDE_DIRECTORIES( ${${pkg}_INCLUDE_DIRS} )
         LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
         ADD_DEFINITIONS ( ${${pkg}_DEFINITIONS} )
-        MESSAGE( "DEFINTIONS OF ${pkg} : ${${pkg}_DEFINITIONS}" )
     ENDIF()
 ENDFOREACH()
 
@@ -79,7 +81,6 @@ IF( PANDORA_MONITORING )
         LINK_LIBRARIES( ${PandoraMonitoring_LIBRARIES} )
         ADD_DEFINITIONS ( ${PandoraMonitoring_DEFINITIONS} )
         ADD_DEFINITIONS( "-DMONITORING" )
-        MESSAGE( "DEFINTIONS OF PandoraMonitoring : ${PandoraMonitoring_DEFINITIONS}" )
     ENDIF()
 ENDIF()
 
