@@ -79,6 +79,7 @@ IF( PANDORA_MONITORING )
         LINK_LIBRARIES( ${PandoraMonitoring_LIBRARIES} )
         ADD_DEFINITIONS ( ${PandoraMonitoring_DEFINITIONS} )
         ADD_DEFINITIONS( "-DMONITORING" )
+        MESSAGE( "DEFINTIONS OF PandoraMonitoring : ${PandoraMonitoring_DEFINITIONS}" )
     ENDIF()
 ENDIF()
 
