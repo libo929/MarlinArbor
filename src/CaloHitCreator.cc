@@ -565,6 +565,7 @@ void CaloHitCreator::GetCommonCaloHitProperties(const EVENT::CalorimeterHit *con
     caloHitParameters.m_positionVector = positionVector;
     caloHitParameters.m_expectedDirection = positionVector.GetUnitVector();
     caloHitParameters.m_pParentAddress = (void*)pCaloHit;
+	caloHitParameters.m_inputEnergy = pCaloHit->getEnergy();
 
 	bool m_useTimeInSimHit = true;
 
