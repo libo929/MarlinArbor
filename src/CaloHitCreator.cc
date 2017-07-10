@@ -20,6 +20,8 @@
 
 #include "UTIL/CellIDDecoder.h"
 
+#include "EVENT/SimCalorimeterHit.h"
+
 #include "CaloHitCreator.h"
 #include "ArborPFAProcessor.h"
 
@@ -563,8 +565,37 @@ void CaloHitCreator::GetCommonCaloHitProperties(const EVENT::CalorimeterHit *con
     caloHitParameters.m_positionVector = positionVector;
     caloHitParameters.m_expectedDirection = positionVector.GetUnitVector();
     caloHitParameters.m_pParentAddress = (void*)pCaloHit;
-    caloHitParameters.m_inputEnergy = pCaloHit->getEnergy();
-    caloHitParameters.m_time = pCaloHit->getTime();
+
+	bool m_useTimeInSimHit = true;
+
+	if(m_useTimeInSimHit)
+	{
+		EVENT::SimCalorimeterHit* rawhit = dynamic_cast<EVENT::SimCalorimeterHit*>( pCaloHit->getRawHit() );
+
+		if(rawhit) 
+		{
+			int nContributions = rawhit->getNMCContributions();
+
+			float hitTime   = 0.;
+			float hitEnergy = 0.;
+
+			for(int iContribution = 0; iContribution < nContributions; ++iContribution)
+			{
+				float energy = rawhit->getEnergyCont(iContribution);
+				float time   = rawhit->getTimeCont(iContribution);
+				
+				hitEnergy += energy;
+				hitTime += time * energy;
+			}
+
+			hitTime = hitTime / hitEnergy;
+			caloHitParameters.m_time = hitTime;
+		}
+	}
+	else
+	{
+		caloHitParameters.m_time = pCaloHit->getTime();
+	}
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------
