@@ -739,6 +739,11 @@ void ArborPFAProcessor::ProcessSteeringFile()
                             "The sdhcal thresholds to set as input in pandora calo hits",
                             m_caloHitCreatorSettings.m_pandoraSDHcalThresholds,
                             FloatVector());
+
+    registerProcessorParameter("UseSimHitTime",
+                            "The variable to decide if use the time from SimCalorimeter hit",
+                            m_caloHitCreatorSettings.m_useSimHitTime,
+                            bool(false));
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------

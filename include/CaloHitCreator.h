@@ -93,6 +93,8 @@ public:
 
         FloatVector     m_inputSDHcalThresholds;                ///< The sdhcal threshold values to decode from lcio file
         FloatVector     m_pandoraSDHcalThresholds;              ///< The sdhcal threshold values to set in pandora calo hits
+
+        bool            m_useSimHitTime;                        ///< The variable to decide if use the time from SimCalorimeter hit
     };
 
     /**

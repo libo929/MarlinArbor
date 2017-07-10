@@ -567,9 +567,7 @@ void CaloHitCreator::GetCommonCaloHitProperties(const EVENT::CalorimeterHit *con
     caloHitParameters.m_pParentAddress = (void*)pCaloHit;
 	caloHitParameters.m_inputEnergy = pCaloHit->getEnergy();
 
-	bool m_useTimeInSimHit = true;
-
-	if(m_useTimeInSimHit)
+	if(m_settings.m_useSimHitTime)
 	{
 		EVENT::SimCalorimeterHit* rawhit = dynamic_cast<EVENT::SimCalorimeterHit*>( pCaloHit->getRawHit() );
 
