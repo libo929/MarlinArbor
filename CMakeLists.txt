@@ -101,6 +101,7 @@ ENDIF()
 
 # add library
 ADD_LIBRARY( MarlinArbor SHARED ${MarlinArbor_SRCS} )
+SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_SOVERSION})
 
 
 ### INSTALL #################################################################
