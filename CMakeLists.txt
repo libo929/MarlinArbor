@@ -62,7 +62,7 @@ FIND_PACKAGE( MarlinUtil REQUIRED )
 FIND_PACKAGE( PandoraSDK 02.00.00 REQUIRED NO_CMAKE_PATH )
 FIND_PACKAGE( ArborContent 01.01.00 REQUIRED )
 
-FOREACH( pkg Marlin MarlinUtil PandoraSDK ArborContent )
+FOREACH( pkg PandoraSDK ArborContent Marlin MarlinUtil )
     IF( ${pkg}_FOUND )
         INCLUDE_DIRECTORIES( ${${pkg}_INCLUDE_DIRS} )
         LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
