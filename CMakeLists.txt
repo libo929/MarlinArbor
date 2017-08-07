@@ -17,7 +17,7 @@ SET( MarlinArbor_VERSION_PATCH 02 )
 ### CMAKE ###################################################################
 
 # load default settings
-#INCLUDE( PandoraCMakeSettings )
+INCLUDE( PandoraCMakeSettings )
 
 ### SOURCE ##################################################################
 
@@ -59,7 +59,7 @@ MESSAGE( STATUS "CMAKE_CXX_FLAGS : ${CMAKE_CXX_FLAGS}" )
 
 FIND_PACKAGE( Marlin 1.0 REQUIRED )
 FIND_PACKAGE( MarlinUtil REQUIRED )
-FIND_PACKAGE( PandoraSDK 02.00.00 REQUIRED )
+FIND_PACKAGE( PandoraSDK 02.00.00 REQUIRED NO_CMAKE_PATH )
 FIND_PACKAGE( ArborContent 01.01.00 REQUIRED )
 
 FOREACH( pkg PandoraSDK ArborContent Marlin MarlinUtil )
@@ -75,7 +75,7 @@ IF( PANDORA_MONITORING )
     INCLUDE_DIRECTORIES( ${ROOT_INCLUDE_DIRS} )
     LINK_LIBRARIES( ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} )
       
-    FIND_PACKAGE( PandoraMonitoring 01.00.00 REQUIRED )
+    FIND_PACKAGE( PandoraMonitoring 01.00.00 REQUIRED NO_CMAKE_PATH )
     IF( PandoraMonitoring_FOUND )
         INCLUDE_DIRECTORIES( ${PandoraMonitoring_INCLUDE_DIRS} )
         LINK_LIBRARIES( ${PandoraMonitoring_LIBRARIES} )
@@ -107,10 +107,10 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSI
 ### INSTALL #################################################################
 
 # install library
-#INSTALL( TARGETS ${PROJECT_NAME} DESTINATION lib COMPONENT Runtime )
+INSTALL( TARGETS ${PROJECT_NAME} DESTINATION lib COMPONENT Runtime )
 
 # install scripts files
-#INSTALL( DIRECTORY ./scripts DESTINATION scripts )
+INSTALL( DIRECTORY ./scripts DESTINATION scripts )
 
 # display some variables and write them to cache
-#PANDORA_DISPLAY_STD_VARIABLES()
+PANDORA_DISPLAY_STD_VARIABLES()
