@@ -51,7 +51,7 @@ StatusCode ExternalClusteringAlgorithm::Run()
         for (CaloHitList::const_iterator hitIter = pCaloHitList->begin(), hitIterEnd = pCaloHitList->end(); hitIter != hitIterEnd; ++hitIter)
         {
             const pandora::CaloHit *const pCaloHit = *hitIter;
-            parentAddressToCaloHitMap.insert(ParentAddressToCaloHitMap::value_type(pCaloHit->GetParentCaloHitAddress(), pCaloHit));
+            parentAddressToCaloHitMap.insert(ParentAddressToCaloHitMap::value_type(pCaloHit->GetParentAddress(), pCaloHit));
         }
 
         // Recreate external clusters within the pandora framework
@@ -62,11 +62,11 @@ StatusCode ExternalClusteringAlgorithm::Run()
             if (NULL == pExternalCluster)
                 throw EVENT::Exception("Collection type mismatch");
 
-            const CalorimeterHitVec &calorimeterHitVec(pExternalCluster->getCalorimeterHits());
+            const EVENT::CalorimeterHitVec &calorimeterHitVec(pExternalCluster->getCalorimeterHits());
 
             const pandora::Cluster *pPandoraCluster = NULL;
 
-            for (CalorimeterHitVec::const_iterator iter = calorimeterHitVec.begin(), iterEnd = calorimeterHitVec.end(); iter != iterEnd; ++iter)
+            for (EVENT::CalorimeterHitVec::const_iterator iter = calorimeterHitVec.begin(), iterEnd = calorimeterHitVec.end(); iter != iterEnd; ++iter)
             {
                 ParentAddressToCaloHitMap::const_iterator pandoraCaloHitIter = parentAddressToCaloHitMap.find(*iter);
 
@@ -80,14 +80,14 @@ StatusCode ExternalClusteringAlgorithm::Run()
                 if (NULL == pPandoraCluster)
                 {
                     PandoraContentApi::Cluster::Parameters parameters;
-                    parameters.m_caloHitList.insert(pPandoraCaloHit);
+                    parameters.m_caloHitList.push_back(pPandoraCaloHit);
                     PANDORA_RETURN_RESULT_IF(STATUS_CODE_SUCCESS, !=, PandoraContentApi::Cluster::Create(*this, parameters, pPandoraCluster));
 
                     if (m_flagClustersAsPhotons)
                     {
                         PandoraContentApi::Cluster::Metadata metadata;
                         metadata.m_particleId = PHOTON;
-                        PANDORA_RETURN_RESULT_IF(STATUS_CODE_SUCCESS, !=, PandoraContentApi::AlterMetadata(*this, pPandoraCluster, metadata));
+                        PANDORA_RETURN_RESULT_IF(STATUS_CODE_SUCCESS, !=, PandoraContentApi::Cluster::AlterMetadata(*this, pPandoraCluster, metadata));
                     }
                 }
                 else

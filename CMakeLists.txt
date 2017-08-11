@@ -17,7 +17,7 @@ SET( MarlinArbor_VERSION_PATCH 02 )
 ### CMAKE ###################################################################
 
 # load default settings
-#INCLUDE( PandoraCMakeSettings )
+INCLUDE( PandoraCMakeSettings )
 
 ### SOURCE ##################################################################
 
@@ -107,10 +107,10 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSI
 ### INSTALL #################################################################
 
 # install library
-#INSTALL( TARGETS ${PROJECT_NAME} DESTINATION lib COMPONENT Runtime )
+INSTALL( TARGETS ${PROJECT_NAME} DESTINATION lib COMPONENT Runtime )
 
 # install scripts files
-#INSTALL( DIRECTORY ./scripts DESTINATION scripts )
+INSTALL( DIRECTORY ./scripts DESTINATION scripts )
 
 # display some variables and write them to cache
-#PANDORA_DISPLAY_STD_VARIABLES()
+PANDORA_DISPLAY_STD_VARIABLES()
