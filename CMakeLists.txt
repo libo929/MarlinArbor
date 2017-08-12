@@ -23,6 +23,8 @@ INCLUDE( PandoraCMakeSettings )
 
 #include directories
 INCLUDE_DIRECTORIES( ./include )
+FILE(GLOB_RECURSE INPUT_DIR_INCS ./include/*.h)
+SOURCE_GROUP("Header files" FILES ${INPUT_DIR_INCS} )
 INSTALL( DIRECTORY ./include DESTINATION include FILES_MATCHING PATTERN "*.h" )
 
 AUX_SOURCE_DIRECTORY( ./src/ MarlinArbor_SRCS )
@@ -100,7 +102,7 @@ ENDIF()
 ### LIBRARY #################################################################
 
 # add library
-ADD_LIBRARY( MarlinArbor SHARED ${MarlinArbor_SRCS} )
+ADD_LIBRARY( MarlinArbor SHARED ${MarlinArbor_SRCS} ${INPUT_DIR_INCS})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_SOVERSION})
 
 
